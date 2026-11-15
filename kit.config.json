@@ -1,0 +1,195 @@
+{
+  "$comment": "Effective config written by kit-install; edit freely, kit-sync reads it.",
+  "project": {
+    "name": "baby-tasting",
+    "uiLocale": "Hebrew RTL",
+    "uiDirection": "rtl",
+    "packageManager": "pnpm",
+    "i18nFile": "",
+    "repoName": "baby-tasting",
+    "icons": {
+      "library": "",
+      "component": "",
+      "registry": ""
+    }
+  },
+  "stack": {
+    "packs": [
+      "angular",
+      "node-express"
+    ],
+    "layers": [],
+    "name": "Angular",
+    "backend": "Node / Express / MongoDB",
+    "stylesheetExt": "scss",
+    "stateRules": "signals only (`signal()`, `computed()`), no `BehaviorSubject`",
+    "standardsDoc": "docs/agent/standards-angular.md",
+    "conventionsDoc": "docs/agent/conventions.md",
+    "backendDoc": "docs/agent/standards-backend.md",
+    "styleSkill": "cssLayer",
+    "authSkill": "auth-and-logging",
+    "docsMapSkill": "breadcrumbs",
+    "docsMapCheck": "scripts/breadcrumbs-check.mjs",
+    "styleqaRoutes": "scripts/styleqa-routes.mjs",
+    "cssSection": "UI, CSS & Folder Structure",
+    "componentsSection": "Angular 19 & Reactivity"
+  },
+  "commands": {
+    "build": "build",
+    "buildProd": "",
+    "dev": "start",
+    "devLocal": "",
+    "devRemote": "",
+    "test": "test",
+    "testCi": "",
+    "lint": "lint",
+    "e2e": "",
+    "codegen": "",
+    "cli": "",
+    "lintStaged": "",
+    "dbBackup": [],
+    "slotPrepare": "",
+    "logQuery": ""
+  },
+  "deploy": {
+    "host": "",
+    "dbHost": ""
+  },
+  "ci": {
+    "install": "pnpm install --frozen-lockfile",
+    "lintScope": "all",
+    "appAuditMode": "enforce",
+    "testMode": "run"
+  },
+  "git": {
+    "mainBranch": "main"
+  },
+  "slots": {
+    "count": 3,
+    "nameFormat": "wt-N",
+    "folderSuffix": "-wt-N",
+    "fePorts": 4200,
+    "bePorts": 3000,
+    "feExec": [
+      "ng",
+      "serve"
+    ],
+    "fePortArgs": [
+      "-c",
+      "slot",
+      "--port",
+      "{port}"
+    ],
+    "feMatcher": "\\bng(\\.js|\\.cmd)?\"?\\s+serve\\b",
+    "feEnvFile": "src/environments/environment.local.ts",
+    "dbNameFormat": "baby_tasting_wt${n}",
+    "dbBackupDir": "baby_tasting-db-backups"
+  },
+  "hooks": {
+    "shellPath": "C:/Program Files/Git/bin/bash.exe"
+  },
+  "paths": {
+    "hotspots": [
+      "src/styles.scss",
+      "src/app/app.routes.ts"
+    ],
+    "routesFile": "src/app/app.routes.ts",
+    "srcRoot": "src/app/",
+    "serverRoot": "server/",
+    "slotEnvFile": "server/.env",
+    "sharedDocs": "docs/project",
+    "planChecks": "docs/project/plan-checks.md"
+  },
+  "plans": {
+    "openDirs": [
+      "plans"
+    ]
+  },
+  "ownership": {
+    "upstreamPaths": []
+  },
+  "security": {
+    "sensitivePaths": [
+      "src/app/core/guards/**",
+      "src/app/core/interceptors/**",
+      "server/middleware/**",
+      "server/routes/auth.js"
+    ]
+  },
+  "tools": {
+    "browser": "browser tool"
+  },
+  "models": {
+    "mechanical": "haiku",
+    "analysis": "sonnet",
+    "judgment": "opus",
+    "build": "sonnet",
+    "review": "sonnet"
+  },
+  "review": {
+    "ship": "checkers",
+    "learn": "off"
+  },
+  "orchestrator": {
+    "runBranchPrefix": "orch/",
+    "maxFixRounds": 2,
+    "minFreeDiskGb": 5,
+    "onPark": "dependents",
+    "gateTimeoutMin": 15,
+    "concurrency": 2,
+    "useSlots": false,
+    "watchTestPattern": "",
+    "staleMin": 10,
+    "mergeChecks": "build",
+    "ciMirror": [
+      "node scripts/override-check.mjs"
+    ],
+    "prepare": [],
+    "reviewerMode": "gate",
+    "reviewerModel": "sonnet",
+    "rateLimitWaitMin": 30
+  },
+  "ui": {
+    "logins": []
+  },
+  "brain": {
+    "projectId": "",
+    "enabled": true
+  },
+  "mods": {
+    "enabled": [],
+    "marketplaceRepo": "WDD-CODER/ai-workflow-kit"
+  },
+  "docs": {
+    "domainStandards": "",
+    "domainSummary": ""
+  },
+  "styleqa": {
+    "appOrigin": "",
+    "apiOrigin": "",
+    "signIn": "",
+    "uiFontToken": "",
+    "tokenPrefixes": {
+      "color": "",
+      "fontSize": "",
+      "radius": ""
+    },
+    "tokenFiles": [],
+    "breakpointPattern": "",
+    "stylesheets": [],
+    "loaderText": [],
+    "blockedSteps": {
+      "words": [],
+      "selectors": []
+    },
+    "outDir": ".claude/styleqa",
+    "widths": [
+      "375x812",
+      "620x900",
+      "768x1024",
+      "1024x768",
+      "1366x768"
+    ]
+  },
+  "overrides": []
+}

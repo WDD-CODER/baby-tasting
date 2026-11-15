@@ -1,0 +1,39 @@
+# docs/brain — index
+
+Distilled project knowledge: history and reasoning, not current state. **Current work status lives in the plan's Execution Notes and `.claude/todo.md` — not here.**
+
+> **Visual tour:** [how-it-works.md](./how-it-works.md) — layers, folder map and the capture loop.
+
+## Reading order (session start on unfamiliar work)
+
+1. `projectbrief.md` — what baby-tasting is, goals, hard constraints
+2. `invariants.md` — the load-bearing architecture rules (INV-n) every plan must declare its impact on
+3. `decisions/` — architectural choices, append-only (never edit in place — supersede)
+4. `patterns/` — proven solutions, one file each
+5. `gotchas.md` — index into `gotchas/` (what hurt before, and what to do instead), split by domain
+6. `glossary.md` — domain vocabulary
+7. `agent-rules.md` — short rules per role (builder, checkers, readiness, ui), learned from decisions graded wrong (the log behind them: `decision-log.md`)
+8. `agent-lessons/` — one short file per orchestrator role and the Planner (`<role>.md`, at most 40 lines / 3,000 characters each), facts from earlier runs written by `node scripts/orch-state.mjs lessons`; `run-log.md` — one row per run
+9. `follow-ups.md` — defects agents saw outside their job; every graded orchestrator decision is a line in `decision-grades.jsonl` (written by `decision-log.mjs grade`, never read by builders)
+
+Run evidence also leaves the project, to the kit's private store, with no model call (`node scripts/brain.mjs`): what goes where and how to set it up is in `docs/agent/kit-brain.md`.
+
+## When to read what
+
+| Situation | Read |
+|---|---|
+| New session, unfamiliar area of the code | `projectbrief.md`, then the relevant sub-file |
+| About to make an architectural choice | `invariants.md`, then `decisions/` — check for an existing rule/ADR before deciding again |
+| Something behaves surprisingly / a trap cost time | `gotchas.md` first |
+| Unfamiliar domain term | `glossary.md` |
+| Starting to build a plan, or deciding a behaviour the plan leaves open | `agent-rules.md` `## builder` (never `decision-log.md`) |
+| Reviewing a plan draft (`/plan`) | `agent-lessons/planner.md` |
+| Need rules/conventions (not history) | `AGENTS.md` and `docs/agent/*.md` — not this folder |
+
+## Maintenance
+
+Brain capture is **auto-evoked** on push / PR / Merge Gate (agent proposal + GitHub sticky reminder). The full draft is always shown first; it then **auto-writes** on the reply that closes the gate (`Y` / `merge` / `later` / `open-pr-only`) — say `no brain` / `skip brain` to opt out for that ship, or `brain edit …` to revise first. See [[0006-auto-write-brain-capture-by-default]], [[0003-auto-evoke-brain-on-pr]], and `docs/agent/standards-git.md` Post-push Merge Gate.
+
+Drafting quality is governed by `docs/agent/brain-capture.md`. Templates: `docs/brain/patterns/_TEMPLATE.md`, `docs/brain/decisions/_TEMPLATE.md`; gotcha shape at the top of `docs/brain/gotchas.md`.
+
+`scripts/brain-review-check.mjs --scope=dead-refs` runs non-blocking in CI on every PR; `--scope=full` runs on `/ship`'s feature-complete/PR path. Both are advisory only — never auto-edit, never auto-delete.

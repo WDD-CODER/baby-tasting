@@ -1,0 +1,200 @@
+/**
+ * Detaches any wt-N slot whose branch has already merged into origin/main back
+ * to detached HEAD @ origin/main (idle), stops its dev servers and clears its .worktree-plan. Run as
+ * part of the Planner's pull/sync sequence so finished slots don't sit occupied
+ * after a Worker's branch merges. See plans/326-planner-worker-workflow.plan.md.
+ * A slot a live orchestrator run holds (.claude/orchestrator-runs/<run>/status.json running, its slot path or plan
+ * branch) is left alone whatever git says: the run gives it back itself (orch-state.mjs release, stop, finish).
+ * A slot that serves a branch for the Human's validation (.worktree-validating, slot-serve.mjs --ref) is left alone.
+ * Also removes the merge folder of a merged run (<repo>-orch-merge-<run>, a worktree on the run branch): when the run
+ * is not live, the folder has no uncommitted file and its run branch is merged into origin/main (or its
+ * upstream is gone after a squash merge). worktree-clean.mjs removeWorktree: `git worktree remove` without --force
+ * (3 tries), then a scripted delete (Windows "Directory not empty" on node_modules); the local branch is kept.
+ *
+ * Usage:
+ *   node scripts/free-merged-slots.mjs             # fetch first
+ *   node scripts/free-merged-slots.mjs --no-fetch  # local refs only (session start: fast, no network)
+ *   --no-sweep                                     # skip the worktree-clean.mjs sweep that runs last (--no-fetch skips it too;
+ *                                                  #   the supervisor runs it itself)
+ */
+import { existsSync, rmSync, readdirSync, readFileSync } from 'fs'
+import { execFileSync } from 'child_process'
+import { resolve, dirname, join } from 'path'
+import { fileURLToPath } from 'url'
+import { listSlots } from './lib/slot.mjs'
+import { samePath } from './lib/orch-folders.mjs'
+import { stopSlotServers } from './lib/slot-procs.mjs'
+import { sweep, removeWorktree } from './worktree-clean.mjs'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const repoRoot = resolve(__dirname, '..')
+// A run counts as live while its status.json says running and was updated in the last two hours (orch-preflight's rule).
+const LIVE_MS = 2 * 60 * 60 * 1000
+const norm = (p) => String(p ?? '').replace(/\\/g, '/').replace(/\/+$/, '')
+
+// The slots (by path) and plan branches a live orchestrator run holds: an orchestrator builder's branch starts equal
+// to the run branch, so "merged into origin/main" says nothing about it until the run moves on. Never freed here.
+function liveRunHolds() {
+  const dir = join(repoRoot, '.claude', 'orchestrator-runs')
+  if (!existsSync(dir)) return []
+  const out = []
+  for (const name of readdirSync(dir)) {
+    try {
+      const s = JSON.parse(readFileSync(join(dir, name, 'status.json'), 'utf8'))
+      if (s.phase !== 'running' || Date.now() - Date.parse(s.updatedAt ?? 0) > LIVE_MS) continue
+      for (const p of Object.values(s.plans ?? {})) out.push({ run: name, slot: p.slot ? norm(p.slot) : null, branch: p.branch ?? null })
+    } catch { /* no status.json, or unreadable: not a live run */ }
+  }
+  return out
+}
+
+function git(cmdArgs, cwd) {
+  return execFileSync('git', cmdArgs, { cwd: cwd || repoRoot, encoding: 'utf8' }).replace(/\r?\n+$/, '')
+}
+
+// Merged = an ancestor of origin/main (merge or fast-forward), or its pushed upstream is gone after a
+// prune (a squash merge with --delete-branch is never an ancestor; the deleted remote branch is the signal).
+function isMergedIntoOriginMain(branch) {
+  try {
+    execFileSync('git', ['merge-base', '--is-ancestor', `refs/heads/${branch}`, 'origin/main'], {
+      cwd: repoRoot,
+      stdio: 'ignore',
+    })
+    return true
+  } catch {
+    try {
+      return git(['for-each-ref', '--format=%(upstream:track)', `refs/heads/${branch}`]) === '[gone]'
+    } catch {
+      return false
+    }
+  }
+}
+
+// Server logs under .claude/ are runtime noise, not work.
+function isClean(path) {
+  return git(['status', '--porcelain'], path)
+    .split(/\r?\n/)
+    .filter((l) => l.trim() && !/^\?\? \.claude\/[^/]+\.log$/.test(l.trim()))
+    .length === 0
+}
+
+// The runs a live orchestrator run still works on (by run name): its merge folder is never removed.
+function liveRunNames() {
+  const dir = join(repoRoot, '.claude', 'orchestrator-runs')
+  if (!existsSync(dir)) return new Set()
+  const out = new Set()
+  for (const name of readdirSync(dir)) {
+    try {
+      const s = JSON.parse(readFileSync(join(dir, name, 'status.json'), 'utf8'))
+      if (s.phase === 'running' && Date.now() - Date.parse(s.updatedAt ?? 0) <= LIVE_MS) out.add(name)
+    } catch { /* no status.json, or unreadable: not a live run */ }
+  }
+  return out
+}
+
+// <repo>-orch-merge-<run> worktrees (orch-state.mjs mergeFolder) of runs that merged: one line per folder.
+function freeMergeFolders() {
+  const repo = 'baby-tasting' || repoRoot.split(/[\\/]/).pop()
+  const prefix = `${repo}-orch-merge-`
+  const folders = []
+  let cur = null
+  for (const line of git(['worktree', 'list', '--porcelain']).split('\n')) {
+    if (line.startsWith('worktree ')) {
+      if (cur) folders.push(cur)
+      cur = { path: line.slice('worktree '.length), branch: null, locked: false }
+    } else if (cur && line.startsWith('branch ')) cur.branch = line.slice('branch '.length).replace('refs/heads/', '')
+    else if (cur && line.startsWith('locked')) cur.locked = true
+  }
+  if (cur) folders.push(cur)
+  const mine = folders.filter((f) => norm(f.path).split('/').pop().startsWith(prefix) && norm(f.path) !== norm(repoRoot))
+  if (!mine.length) return
+  const live = liveRunNames()
+  for (const f of mine) {
+    const run = norm(f.path).split('/').pop().slice(prefix.length)
+    if (live.has(run)) {
+      console.log(`merge folder ${f.path}: left alone — run ${run} is live`)
+      continue
+    }
+    if (!f.branch) {
+      console.log(`merge folder ${f.path}: left alone — it is not on a run branch`)
+      continue
+    }
+    if (f.locked) {
+      console.log(`merge folder ${f.path}: left alone — git has it locked`)
+      continue
+    }
+    let clean = false
+    try {
+      clean = isClean(f.path)
+    } catch (e) {
+      console.log(`merge folder ${f.path}: left alone — cannot read its status (${String(e.message).split('\n')[0]})`)
+      continue
+    }
+    if (!clean) {
+      console.log(`merge folder ${f.path}: left alone — it has uncommitted files`)
+      continue
+    }
+    if (!isMergedIntoOriginMain(f.branch)) {
+      console.log(`merge folder ${f.path}: left alone — run branch ${f.branch} is not merged into origin/main`)
+      continue
+    }
+    // git alone failed on Windows ("Directory not empty" on node_modules) and left 1-2 GB behind: retries, then a
+    // scripted delete of the clean folder.
+    const r = removeWorktree(repoRoot, f.path)
+    if (r.ok) console.log(`merge folder ${f.path}: removed (run branch ${f.branch} merged; local branch kept)${r.note}`)
+    else console.log(`merge folder ${f.path}: left alone — ${r.note}`)
+  }
+}
+
+function main() {
+  if (!process.argv.includes('--no-fetch')) git(['fetch', 'origin', '--prune'])
+
+  const slots = listSlots()
+  if (!slots.length) console.log('FREE_SLOTS: no wt-N worktrees found')
+  const live = liveRunHolds()
+
+  for (const s of slots) {
+    if (s.validating && !s.plan) {
+      console.log(`wt-${s.slot}: validating ${s.validating.branch} — left alone`)
+      continue
+    }
+    if (s.detached || !s.branch) {
+      console.log(`wt-${s.slot}: idle — left alone`)
+      continue
+    }
+    const held = live.find((h) => (h.slot && samePath(h.slot, s.path)) || (h.branch && h.branch === s.branch))
+    if (held) {
+      console.log(`wt-${s.slot}: branch=${s.branch} claimed by live orchestrator run ${held.run} — left alone`)
+      continue
+    }
+    // Only a slot claimed through take-plan.mjs (.worktree-plan present) is
+    // ours to free. A hand-made branch (no recorded plan) is never touched,
+    // even if its tip happens to already be an ancestor of origin/main —
+    // that's trivially true for any branch that hasn't diverged yet, not
+    // evidence the work shipped.
+    if (!s.plan) {
+      console.log(`wt-${s.slot}: branch=${s.branch}, no recorded plan — left alone`)
+      continue
+    }
+    if (!isClean(s.path)) {
+      console.log(`wt-${s.slot}: branch=${s.branch} has uncommitted changes — left alone`)
+      continue
+    }
+    if (!isMergedIntoOriginMain(s.branch)) {
+      console.log(`wt-${s.slot}: branch=${s.branch} not yet merged — left alone`)
+      continue
+    }
+    // Servers are off unless a session needs them: a freed slot's servers are stopped.
+    const stopped = stopSlotServers({ root: s.path, slotPorts: { fe: 4200 + s.slot, be: 3000 + s.slot } })
+    git(['checkout', '--detach', 'origin/main'], s.path)
+    const planFile = join(s.path, '.worktree-plan')
+    if (existsSync(planFile)) rmSync(planFile)
+    console.log(`wt-${s.slot}: freed (branch=${s.branch} merged) -> idle @ origin/main; servers stopped (${stopped.length} action(s))`)
+  }
+  freeMergeFolders()
+  // Every other kit-made worktree (dead runs' builder and review folders, agent folders) by worktree-clean's rules.
+  // Not at session start (--no-fetch runs under a 10-second timeout that could stop a delete half-way).
+  if (!process.argv.includes('--no-sweep') && !process.argv.includes('--no-fetch')) for (const l of sweep({ root: repoRoot })) console.log(`WORKTREE_CLEAN: ${l}`)
+}
+
+main()

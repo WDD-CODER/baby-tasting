@@ -48,3 +48,11 @@ Thumbs.db
 .env.*
 !.env.example
 /.angular
+
+# Generated per slot by scripts/slot-serve.mjs
+src/environments/environment.slot.ts
+
+# Logs and OS
+/logs/
+*.log
+.DS_Store
