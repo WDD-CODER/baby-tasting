@@ -8,7 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "lint": "ng lint",
     "test": "ng test --watch=false --browsers=ChromeHeadless",
-    "prepare": "husky"
+    "prepare": "husky",
+    "e2e": "playwright test",
+    "test:server": "pnpm --dir server test"
   },
   "private": true,
   "packageManager": "pnpm@10.34.6",
@@ -31,6 +33,7 @@
     "@angular/cli": "^22.2.7",
     "@angular/compiler-cli": "^22.2.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.1",
     "@types/jasmine": "~6.0.0",
     "angular-eslint": "22.6.0",
     "eslint": "^10.12.0",
