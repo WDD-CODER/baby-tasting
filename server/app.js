@@ -18,6 +18,7 @@ import { createCatalogContext } from './routes/catalog-helpers.js'
 import { createFoodsRouter } from './routes/foods.js'
 import { healthRouter } from './routes/health.js'
 import { createSettingsRouter } from './routes/settings.js'
+import { createSuggestionsRouter } from './routes/suggestions.js'
 import { createTestResetRouter } from './routes/test-reset.js'
 
 export function createApp({ config, db }) {
@@ -66,6 +67,7 @@ export function createApp({ config, db }) {
   app.use('/api/v1/allergens', requireAuth, catalogContext, createAllergensRouter({ repos }))
   app.use('/api/v1/foods', requireAuth, catalogContext, createFoodsRouter({ repos }))
   app.use('/api/v1/calendar', requireAuth, catalogContext, createCalendarRouter({ repos }))
+  app.use('/api/v1/suggestions', requireAuth, catalogContext, createSuggestionsRouter({ repos }))
   app.use('/api', notFound)
 
   app.use(express.static(config.staticDir))

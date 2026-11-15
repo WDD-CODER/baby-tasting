@@ -38,6 +38,13 @@ export class CatalogService {
   readonly archivedAllergens = computed(() => this.allAllergens_().filter((a) => a.archived))
   readonly allergenById = computed(() => new Map(this.allAllergens_().map((a) => [a.id, a])))
 
+  /** Queued active foods in queue order. */
+  readonly queue = computed(() =>
+    this.foods()
+      .filter((f) => f.queuePosition !== null)
+      .sort((a, b) => (a.queuePosition ?? 0) - (b.queuePosition ?? 0)),
+  )
+
   /** Loads the whole catalog, archived entries included (the server seeds the built-ins on first call). */
   async load(): Promise<void> {
     const [foods, allergens] = await Promise.all([
@@ -60,6 +67,33 @@ export class CatalogService {
     )
     this.allFoods_.update((list) => upsert(list, res.food))
     return res.food
+  }
+
+  /** Adds the food to the end of the tasting queue, or removes it. */
+  async toggleQueue(id: string): Promise<void> {
+    const food = this.foodById(id)
+    if (!food) return
+    const res = await firstValueFrom(
+      this.api.post<FoodResponse>(`/foods/${id}/queue`, { queued: food.queuePosition === null }),
+    )
+    this.allFoods_.update((list) => upsert(list, res.food))
+  }
+
+  /** Saves the whole queue in its new order (optimistic; a failure restores the old order). */
+  async reorderQueue(foodIds: string[]): Promise<void> {
+    const before = this.allFoods_()
+    this.allFoods_.update((list) =>
+      list.map((f) => {
+        const index = foodIds.indexOf(f.id)
+        return index === -1 ? f : { ...f, queuePosition: index }
+      }),
+    )
+    try {
+      await firstValueFrom(this.api.put<unknown>('/foods/queue', { foodIds }))
+    } catch (err) {
+      this.allFoods_.set(before)
+      throw err
+    }
   }
 
   async archiveFood(id: string): Promise<void> {

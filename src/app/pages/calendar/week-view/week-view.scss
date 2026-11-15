@@ -75,36 +75,17 @@
   }
 }
 
+// Suggested tile (DESIGN.md): dashed accent outline, 70% opacity, never draggable.
 .suggested {
-  position: relative;
+  inline-size: var(--touch-target);
+  block-size: var(--touch-target);
 
-  display: inline-flex;
+  padding: 0;
+  border: 2px dashed var(--color-accent);
+  border-radius: var(--radius-card);
 
-  &__accept {
-    inline-size: var(--touch-target);
-    block-size: var(--touch-target);
-
-    border: 1px dashed var(--color-text-secondary);
-    border-radius: var(--radius-card);
-
-    background: transparent;
-    font-size: 32px;
-    line-height: 1;
-  }
-
-  &__dismiss {
-    position: absolute;
-    inset-block-start: -4px;
-    inset-inline-end: -4px;
-
-    inline-size: 18px;
-    block-size: 18px;
-    padding: 0;
-    border: 0;
-    border-radius: var(--radius-pill);
-
-    background: var(--color-surface-raised);
-    color: var(--color-text-secondary);
-    font-size: var(--fs-xs);
-  }
+  background: transparent;
+  font-size: 32px;
+  line-height: 1;
+  opacity: 0.7;
 }

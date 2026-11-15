@@ -17,6 +17,7 @@ import { BabyService } from '../../../core/services/baby.service'
 import { CalendarService } from '../../../core/services/calendar.service'
 import { CatalogService } from '../../../core/services/catalog.service'
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service'
+import { SuggestionsService } from '../../../core/services/suggestions.service'
 import { ToastService } from '../../../core/services/toast.service'
 import { ageParts } from '../../../core/utils/age'
 import { alertText } from '../../../core/utils/alerts'
@@ -32,12 +33,14 @@ import {
   weekTitle,
 } from '../../../core/utils/dates'
 import { AlertStrip } from '../../../shared/ui/alert-strip/alert-strip'
+import { BottomSheet } from '../../../shared/ui/bottom-sheet/bottom-sheet'
+import { Button } from '../../../shared/ui/button/button'
 import { Chip } from '../../../shared/ui/chip/chip'
 import { ErrorState } from '../../../shared/ui/error-state/error-state'
 import { IconButton } from '../../../shared/ui/icon-button/icon-button'
 import { LoadingState } from '../../../shared/ui/loading-state/loading-state'
 import { AddFoodSheet } from '../add-food-sheet/add-food-sheet'
-import { CalendarExtensions, ItemBadge } from '../calendar-extensions.service'
+import { CalendarExtensions, ItemBadge, SuggestedItem } from '../calendar-extensions.service'
 import { Cell, MoveRequest } from '../calendar-types'
 import { DaySheet } from '../day-sheet/day-sheet'
 import { ItemActionsSheet } from '../item-actions-sheet/item-actions-sheet'
@@ -53,6 +56,8 @@ const SWIPE_DISTANCE = 50
   imports: [
     AlertStrip,
     AddFoodSheet,
+    BottomSheet,
+    Button,
     Chip,
     DaySheet,
     ErrorState,
@@ -74,6 +79,7 @@ export class CalendarPage {
   private readonly toast = inject(ToastService)
   private readonly allergenStatus = inject(AllergenStatusService)
   private readonly router = inject(Router)
+  private readonly suggestions = inject(SuggestionsService)
   protected readonly extensions = inject(CalendarExtensions)
 
   protected readonly t = HE.calendar
@@ -104,6 +110,19 @@ export class CalendarPage {
   protected readonly title = computed(() =>
     this.view_() === 'week' ? weekTitle(this.weekStart()) : monthTitle(this.anchor_()),
   )
+  protected readonly suggestT = HE.suggestions
+  protected readonly suggesting_ = signal(false)
+  protected readonly suggestionId_ = signal<string | null>(null)
+  protected readonly openedSuggestion = computed(
+    () => this.extensions.suggested().find((s) => s.id === this.suggestionId_()) ?? null,
+  )
+  protected readonly openedSuggestionFood = computed(() => {
+    const item = this.openedSuggestion()
+    return item ? this.foodById(item.foodId) : undefined
+  })
+  protected readonly suggestionBarText = computed(() =>
+    this.suggestT.count.replace('{n}', String(this.extensions.suggested().length)),
+  )
   protected readonly actionsItem = computed(
     () => this.items().find((it) => it.id === this.actionsId_()) ?? null,
   )
@@ -123,6 +142,14 @@ export class CalendarPage {
     void this.catalog.load().catch(() => this.failed_.set(true))
     void this.allergenStatus.refresh()
     this.extensions.onAlertAction.set((id) => this.openAlert(id))
+    this.extensions.onSuggestionAccept.set((item) => void this.acceptSuggestions([item]))
+    this.extensions.onSuggestionDismiss.set((item) => this.dismissSuggestion(item))
+    effect(() => {
+      // a proposal belongs to the week and view it was made for
+      this.weekStart()
+      this.view_()
+      untracked(() => this.dismissAllSuggestions())
+    })
     effect(() => {
       const alerts = this.allergenStatus.alerts()
       this.extensions.alerts.set(
@@ -198,6 +225,74 @@ export class CalendarPage {
       .sort((a, b) => (a.date === b.date ? b.meal - a.meal : a.date < b.date ? 1 : -1))[0]
     this.preselect_.set(lastGiven?.foodId ?? foods[0]?.id ?? null)
     this.addFor_.set({ date: today(), meal: 1 })
+  }
+
+  /** `הצע לי שבוע`: asks the server for a proposal for the visible week; nothing is saved. */
+  protected async suggestWeek(): Promise<void> {
+    if (this.suggesting_()) return
+    this.suggesting_.set(true)
+    try {
+      const list = await this.suggestions.preview(this.weekStart())
+      this.extensions.suggested.set(
+        list.map((s) => ({ ...s, id: `${s.date}|${s.meal}|${s.foodId}` })),
+      )
+      if (list.length === 0) this.toast.show(this.suggestT.nothing)
+    } catch {
+      this.toast.show(this.suggestT.failed, 'bad')
+    } finally {
+      this.suggesting_.set(false)
+    }
+  }
+
+  protected openSuggestion(item: SuggestedItem): void {
+    this.suggestionId_.set(item.id)
+  }
+
+  protected closeSuggestion(): void {
+    this.suggestionId_.set(null)
+  }
+
+  protected reasonText(item: SuggestedItem | null): string {
+    const reason = item?.reason
+    if (!reason) return ''
+    const allergen = reason.allergenId
+      ? (this.catalog.allergenById().get(reason.allergenId)?.name ?? '')
+      : ''
+    return this.suggestT.reason[reason.kind]
+      .replace('{allergen}', allergen)
+      .replace('{n}', String(reason.n ?? ''))
+      .replace('{total}', String(reason.total ?? ''))
+      .replace('{x}', String(reason.x ?? ''))
+      .replace('{y}', String(reason.y ?? ''))
+  }
+
+  protected dismissSuggestion(item: SuggestedItem): void {
+    this.extensions.suggested.update((list) => list.filter((s) => s.id !== item.id))
+    this.suggestionId_.set(null)
+  }
+
+  protected dismissAllSuggestions(): void {
+    this.extensions.suggested.set([])
+    this.suggestionId_.set(null)
+  }
+
+  protected async acceptSuggestions(items: SuggestedItem[]): Promise<void> {
+    if (items.length === 0 || this.suggesting_()) return
+    this.suggesting_.set(true)
+    try {
+      const res = await this.suggestions.accept(
+        items.map((s) => ({ date: s.date, meal: s.meal, foodId: s.foodId })),
+      )
+      const gone = new Set(items.map((s) => s.id))
+      this.extensions.suggested.update((list) => list.filter((s) => !gone.has(s.id)))
+      this.suggestionId_.set(null)
+      if (res.rejected.length > 0) this.toast.show(this.suggestT.someRejected, 'bad')
+      await this.calendar.refresh()
+    } catch {
+      this.toast.show(HE.calendar.errors.notSaved, 'bad')
+    } finally {
+      this.suggesting_.set(false)
+    }
   }
 
   protected closeAdd(): void {

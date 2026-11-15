@@ -32,11 +32,39 @@
       </div>
     </div>
 
+    @if (queue_().length > 0) {
+      <h3 class="foods__group">{{ t.queueTitle }}</h3>
+      <ul class="foods__list queue" cdkDropList (cdkDropListDropped)="reorder($event)">
+        @for (food of queue_(); track food.id) {
+          <li class="queue__row" cdkDrag>
+            <button
+              type="button"
+              class="queue__handle"
+              cdkDragHandle
+              [attr.aria-label]="t.queueReorder"
+            >
+              <span aria-hidden="true">⠿</span>
+            </button>
+            <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+            <span class="food__name">{{ food.name }}</span>
+            <button
+              type="button"
+              class="queue__remove"
+              [attr.aria-label]="t.queueRemove + ' ' + food.name"
+              (click)="toggleQueue(food)"
+            >
+              <span aria-hidden="true">✕</span>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+
     @for (group of groups_(); track group.category) {
       <h3 class="foods__group">{{ group.label }}</h3>
       <ul class="foods__list">
         @for (food of group.foods; track food.id) {
-          <li>
+          <li class="row">
             <a class="food" [routerLink]="['/foods', food.id, 'edit']">
               <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
               <span class="food__name">{{ food.name }}</span>
@@ -48,6 +76,16 @@
               }
               <span class="food__status">{{ statusText(food) }}</span>
             </a>
+            <button
+              type="button"
+              class="row__queue"
+              [class.row__queue--on]="food.queuePosition !== null"
+              [attr.aria-label]="t.queueToggle"
+              [attr.aria-pressed]="food.queuePosition !== null"
+              (click)="toggleQueue(food)"
+            >
+              <span aria-hidden="true">{{ food.queuePosition !== null ? '✓' : '➕' }}</span>
+            </button>
           </li>
         }
       </ul>

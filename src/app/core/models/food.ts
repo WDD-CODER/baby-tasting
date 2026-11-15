@@ -23,6 +23,8 @@ export interface Food {
   warning: FoodWarning | null
   builtIn: boolean
   archived: boolean
+  /** Place in the tasting queue; null = not queued. */
+  queuePosition: number | null
   status: FoodStatus
 }
 

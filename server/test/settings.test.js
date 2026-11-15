@@ -30,6 +30,8 @@ test('GET returns the defaults', async () => {
     maintenancePerWeek: 2,
     maintenanceGapDays: 5,
     maintenanceUntilMonths: 24,
+    maxAllergensPerMeal: 2,
+    newFoodsPerWeek: 3,
   })
 })
 
@@ -46,12 +48,19 @@ test('PUT accepts in-range values and keeps the others', async () => {
     maintenancePerWeek: 3,
     maintenanceGapDays: 7,
     maintenanceUntilMonths: 24,
+    maxAllergensPerMeal: 2,
+    newFoodsPerWeek: 3,
   })
 })
 
 test('PUT refuses out-of-range values with 400 invalid', async () => {
   const agent = await signedInAgent(ctx.newApp())
-  for (const bad of [{ introDays: 8 }, { maintenanceGapDays: 1 }, { maintenanceUntilMonths: 40 }]) {
+  for (const bad of [{ introDays: 8 }, { maintenanceGapDays: 1 }, { maintenanceUntilMonths: 40 },
+    { maxAllergensPerMeal: 6 },
+    { maxAllergensPerMeal: 0 },
+    { newFoodsPerWeek: 8 },
+    { newFoodsPerWeek: -1 },
+  ]) {
     const res = await agent.put('/api/v1/settings').send(bad)
     assert.equal(res.status, 400)
     assert.equal(res.body.error.code, 'invalid')

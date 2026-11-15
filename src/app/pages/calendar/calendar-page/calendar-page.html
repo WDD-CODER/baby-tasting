@@ -26,6 +26,25 @@
     </div>
   </header>
 
+  @if (view_() === 'week') {
+    <div class="calendar__suggest">
+      <app-button variant="secondary" [loading]="suggesting_()" (pressed)="suggestWeek()">{{
+        suggestT.suggestWeek
+      }}</app-button>
+    </div>
+    @if (extensions.suggested().length > 0) {
+      <div class="suggest-bar" role="status">
+        <span class="suggest-bar__count">{{ suggestionBarText() }}</span>
+        <app-button (pressed)="acceptSuggestions(extensions.suggested())">{{
+          suggestT.acceptAll
+        }}</app-button>
+        <app-button variant="ghost" (pressed)="dismissAllSuggestions()">{{
+          suggestT.dismissAll
+        }}</app-button>
+      </div>
+    }
+  }
+
   @if (loading_()) {
     <app-loading-state />
   } @else if (failed_()) {
@@ -41,8 +60,7 @@
       (itemOpened)="openItem($event)"
       (addRequested)="requestAdd($event)"
       (moveRequested)="moveItem($event)"
-      (suggestionAccepted)="extensions.onSuggestionAccept()($event)"
-      (suggestionDismissed)="extensions.onSuggestionDismiss()($event)"
+      (suggestionOpened)="openSuggestion($event)"
     />
   } @else {
     <app-month-view
@@ -77,6 +95,26 @@
     (picked)="pickFood($event)"
     (newFoodRequested)="newFood()"
   />
+
+  <app-bottom-sheet
+    [open]="openedSuggestion() !== null"
+    [title]="openedSuggestionFood()?.name ?? ''"
+    (closed)="closeSuggestion()"
+  >
+    @if (openedSuggestion(); as s) {
+      <div class="suggestion-sheet">
+        <p class="suggestion-sheet__reason">{{ reasonText(s) }}</p>
+        <div class="suggestion-sheet__actions">
+          <app-button (pressed)="extensions.onSuggestionAccept()(s)">{{
+            suggestT.accept
+          }}</app-button>
+          <app-button variant="ghost" (pressed)="extensions.onSuggestionDismiss()(s)">{{
+            suggestT.dismiss
+          }}</app-button>
+        </div>
+      </div>
+    }
+  </app-bottom-sheet>
 
   <app-item-actions-sheet
     [open]="actionsId_() !== null"

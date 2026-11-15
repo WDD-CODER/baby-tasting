@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core'
 import { AlertItem } from '../../shared/ui/alert-strip/alert-strip'
 import { CalendarItem, Meal } from '../../core/models/calendar-item'
+import { SuggestionReason } from '../../core/models/suggestion'
 
 export type AlertStripItem = AlertItem
 
@@ -15,6 +16,7 @@ export interface SuggestedItem {
   date: string
   meal: Meal
   foodId: string
+  reason?: SuggestionReason
 }
 
 /**

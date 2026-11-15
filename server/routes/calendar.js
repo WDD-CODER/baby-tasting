@@ -1,15 +1,12 @@
 import { Router } from 'express'
 import { checkDuplicate, checkPlacement, checkStatus } from '../domain/calendar-rules.js'
 import { isoDiffDays, isRealDate } from '../domain/dates.js'
+import { createCalendarItem, invalid, parseDate, parseMeal, refusal, STATUSES } from '../lib/calendar-create.js'
 import { todayIso } from '../lib/dates.js'
-import { HttpError } from '../lib/http-error.js'
 import { handle, notFound } from './catalog-helpers.js'
 
-const STATUSES = ['planned', 'given', 'skipped']
 const AMOUNTS = ['taste', 'teaspoon', 'portion']
 const MAX_RANGE_DAYS = 62
-
-const invalid = (message) => new HttpError(400, 'invalid', message)
 
 export function toItemDto(doc) {
   return {
@@ -24,16 +21,6 @@ export function toItemDto(doc) {
     givenBy: doc.givenBy ?? null,
     givenAt: doc.givenAt ? new Date(doc.givenAt).toISOString() : null,
   }
-}
-
-function parseMeal(value) {
-  if (!Number.isInteger(value) || value < 1 || value > 3) throw invalid('meal must be 1, 2 or 3')
-  return value
-}
-
-function parseDate(value) {
-  if (!isRealDate(value)) throw invalid('date must be a real YYYY-MM-DD date')
-  return value
 }
 
 function parsePatch(body) {
@@ -55,12 +42,6 @@ function parsePatch(body) {
     patch.liked = body.liked
   }
   return patch
-}
-
-function refusal(code) {
-  if (code === 'allergen_meal_1') return new HttpError(422, code, 'Allergen foods are given in meal 1')
-  if (code === 'given_in_future') return new HttpError(422, code, 'A future date cannot be marked given')
-  return new HttpError(409, code, 'This food is already in this meal')
 }
 
 export function createCalendarRouter({ repos }) {
@@ -86,37 +67,14 @@ export function createCalendarRouter({ repos }) {
   router.post(
     '/',
     handle(async (req, res) => {
-      const date = parseDate(req.body?.date)
-      const meal = parseMeal(req.body?.meal)
-      const status = req.body?.status ?? 'planned'
-      if (!STATUSES.includes(status)) throw invalid('Unknown status')
-      if (typeof req.body?.foodId !== 'string') throw invalid('foodId is required')
-      const food = await repos.foods.findById(req.householdId, req.body.foodId)
-      if (!food || food.archived) throw invalid('Unknown food')
-      const placement = checkPlacement({ food, meal })
-      if (placement) throw refusal(placement)
-      const future = checkStatus({ status, date, today: todayIso() })
-      if (future) throw refusal(future)
-      const day = await repos.calendarItems.listForDay(req.householdId, date)
-      const dup = checkDuplicate({ items: day, date, meal, foodId: req.body.foodId })
-      if (dup) throw refusal(dup)
-      const user = req.user.username
-      const saved = await repos.calendarItems.create(
-        req.householdId,
-        {
-          babyId: req.babyId,
-          date,
-          meal,
-          foodId: req.body.foodId,
-          status,
-          amount: null,
-          note: '',
-          liked: null,
-          givenBy: status === 'given' ? user : null,
-          givenAt: status === 'given' ? new Date() : null,
-        },
-        user,
-      )
+      const saved = await createCalendarItem({
+        repos,
+        householdId: req.householdId,
+        babyId: req.babyId,
+        user: req.user.username,
+        input: req.body,
+        today: todayIso(),
+      })
       res.status(201).json({ item: toItemDto(saved) })
     }),
   )

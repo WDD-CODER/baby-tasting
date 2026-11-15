@@ -85,6 +85,8 @@ Calendar tile (plan 004): 32px emoji inside a 44px touch target; allergen = 2px 
 - D-6: toasts stack above the bottom navigation and auto-hide after 4 s — reverse: edit `toast.ts` / `toast.scss`.
 - D-8 (plan 005): the badge grows from an 18px circle to a pill (min 18px) so `2/3` fits — reverse: show a dot only and put the ordinal in the item sheet.
 - D-9 (plan 005): an alert's suggested food is shown first in the add-food sheet under `מוצע` with an accent outline; it is not added until tapped — reverse: add it on the alert tap.
+- D-10 (plan 006): a suggested tile is a 2px dashed `--color-accent` outline at 70% opacity, never draggable; tap opens a sheet with the reason and `אישור` / `הסרה`; the bar under the header shows `{n} הצעות` · `אשר הכול` · `בטל הכול` — reverse: edit `.suggested` in `week-view.scss` and `.suggest-bar` in `calendar-page.scss`.
+- D-11 (plan 006): the foods page queue toggle is a round 48px button at the row's inline-end (➕ / ✓, accent border when queued) and the queue section `התור לטעימה` sits above the categories with a drag handle and a ✕ per row — reverse: edit `foods-page.html` / `.scss`.
 - D-7: the unsaved-changes prompt uses the destructive confirm style for "לצאת" — reverse: pass `destructive: false` in `unsaved-changes.guard.ts`.
 - D-8: the baby slot in the top bar is empty until a later plan fills `ShellService.babyLabel` — reverse: none needed.
 - D-9: the week grid has a 56px label column and 7 columns of at least 56px, scrolling inside itself at 360px; today's column has an accent-border tint — reverse: edit `week-view.scss`.
