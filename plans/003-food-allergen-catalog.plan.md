@@ -129,3 +129,4 @@ Calendar placement, any status beyond `לא נוסה`, locks, age-based recommen
 
 ## Execution Notes
 - Planner decision (overnight pre-approval): `DELETE` decides between delete and archive on the server, so the UI has one remove action; built-in entries can be archived but are never deleted (`DELETE` on a built-in archives it).
+- Planner decision (review fix): this plan may modify the existing `src/app/app.routes.ts` entries named in C6 (the `foods` entry now loads the foods page; `foods/new`, `foods/:id/edit`, `foods/allergens` are added before any `foods/:id`); the append-only rule is waived for those entries only.

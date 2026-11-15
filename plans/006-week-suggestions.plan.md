@@ -132,3 +132,4 @@ Recipes, portions, nutrition balance, automatic acceptance, more than one week a
 ## Execution Notes
 - Planner decision (overnight pre-approval): "the next two days" for an allergen at 1/3 means the next two days without it, starting today unless it is already given or planned today. Reverse: always start tomorrow.
 - Planner decision: suggestions are not stored; dismissing one only hides it in this preview (a new preview shows it again).
+- Planner decision (review fix): rule 1 stops at the end of the week, so the first `[ui]` check needs at least two days left in the week; on a Friday or Saturday the spec calls `test.skip` with the reason "needs Sunday–Thursday" and the card is checked on another day.

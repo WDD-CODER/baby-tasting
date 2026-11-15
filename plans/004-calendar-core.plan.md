@@ -147,3 +147,5 @@ Allergen states and colours, alerts, locks, suggestions, reactions (plans 005–
 ## Execution Notes
 - Planner decision (overnight pre-approval): the food-level `liked` mark is the latest given item's mark; parents set it per tasting in the item actions sheet.
 - Planner decision: swipe changes week only on the header area, so it never fights with drag and drop in the grid.
+- Planner decision (review fix): this plan may modify the existing `src/app/app.routes.ts` entries named in D7 (the `''` entry now loads the calendar page); the append-only rule is waived for those entries only.
+- Planner decision (review fix): R8 warnings show only as the add-time confirm (brief 4), not in the alert strip (program §5 lists R8 there). Reverse: add a `food_warning` alert kind for planned items of a warning food while the baby is under its age.
