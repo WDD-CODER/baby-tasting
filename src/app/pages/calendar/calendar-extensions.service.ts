@@ -6,6 +6,8 @@ export type AlertStripItem = AlertItem
 
 export interface ItemBadge {
   text: string
+  /** State colour of the badge; no tone keeps the neutral dot. */
+  tone?: 'okay' | 'good'
 }
 
 export interface SuggestedItem {

@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.allergens {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+
+  min-block-size: var(--touch-target);
+
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  &__name {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+  }
+
+  &__line {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
+  &__alert {
+    color: var(--color-tier-bad);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+  }
+}

@@ -9,6 +9,7 @@ import { notFound } from './middleware/not-found.js'
 import { requestLogger } from './middleware/request-logger.js'
 import { createRepos } from './repositories/index.js'
 import { createIndexes } from './repositories/indexes.js'
+import { createAllergenStatusRouter } from './routes/allergen-status.js'
 import { createAllergensRouter } from './routes/allergens.js'
 import { createAuthRouter } from './routes/auth.js'
 import { createBabyRouter } from './routes/baby.js'
@@ -16,6 +17,7 @@ import { createCalendarRouter } from './routes/calendar.js'
 import { createCatalogContext } from './routes/catalog-helpers.js'
 import { createFoodsRouter } from './routes/foods.js'
 import { healthRouter } from './routes/health.js'
+import { createSettingsRouter } from './routes/settings.js'
 import { createTestResetRouter } from './routes/test-reset.js'
 
 export function createApp({ config, db }) {
@@ -52,6 +54,15 @@ export function createApp({ config, db }) {
   if (config.e2eReset) app.use('/api/v1', createTestResetRouter({ repos }))
   app.use('/api/v1/baby', requireAuth, createBabyRouter({ repos }))
   const catalogContext = createCatalogContext({ repos })
+  const statusRouter = createAllergenStatusRouter({ repos })
+  // before the /allergens/:id routes
+  app.use(
+    ['/api/v1/allergens/status', '/api/v1/allergens/:id/history', '/api/v1/alerts'],
+    requireAuth,
+    catalogContext,
+  )
+  app.use('/api/v1', statusRouter)
+  app.use('/api/v1/settings', requireAuth, createSettingsRouter({ repos }))
   app.use('/api/v1/allergens', requireAuth, catalogContext, createAllergensRouter({ repos }))
   app.use('/api/v1/foods', requireAuth, catalogContext, createFoodsRouter({ repos }))
   app.use('/api/v1/calendar', requireAuth, catalogContext, createCalendarRouter({ repos }))

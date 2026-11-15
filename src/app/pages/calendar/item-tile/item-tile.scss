@@ -65,5 +65,20 @@
     background: var(--color-text-secondary);
     color: var(--color-canvas);
     font-size: var(--fs-xs);
+
+    // an ordinal such as 2/3 is wider than the dot
+    min-inline-size: 18px;
+    inline-size: auto;
+    padding-inline: 3px;
+
+    &--okay {
+      background: var(--color-tier-okay);
+      color: var(--color-canvas);
+      font-weight: var(--fw-bold);
+    }
+
+    &--good {
+      background: var(--color-tier-good);
+    }
   }
 }

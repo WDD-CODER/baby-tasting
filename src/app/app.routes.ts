@@ -36,7 +36,17 @@ export const routes: Routes = [
         canDeactivate: [unsavedChangesGuard],
         loadComponent: () => import('./pages/foods/food-form/food-form').then((m) => m.FoodForm),
       },
-      { path: 'allergens', loadComponent: () => import('./pages/allergens/allergens').then((m) => m.AllergensPage) },
+      {
+        path: 'allergens',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./pages/allergens/allergens-page/allergens-page').then((m) => m.AllergensPage),
+      },
+      {
+        path: 'allergens/:id',
+        loadComponent: () =>
+          import('./pages/allergens/allergen-detail/allergen-detail').then((m) => m.AllergenDetail),
+      },
       {
         path: 'settings',
         canDeactivate: [unsavedChangesGuard],

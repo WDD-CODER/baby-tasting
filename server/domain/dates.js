@@ -22,3 +22,17 @@ export function isoDiffDays(from, to) {
 export function weekStartSunday(iso) {
   return isoAddDays(iso, -parse(iso).getUTCDay())
 }
+
+export function dayOfWeek(iso) {
+  return parse(iso).getUTCDay()
+}
+
+// Whole months between a birth date and today (0 when today is before the birth date).
+export function ageInMonths(birthDate, today) {
+  if (!isRealDate(birthDate) || !isRealDate(today)) return 0
+  const [by, bm, bd] = birthDate.split('-').map(Number)
+  const [ty, tm, td] = today.split('-').map(Number)
+  let months = (ty - by) * 12 + (tm - bm)
+  if (td < bd) months -= 1
+  return Math.max(0, months)
+}
