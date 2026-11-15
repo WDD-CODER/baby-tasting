@@ -38,7 +38,7 @@
     "build": "build",
     "buildProd": "",
     "dev": "start",
-    "devLocal": "",
+    "devLocal": "dev",
     "devRemote": "",
     "test": "test",
     "testCi": "",

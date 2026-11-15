@@ -35,7 +35,7 @@ export const MAIN_PIDS = '.main-serve-pids'
 const pidsFileOf = (root, file = SLOT_PIDS) => join(root, '.claude', file)
 const DEV_SERVER = /\b(node|nodemon|npm|npx|pnpm|ng|vite|tsx|ts-node)(\.exe|\.cmd|\.c?js)?\b/i
 // The backend's npm scripts (commands.devLocal / commands.devRemote; empty = dev:local / dev:remote).
-export const BE_LOCAL_SCRIPT = String("" || '') || 'dev:local'
+export const BE_LOCAL_SCRIPT = String("dev" || '') || 'dev:local'
 export const BE_REMOTE_SCRIPT = String("" || '') || 'dev:remote'
 const BE_SCRIPTS_RE = [...new Set(['dev:local', 'dev:remote', BE_LOCAL_SCRIPT, BE_REMOTE_SCRIPT])].map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')
 // A process that can sit in a dev chain: npm/npx/pnpm launchers, their cmd.exe/sh shell, cross-env, a watcher, a frontend
