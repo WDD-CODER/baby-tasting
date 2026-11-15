@@ -1,0 +1,40 @@
+<app-bottom-sheet [open]="open()" [title]="title()" (closed)="closed.emit()">
+  <div class="meals" cdkDropListGroup>
+    @for (meal of meals; track meal) {
+      <section class="meal">
+        <h3 class="meal__title">{{ t.meal }} {{ meal }}</h3>
+        <ul
+          class="meal__list"
+          cdkDropList
+          [cdkDropListData]="{ date: date(), meal: meal }"
+          [cdkDropListSortingDisabled]="true"
+          (cdkDropListDropped)="dropped($event)"
+          [attr.data-meal]="meal"
+        >
+          @for (item of itemsOf(meal); track item.id) {
+            <li
+              class="row"
+              cdkDrag
+              [cdkDragData]="item"
+              [cdkDragStartDelay]="dragDelay"
+              (cdkDragStarted)="dragStarted()"
+              (cdkDragEnded)="dragEnded()"
+              (click)="openItem(item)"
+            >
+              <app-item-tile [item]="item" [food]="foodOf(item)" [badge]="badgeFor()(item)" />
+              <span class="row__name">{{ foodOf(item)?.name }}</span>
+              <span class="row__status">{{ statusText(item) }}</span>
+            </li>
+          }
+        </ul>
+        <button
+          type="button"
+          class="meal__add"
+          (click)="addRequested.emit({ date: date(), meal: meal })"
+        >
+          {{ t.addFood }}
+        </button>
+      </section>
+    }
+  </div>
+</app-bottom-sheet>

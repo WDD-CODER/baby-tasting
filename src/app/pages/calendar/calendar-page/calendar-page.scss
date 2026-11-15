@@ -1,0 +1,35 @@
+:host {
+  display: block;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+
+    touch-action: pan-y;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-bold);
+  }
+
+  &__controls {
+    display: flex;
+    gap: var(--space-2);
+  }
+}

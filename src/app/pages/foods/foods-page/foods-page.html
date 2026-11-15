@@ -46,7 +46,7 @@
               @if (food.warning) {
                 <span class="food__warning" aria-hidden="true">{{ t.warningIcon }}</span>
               }
-              <span class="food__status">{{ t.notTried }}</span>
+              <span class="food__status">{{ statusText(food) }}</span>
             </a>
           </li>
         }

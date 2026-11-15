@@ -1,0 +1,83 @@
+<section class="calendar">
+  <app-alert-strip [alerts]="extensions.alerts()" (act)="extensions.onAlertAction()($event)" />
+
+  <header
+    class="calendar__header"
+    (pointerdown)="swipeStart($event)"
+    (pointerup)="swipeEnd($event)"
+  >
+    <div class="calendar__nav">
+      <app-icon-button icon="›" [ariaLabel]="t.previous" (pressed)="step(-1)" />
+      <h2 class="calendar__title">{{ title() }}</h2>
+      <app-icon-button icon="‹" [ariaLabel]="t.next" (pressed)="step(1)" />
+    </div>
+    <div class="calendar__controls">
+      <app-chip (pressed)="goToday()">{{ t.today }}</app-chip>
+      <app-chip [selected]="view_() === 'week'" (pressed)="setView('week')">{{ t.week }}</app-chip>
+      <app-chip [selected]="view_() === 'month'" (pressed)="setView('month')">{{
+        t.month
+      }}</app-chip>
+    </div>
+  </header>
+
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state [message]="t.loadFailed" (retry)="load()" />
+  } @else if (view_() === 'week') {
+    <app-week-view
+      [weekStart]="weekStart()"
+      [today]="today()"
+      [items]="items()"
+      [foods]="foods()"
+      [suggested]="extensions.suggested()"
+      [badgeFor]="extensions.badgeFor()"
+      (itemOpened)="openItem($event)"
+      (addRequested)="requestAdd($event)"
+      (moveRequested)="moveItem($event)"
+      (suggestionAccepted)="extensions.onSuggestionAccept()($event)"
+      (suggestionDismissed)="extensions.onSuggestionDismiss()($event)"
+    />
+  } @else {
+    <app-month-view
+      [month]="anchor_()"
+      [today]="today()"
+      [items]="items()"
+      [foods]="foods()"
+      (dayOpened)="openDay($event)"
+    />
+  }
+
+  @if (daySheet_(); as date) {
+    <app-day-sheet
+      [open]="true"
+      [date]="date"
+      [items]="items()"
+      [foods]="foods()"
+      [badgeFor]="extensions.badgeFor()"
+      (closed)="daySheet_.set(null)"
+      (itemOpened)="openItem($event)"
+      (addRequested)="requestAdd($event)"
+      (moveRequested)="moveItem($event)"
+    />
+  }
+
+  <app-add-food-sheet
+    [open]="addFor_() !== null"
+    [foods]="foods()"
+    [recentIds]="recentIds()"
+    (closed)="addFor_.set(null)"
+    (picked)="pickFood($event)"
+    (newFoodRequested)="newFood()"
+  />
+
+  <app-item-actions-sheet
+    [open]="actionsId_() !== null"
+    [item]="actionsItem()"
+    [food]="actionsFood()"
+    (closed)="actionsId_.set(null)"
+    (patched)="patchItem($event)"
+    (moved)="moveFromActions($event)"
+    (removed)="removeItem()"
+  />
+</section>

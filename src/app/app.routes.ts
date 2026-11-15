@@ -15,7 +15,7 @@ export const routes: Routes = [
     path: '',
     canActivate: [authGuard, babyGuard],
     children: [
-      { path: '', pathMatch: 'full', loadComponent: () => import('./pages/calendar/calendar').then((m) => m.CalendarPage) },
+      { path: '', pathMatch: 'full', loadComponent: () => import('./pages/calendar/calendar-page/calendar-page').then((m) => m.CalendarPage) },
       {
         path: 'foods',
         pathMatch: 'full',

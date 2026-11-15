@@ -12,6 +12,7 @@ import { createIndexes } from './repositories/indexes.js'
 import { createAllergensRouter } from './routes/allergens.js'
 import { createAuthRouter } from './routes/auth.js'
 import { createBabyRouter } from './routes/baby.js'
+import { createCalendarRouter } from './routes/calendar.js'
 import { createCatalogContext } from './routes/catalog-helpers.js'
 import { createFoodsRouter } from './routes/foods.js'
 import { healthRouter } from './routes/health.js'
@@ -53,6 +54,7 @@ export function createApp({ config, db }) {
   const catalogContext = createCatalogContext({ repos })
   app.use('/api/v1/allergens', requireAuth, catalogContext, createAllergensRouter({ repos }))
   app.use('/api/v1/foods', requireAuth, catalogContext, createFoodsRouter({ repos }))
+  app.use('/api/v1/calendar', requireAuth, catalogContext, createCalendarRouter({ repos }))
   app.use('/api', notFound)
 
   app.use(express.static(config.staticDir))
