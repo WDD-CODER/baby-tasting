@@ -313,6 +313,11 @@
       "kind": "managed",
       "source": "packs/angular/.cursor/rules/scss-styling-must-use-cssLayer.mdc"
     },
+    ".editorconfig": {
+      "sha256": "d62fd282eadb5b3ff888a23ba5968e490cc0a77dded2fbc4f704b7e6e247f4db",
+      "kind": "managed",
+      "source": "core/.editorconfig"
+    },
     ".gitattributes": {
       "sha256": "484b84750f6a716c7d619302401bd780c069c5a548162ec637bcc963b3145e74",
       "kind": "managed",
@@ -372,6 +377,11 @@
       "sha256": "5cd80f43313b0af162229abd9fabff0f902ebf2e9acd1ef624aabbff7efe12c5",
       "kind": "managed",
       "source": "core/.vscode/settings.json"
+    },
+    ".vscode/tasks.json": {
+      "sha256": "b409efe1410a770328f16565a420d6f70fd00afaab9e23ca3f80a8a751953ae2",
+      "kind": "managed",
+      "source": "packs/angular/.vscode/tasks.json"
     },
     "AGENTS.md": {
       "sha256": "61bb1608ce23d1c89cb8154d09ea9bad6535f4b78f249d539243bb4af9ecef76",
@@ -529,7 +539,7 @@
       "source": "core/docs/agent/styleqa.md"
     },
     "docs/agent/workflow-map.md": {
-      "sha256": "bcfaae3e34d9bb658b7056851d27273a7989950abb2e77fb07b96dc2b44cbe66",
+      "sha256": "6c78a0f51e5127b13601047d42ae9cbbc55f357c8e18808e3eae1989d73df6be",
       "kind": "managed",
       "source": "core/docs/agent/workflow-map.md"
     },
@@ -954,7 +964,7 @@
       "source": "core/scripts/lib/scope-tests-lint.mjs"
     },
     "scripts/lib/slot-procs.mjs": {
-      "sha256": "04ce24b59312d1e3e0f30882cf27f1c0e6e0ccb183b84c3951b48362f728bc2b",
+      "sha256": "3eacc4414bd6bd02766912e457c07c9c984fc833a2cfbe1abe52c71d1f4ff888",
       "kind": "managed",
       "source": "core/scripts/lib/slot-procs.mjs"
     },
