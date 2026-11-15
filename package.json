@@ -6,21 +6,23 @@
     "start": "ng serve",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "lint": "ng lint",
-    "test": "ng test --watch=false --browsers=ChromeHeadless",
+    "lint": "ng lint && node tools/check-no-hex.mjs",
+    "test": "ng test --watch=false --browsers=ChromeHeadless && pnpm run test:server",
     "prepare": "husky",
     "e2e": "playwright test",
-    "test:server": "pnpm --dir server test"
+    "test:server": "pnpm --dir server install --frozen-lockfile --prefer-offline && pnpm --dir server test"
   },
   "private": true,
   "packageManager": "pnpm@10.34.6",
   "dependencies": {
+    "@angular/cdk": "^22.2.7",
     "@angular/common": "^22.2.0",
     "@angular/compiler": "^22.2.0",
     "@angular/core": "^22.2.0",
     "@angular/forms": "^22.2.0",
     "@angular/platform-browser": "^22.2.0",
     "@angular/router": "^22.2.0",
+    "@fontsource/heebo": "^5.3.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

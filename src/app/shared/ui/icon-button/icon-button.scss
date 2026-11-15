@@ -1,0 +1,35 @@
+:host {
+  display: inline-block;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  inline-size: var(--touch-target);
+  block-size: var(--touch-target);
+
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  padding: 0;
+
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--fs-lg);
+  cursor: pointer;
+
+  &--secondary {
+    border-color: var(--color-border);
+    background: var(--color-surface-raised);
+  }
+
+  &--danger {
+    color: var(--color-tier-bad);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-border);
+    outline-offset: 2px;
+  }
+}

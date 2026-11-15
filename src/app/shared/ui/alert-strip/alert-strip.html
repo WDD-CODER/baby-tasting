@@ -1,0 +1,14 @@
+@if (alerts().length) {
+  <div class="strip" role="list">
+    @for (alert of alerts(); track alert.id) {
+      <div [class]="'alert alert--' + alert.tone" role="listitem">
+        <span class="alert__text">{{ alert.text }}</span>
+        @if (alert.actionLabel) {
+          <button type="button" class="alert__action" (click)="act.emit(alert.id)">
+            {{ alert.actionLabel }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+}

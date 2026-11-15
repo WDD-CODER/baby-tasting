@@ -1,0 +1,8 @@
+<button
+  type="button"
+  [class]="'icon-btn icon-btn--' + variant()"
+  [attr.aria-label]="ariaLabel()"
+  (click)="pressed.emit()"
+>
+  <span aria-hidden="true">{{ icon() }}</span>
+</button>

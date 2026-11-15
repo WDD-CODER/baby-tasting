@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.demo {
+  &__title {
+    margin-block: 0 var(--space-4);
+
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-black);
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+
+    margin-block-end: var(--space-6);
+
+    h3 {
+      margin: 0;
+
+      color: var(--color-text-secondary);
+      font-size: var(--fs-sm);
+    }
+  }
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+}

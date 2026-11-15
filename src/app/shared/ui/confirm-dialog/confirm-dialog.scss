@@ -1,0 +1,43 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+
+  background: var(--color-backdrop);
+}
+
+.dialog {
+  position: fixed;
+  inset-inline: var(--space-4);
+  inset-block-start: 50%;
+  z-index: 51;
+  transform: translateY(-50%);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-bold);
+  }
+
+  &__body {
+    margin-block: var(--space-3) 0;
+
+    color: var(--color-text-secondary);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+
+    margin-block-start: var(--space-5);
+  }
+}

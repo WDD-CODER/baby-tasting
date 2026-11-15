@@ -1,0 +1,49 @@
+:host {
+  display: block;
+  min-inline-size: 0;
+}
+
+.strip {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+}
+
+.alert {
+  --alert-color: var(--color-tier-okay);
+
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-3);
+
+  min-block-size: var(--touch-target);
+
+  border: 1px solid var(--alert-color);
+  border-radius: var(--radius-card);
+  padding-inline: var(--space-3);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+
+  &--bad {
+    --alert-color: var(--color-tier-bad);
+  }
+
+  &--good {
+    --alert-color: var(--color-tier-good);
+  }
+
+  &__action {
+    min-block-size: var(--touch-target);
+
+    border: 0;
+
+    background: transparent;
+    color: var(--alert-color);
+    font-family: inherit;
+    font-weight: var(--fw-bold);
+    cursor: pointer;
+  }
+}
