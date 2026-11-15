@@ -143,3 +143,4 @@ Registration, passwords, password reset, roles, more than one household, more th
 - Planner decision (review fix): this plan may modify the existing `src/app/app.routes.ts` entries named in B10 (nesting the shell routes under `authGuard` and `babyGuard`); the append-only rule is waived for those entries only.
 - Builder: B1–B12 done. Blocked on `src/app/app.spec.ts` (outside scope): the route guards now need `AuthService`/`BabyService`, so its 2 router tests ('renders the foods empty state', 'redirects an unknown path') fail (`pnpm run test` → 2 FAILED, 19 SUCCESS). Needed: provide stub `AuthService`/`BabyService` in its TestBed. Asked for `approved: src/app/app.spec.ts`.
 - Evidence: `pnpm run build` → 0; `pnpm run lint` → 0; `node --test server/test/*.test.js` → pass, 0 fail (auth, baby, test-reset, app).
+- Builder (resume): added stub AuthService/BabyService to src/app/app.spec.ts (approved 002-1); pnpm run test -> exit 0, 22 pass.
