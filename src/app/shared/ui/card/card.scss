@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+
+  &--raised {
+    background: var(--color-surface-raised);
+  }
+}

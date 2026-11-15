@@ -1,0 +1,5 @@
+<div class="error" role="alert">
+  <span class="error__icon" aria-hidden="true">⚠️</span>
+  <p class="error__message">{{ message() }}</p>
+  <app-button variant="secondary" (pressed)="retry.emit()">{{ t.retry }}</app-button>
+</div>

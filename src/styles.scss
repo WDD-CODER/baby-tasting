@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+@use './styles/tokens';
+@import '@fontsource/heebo/400.css';
+@import '@fontsource/heebo/500.css';
+@import '@fontsource/heebo/700.css';
+@import '@fontsource/heebo/800.css';
+
+$break-mobile: 768px;
+$break-tablet: 900px;
+$break-desktop: 1200px;
+
+:root {
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: var(--fs-md);
+}

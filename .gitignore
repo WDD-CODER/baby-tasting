@@ -56,3 +56,8 @@ src/environments/environment.slot.ts
 /logs/
 *.log
 .DS_Store
+
+# Playwright
+/e2e/.results/
+/e2e/screens/
+/playwright-report/

@@ -106,7 +106,7 @@
               "buildTarget": "baby-tasting:build:slot"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "test": {
           "builder": "@angular/build:unit-test",
