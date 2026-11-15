@@ -54,6 +54,7 @@ src/app/pages/settings/**
 src/app/shared/**
 e2e/**
 docs/project/current-state.md
+src/app/app.spec.ts
 ```
 
 ## Read Scope
