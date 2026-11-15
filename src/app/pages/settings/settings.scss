@@ -14,6 +14,13 @@
     font-weight: var(--fw-bold);
   }
 
+  &__disclaimer {
+    margin: 0;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
   &__logout {
     margin-block-start: var(--space-6);
   }

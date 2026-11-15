@@ -57,6 +57,27 @@ export function createFoodsRouter({ repos }) {
     }),
   )
 
+  router.get(
+    '/:id/history',
+    handle(async (req, res) => {
+      await load(req)
+      const given = (await repos.calendarItems.listByFood(req.householdId, req.params.id)).filter(
+        (it) => it.status === 'given',
+      )
+      given.sort((a, b) => (a.date === b.date ? b.meal - a.meal : a.date < b.date ? 1 : -1))
+      res.json({
+        items: given.map((it) => ({
+          id: String(it._id),
+          date: it.date,
+          meal: it.meal,
+          amount: it.amount ?? null,
+          note: it.note ?? '',
+          liked: it.liked === true || it.liked === false ? it.liked : null,
+        })),
+      })
+    }),
+  )
+
   router.put(
     '/queue',
     handle(async (req, res) => {

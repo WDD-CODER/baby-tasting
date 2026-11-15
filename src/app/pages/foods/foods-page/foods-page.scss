@@ -158,7 +158,67 @@
   &__name {
     flex: 1;
   }
+}
 
+.progress {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+
+  background: var(--color-surface);
+
+  &__summary {
+    font-weight: var(--fw-bold);
+    cursor: pointer;
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+
+    margin: var(--space-3) 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-1) var(--space-2);
+  }
+
+  &__count {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
+  &__bar {
+    grid-column: 1 / -1;
+
+    block-size: 6px;
+    border-radius: var(--radius-card);
+
+    background: var(--color-border);
+    overflow: hidden;
+  }
+
+  &__fill {
+    display: block;
+    block-size: 100%;
+
+    background: var(--color-cat-nutrition);
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+}
+
+.food {
   &__status {
     color: var(--color-text-secondary);
     font-size: var(--fs-sm);

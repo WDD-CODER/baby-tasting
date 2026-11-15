@@ -28,6 +28,9 @@ export class ItemActionsSheet {
   readonly moved = output<{ date: string; meal: Meal }>()
   readonly removed = output<void>()
   readonly reactionRequested = output<void>()
+  readonly detailsRequested = output<void>()
+
+  protected readonly detailsLabel = HE.foodDetail.toDetails
 
   protected readonly t = HE.calendar
   protected readonly amounts = AMOUNTS.map((key) => ({ key, label: HE.calendar.amounts[key] }))

@@ -10,6 +10,7 @@ import { requestLogger } from './middleware/request-logger.js'
 import { createRepos } from './repositories/index.js'
 import { createIndexes } from './repositories/indexes.js'
 import { createAllergenStatusRouter } from './routes/allergen-status.js'
+import { createActivityRouter } from './routes/activity.js'
 import { createAllergensRouter } from './routes/allergens.js'
 import { createAuthRouter } from './routes/auth.js'
 import { createBabyRouter } from './routes/baby.js'
@@ -18,8 +19,10 @@ import { createCatalogContext } from './routes/catalog-helpers.js'
 import { createFoodsRouter } from './routes/foods.js'
 import { healthRouter } from './routes/health.js'
 import { createPhotoStore } from './lib/cloudinary.js'
+import { createProgressRouter } from './routes/progress.js'
 import { createReactionsRouter } from './routes/reactions.js'
 import { createUploadsRouter } from './routes/uploads.js'
+import { createUsersRouter } from './routes/users.js'
 import { createSettingsRouter } from './routes/settings.js'
 import { createSuggestionsRouter } from './routes/suggestions.js'
 import { createTestResetRouter } from './routes/test-reset.js'
@@ -67,6 +70,9 @@ export function createApp({ config, db, photoStore = createPhotoStore(config.clo
     catalogContext,
   )
   app.use('/api/v1', statusRouter)
+  app.use('/api/v1/progress', requireAuth, catalogContext, createProgressRouter({ repos }))
+  app.use('/api/v1/activity', requireAuth, createActivityRouter({ repos }))
+  app.use('/api/v1/users', requireAuth, createUsersRouter({ repos }))
   app.use('/api/v1/settings', requireAuth, createSettingsRouter({ repos }))
   app.use('/api/v1/allergens', requireAuth, catalogContext, createAllergensRouter({ repos }))
   app.use('/api/v1/foods', requireAuth, catalogContext, createFoodsRouter({ repos }))

@@ -1,4 +1,6 @@
 <section class="calendar">
+  <app-calendar-hint />
+
   <app-alert-strip
     [alerts]="extensions.alerts()"
     [limit]="3"
@@ -125,5 +127,6 @@
     (moved)="moveFromActions($event)"
     (removed)="removeItem()"
     (reactionRequested)="openReaction()"
+    (detailsRequested)="openDetails()"
   />
 </section>

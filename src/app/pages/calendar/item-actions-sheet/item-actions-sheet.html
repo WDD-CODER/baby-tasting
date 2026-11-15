@@ -50,6 +50,10 @@
         }}</app-button>
       }
 
+      <app-button variant="ghost" (pressed)="detailsRequested.emit()">{{
+        detailsLabel
+      }}</app-button>
+
       <app-button variant="ghost" (pressed)="toggleMove()">{{ t.moveTo }}</app-button>
       @if (moving_()) {
         <div class="move">

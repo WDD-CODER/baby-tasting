@@ -32,6 +32,15 @@ export interface Food {
   foodLocked?: boolean
 }
 
+export interface FoodHistoryItem {
+  id: string
+  date: string
+  meal: number
+  amount: 'taste' | 'teaspoon' | 'portion' | null
+  note: string
+  liked: boolean | null
+}
+
 export interface FoodInput {
   name: string
   emoji: string

@@ -68,3 +68,35 @@ test('PUT refuses out-of-range values with 400 invalid', async () => {
   }
   assert.equal((await agent.get('/api/v1/settings')).body.settings.introDays, 3)
 })
+
+test('POST /settings/reset restores every default', async () => {
+  const agent = await signedInAgent(ctx.newApp())
+  await agent.put('/api/v1/settings').send({ introDays: 5, newFoodsPerWeek: 0 })
+  const res = await agent.post('/api/v1/settings/reset')
+  assert.equal(res.status, 200)
+  assert.deepEqual(res.body.settings, {
+    introDays: 3,
+    maintenancePerWeek: 2,
+    maintenanceGapDays: 5,
+    maintenanceUntilMonths: 24,
+    maxAllergensPerMeal: 2,
+    newFoodsPerWeek: 3,
+  })
+  assert.equal((await agent.get('/api/v1/settings')).body.settings.introDays, 3)
+  assert.equal((await request(ctx.newApp()).post('/api/v1/settings/reset')).status, 401)
+})
+
+test('PUT /users/me/hints stores calendarHintSeen per user', async () => {
+  await ctx.db.collection('userPrefs').deleteMany({})
+  const app = ctx.newApp()
+  const a = await signedInAgent(app, 'parent-a')
+  const b = await signedInAgent(app, 'parent-b')
+  assert.equal((await a.get('/api/v1/users/me/hints')).body.hints.calendarHintSeen, false)
+  const put = await a.put('/api/v1/users/me/hints').send({ calendarHintSeen: true })
+  assert.equal(put.status, 200)
+  assert.equal(put.body.hints.calendarHintSeen, true)
+  assert.equal((await a.get('/api/v1/users/me/hints')).body.hints.calendarHintSeen, true)
+  assert.equal((await b.get('/api/v1/users/me/hints')).body.hints.calendarHintSeen, false)
+  assert.equal((await a.put('/api/v1/users/me/hints').send({ calendarHintSeen: 'yes' })).status, 400)
+  assert.equal((await request(app).get('/api/v1/users/me/hints')).status, 401)
+})

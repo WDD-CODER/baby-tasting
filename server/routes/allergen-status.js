@@ -8,7 +8,7 @@ import { handle, notFound } from './catalog-helpers.js'
 
 const idOf = (doc) => String(doc._id)
 
-async function compute(repos, req) {
+export async function compute(repos, req) {
   const today = todayIso()
   const [baby, stored, allergens, foods, items, planned, locks] = await Promise.all([
     repos.babies.getForHousehold(req.householdId),

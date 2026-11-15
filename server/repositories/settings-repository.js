@@ -12,6 +12,17 @@ export class SettingsRepository extends BaseRepository {
     return doc?.values ?? {}
   }
 
+  // Drops every stored value so the defaults apply again.
+  async reset(householdId, user) {
+    const existing = await this.findOne(householdId, {})
+    if (existing) {
+      await this.collection.updateOne(
+        { _id: existing._id, householdId },
+        { $set: withUpdateAudit({ values: {} }, user, new Date()) },
+      )
+    }
+  }
+
   async save(householdId, values, user) {
     const existing = await this.findOne(householdId, {})
     const merged = { ...(existing?.values ?? {}), ...values }
