@@ -1,0 +1,69 @@
+<app-bottom-sheet [open]="open() && item() !== null" [title]="title()" (closed)="closed.emit()">
+  @if (item(); as it) {
+    <div class="actions">
+      <div class="actions__row">
+        <app-button
+          [variant]="it.status === 'given' ? 'primary' : 'secondary'"
+          (pressed)="patched.emit({ status: 'given' })"
+        >
+          {{ t.given }}
+        </app-button>
+        <app-button
+          [variant]="it.status === 'skipped' ? 'primary' : 'secondary'"
+          (pressed)="patched.emit({ status: 'skipped' })"
+        >
+          {{ t.skipped }}
+        </app-button>
+        @if (it.status !== 'planned') {
+          <app-button variant="ghost" (pressed)="patched.emit({ status: 'planned' })">{{
+            t.unmark
+          }}</app-button>
+        }
+      </div>
+
+      @if (it.status === 'given') {
+        <div class="actions__row" role="group" [attr.aria-label]="t.amount">
+          @for (a of amounts; track a.key) {
+            <app-chip [selected]="it.amount === a.key" (pressed)="setAmount(a.key)">{{
+              a.label
+            }}</app-chip>
+          }
+          <app-chip tone="good" [selected]="it.liked === true" (pressed)="toggleLiked()"
+            >❤️ {{ t.liked }}</app-chip
+          >
+        </div>
+        <label class="note">
+          <span class="note__label">{{ t.note }}</span>
+          <input
+            class="note__input"
+            type="text"
+            maxlength="200"
+            [value]="it.note"
+            (change)="onNote($event)"
+          />
+        </label>
+      }
+
+      <app-button variant="ghost" (pressed)="toggleMove()">{{ t.moveTo }}</app-button>
+      @if (moving_()) {
+        <div class="move">
+          <app-text-field
+            type="date"
+            [label]="t.moveDate"
+            [ngModel]="moveDate_()"
+            (ngModelChange)="moveDate_.set($event)"
+          />
+          <app-select
+            [label]="t.moveMeal"
+            [options]="mealOptions"
+            [ngModel]="moveMeal_()"
+            (ngModelChange)="moveMeal_.set($event)"
+          />
+          <app-button (pressed)="confirmMove()">{{ t.moveConfirm }}</app-button>
+        </div>
+      }
+
+      <app-button variant="danger" (pressed)="removed.emit()">{{ t.remove }}</app-button>
+    </div>
+  }
+</app-bottom-sheet>

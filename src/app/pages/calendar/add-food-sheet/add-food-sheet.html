@@ -1,0 +1,43 @@
+<app-bottom-sheet [open]="open()" [title]="t.addFood" (closed)="close()">
+  <input
+    class="search"
+    type="search"
+    [attr.aria-label]="t.search"
+    [placeholder]="t.search"
+    [value]="query_()"
+    (input)="onQuery($event)"
+  />
+
+  @if (recent().length) {
+    <h3 class="group">{{ t.recent }}</h3>
+    <ul class="list">
+      @for (food of recent(); track food.id) {
+        <li>
+          <button type="button" class="food" (click)="pick(food)">
+            <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+            <span class="food__name">{{ food.name }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+
+  <h3 class="group">{{ t.allFoods }}</h3>
+  <ul class="list">
+    @for (food of matches(); track food.id) {
+      <li>
+        <button type="button" class="food" (click)="pick(food)">
+          <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+          <span class="food__name">{{ food.name }}</span>
+          @if (food.allergenId) {
+            <span class="food__allergen" aria-hidden="true">{{ t.allergenBadge }}</span>
+          }
+        </button>
+      </li>
+    } @empty {
+      <li class="none">{{ t.noFoods }}</li>
+    }
+  </ul>
+
+  <button type="button" class="new" (click)="newFoodRequested.emit()">{{ t.newFood }}</button>
+</app-bottom-sheet>

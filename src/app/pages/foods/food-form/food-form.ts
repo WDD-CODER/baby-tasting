@@ -53,7 +53,13 @@ export class FoodForm implements HasUnsavedChanges {
   private readonly catalog = inject(CatalogService)
   private readonly router = inject(Router)
   private readonly confirmDialog = inject(ConfirmDialogService)
-  private readonly foodId = inject(ActivatedRoute).snapshot.paramMap.get('id')
+  private readonly route = inject(ActivatedRoute)
+  private readonly foodId = this.route.snapshot.paramMap.get('id')
+  /** Where to go after saving; only an app-internal path is accepted. */
+  private readonly returnTo = ((): string => {
+    const value = this.route.snapshot.queryParamMap.get('returnTo')
+    return value !== null && value.startsWith('/') && !value.startsWith('//') ? value : '/foods'
+  })()
 
   protected readonly t = HE.foods.form
   protected readonly isEdit = this.foodId !== null
@@ -162,7 +168,7 @@ export class FoodForm implements HasUnsavedChanges {
     try {
       await this.catalog.saveFood(this.toInput(), this.foodId ?? undefined)
       this.leaving_ = true
-      await this.router.navigateByUrl('/foods')
+      await this.router.navigateByUrl(this.returnTo)
     } catch (err) {
       this.error_.set(this.messageFor(err))
     } finally {
@@ -171,7 +177,7 @@ export class FoodForm implements HasUnsavedChanges {
   }
 
   protected async cancel(): Promise<void> {
-    await this.router.navigateByUrl('/foods')
+    await this.router.navigateByUrl(this.returnTo)
   }
 
   protected async archive(): Promise<void> {

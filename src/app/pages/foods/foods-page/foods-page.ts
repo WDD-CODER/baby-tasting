@@ -82,6 +82,12 @@ export class FoodsPage {
     return food.allergenId ? (this.allergenById().get(food.allergenId)?.name ?? '') : ''
   }
 
+  protected statusText(food: Food): string {
+    const status = food.status
+    if (!status?.tried) return this.t.notTried
+    return `${this.t.tried} · ${status.timesGiven}${status.liked === true ? ' ❤️' : ''}`
+  }
+
   protected add(): void {
     void this.router.navigateByUrl('/foods/new')
   }

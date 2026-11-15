@@ -1,0 +1,25 @@
+<div class="month">
+  @for (letter of letters; track letter) {
+    <div class="month__letter">{{ letter }}</div>
+  }
+  @for (cell of cells(); track cell.date) {
+    <button
+      type="button"
+      class="day"
+      [class.day--out]="!cell.inMonth"
+      [class.day--today]="cell.date === today()"
+      [attr.data-date]="cell.date"
+      (click)="dayOpened.emit(cell.date)"
+    >
+      <span class="day__num">{{ dom(cell.date) }}</span>
+      <span class="day__emoji">
+        @for (e of cell.emoji; track $index) {
+          <span class="day__item">{{ e }}</span>
+        }
+        @if (cell.more > 0) {
+          <span class="day__more">+{{ cell.more }}</span>
+        }
+      </span>
+    </button>
+  }
+</div>

@@ -1,9 +1,10 @@
 import { Router } from 'express'
+import { deriveFoodStatus } from '../domain/calendar-rules.js'
 import { parseFoodInput } from '../lib/catalog-validation.js'
 import { HttpError } from '../lib/http-error.js'
 import { duplicateName, handle, notFound, wantsArchived } from './catalog-helpers.js'
 
-export function toFoodDto(doc) {
+export function toFoodDto(doc, status = null) {
   return {
     id: String(doc._id),
     name: doc.name,
@@ -13,6 +14,7 @@ export function toFoodDto(doc) {
     warning: doc.warning ?? null,
     builtIn: doc.builtIn === true,
     archived: doc.archived === true,
+    status: status ?? { tried: false, firstDate: null, timesGiven: 0, liked: null },
   }
 }
 
@@ -34,7 +36,8 @@ export function createFoodsRouter({ repos }) {
       const docs = wantsArchived(req)
         ? await repos.foods.listAll(req.householdId)
         : await repos.foods.listActive(req.householdId)
-      res.json({ foods: docs.map(toFoodDto) })
+      const statuses = deriveFoodStatus(await repos.calendarItems.listGiven(req.householdId))
+      res.json({ foods: docs.map((d) => toFoodDto(d, statuses[String(d._id)])) })
     }),
   )
 

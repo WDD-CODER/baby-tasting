@@ -41,6 +41,8 @@ Heebo via `@fontsource/heebo`, weights 400, 500, 700, 800, fallback `system-ui`.
 
 planned = outline; given = filled + ✓; skipped = 50% opacity + line-through; suggested = dashed outline.
 
+Calendar tile (plan 004): 32px emoji inside a 44px touch target; allergen = 2px accent ring plus an 18px neutral badge dot at the inline-end top corner; given shows a small ✓ at the inline-start bottom corner.
+
 ## Shared components (`src/app/shared/ui/<name>/`, selector `app-<name>`)
 
 | Component | Inputs / outputs |
@@ -80,3 +82,6 @@ planned = outline; given = filled + ✓; skipped = 50% opacity + line-through; s
 - D-6: toasts stack above the bottom navigation and auto-hide after 4 s — reverse: edit `toast.ts` / `toast.scss`.
 - D-7: the unsaved-changes prompt uses the destructive confirm style for "לצאת" — reverse: pass `destructive: false` in `unsaved-changes.guard.ts`.
 - D-8: the baby slot in the top bar is empty until a later plan fills `ShellService.babyLabel` — reverse: none needed.
+- D-9: the week grid has a 56px label column and 7 columns of at least 56px, scrolling inside itself at 360px; today's column has an accent-border tint — reverse: edit `week-view.scss`.
+- D-10: swiping the header area left goes to the next week or month, right to the previous (matching the arrows in RTL) — reverse: swap the sign in `calendar-page.ts` `swipeEnd`.
+- D-11: the allergen badge is a neutral dot until plan 005 fills state colours — reverse: none needed.
