@@ -43,7 +43,7 @@
     "test": "test",
     "testCi": "",
     "lint": "lint",
-    "e2e": "",
+    "e2e": "e2e",
     "codegen": "",
     "cli": "",
     "lintStaged": "",
