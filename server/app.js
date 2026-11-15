@@ -9,8 +9,11 @@ import { notFound } from './middleware/not-found.js'
 import { requestLogger } from './middleware/request-logger.js'
 import { createRepos } from './repositories/index.js'
 import { createIndexes } from './repositories/indexes.js'
+import { createAllergensRouter } from './routes/allergens.js'
 import { createAuthRouter } from './routes/auth.js'
 import { createBabyRouter } from './routes/baby.js'
+import { createCatalogContext } from './routes/catalog-helpers.js'
+import { createFoodsRouter } from './routes/foods.js'
 import { healthRouter } from './routes/health.js'
 import { createTestResetRouter } from './routes/test-reset.js'
 
@@ -47,6 +50,9 @@ export function createApp({ config, db }) {
   app.use('/api/v1', createAuthRouter({ repos, config: authConfig, requireAuth }))
   if (config.e2eReset) app.use('/api/v1', createTestResetRouter({ repos }))
   app.use('/api/v1/baby', requireAuth, createBabyRouter({ repos }))
+  const catalogContext = createCatalogContext({ repos })
+  app.use('/api/v1/allergens', requireAuth, catalogContext, createAllergensRouter({ repos }))
+  app.use('/api/v1/foods', requireAuth, catalogContext, createFoodsRouter({ repos }))
   app.use('/api', notFound)
 
   app.use(express.static(config.staticDir))

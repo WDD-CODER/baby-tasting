@@ -16,7 +16,26 @@ export const routes: Routes = [
     canActivate: [authGuard, babyGuard],
     children: [
       { path: '', pathMatch: 'full', loadComponent: () => import('./pages/calendar/calendar').then((m) => m.CalendarPage) },
-      { path: 'foods', loadComponent: () => import('./pages/foods/foods').then((m) => m.FoodsPage) },
+      {
+        path: 'foods',
+        pathMatch: 'full',
+        loadComponent: () => import('./pages/foods/foods-page/foods-page').then((m) => m.FoodsPage),
+      },
+      {
+        path: 'foods/new',
+        canDeactivate: [unsavedChangesGuard],
+        loadComponent: () => import('./pages/foods/food-form/food-form').then((m) => m.FoodForm),
+      },
+      {
+        path: 'foods/allergens',
+        loadComponent: () =>
+          import('./pages/foods/allergens-manage/allergens-manage').then((m) => m.AllergensManage),
+      },
+      {
+        path: 'foods/:id/edit',
+        canDeactivate: [unsavedChangesGuard],
+        loadComponent: () => import('./pages/foods/food-form/food-form').then((m) => m.FoodForm),
+      },
       { path: 'allergens', loadComponent: () => import('./pages/allergens/allergens').then((m) => m.AllergensPage) },
       {
         path: 'settings',

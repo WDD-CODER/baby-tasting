@@ -1,0 +1,24 @@
+<div class="picker" role="group" [attr.aria-label]="label()">
+  <span class="picker__label">{{ label() }}</span>
+  <div class="picker__grid">
+    @for (emoji of options; track emoji + $index) {
+      <button
+        type="button"
+        class="picker__item"
+        [class.picker__item--selected]="emoji === value()"
+        [attr.aria-pressed]="emoji === value()"
+        (click)="value.set(emoji)"
+      >
+        {{ emoji }}
+      </button>
+    }
+  </div>
+  <input
+    class="picker__free"
+    type="text"
+    [attr.aria-label]="freeLabel"
+    [placeholder]="freeLabel"
+    [value]="value()"
+    (input)="onFree($event)"
+  />
+</div>
