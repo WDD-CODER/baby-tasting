@@ -6,6 +6,7 @@ import { HE } from './core/i18n/he'
 import { routes } from './app.routes'
 import { AuthService } from './core/services/auth.service'
 import { BabyService } from './core/services/baby.service'
+import { CatalogService } from './core/services/catalog.service'
 
 describe('App', () => {
   beforeEach(async () => {
@@ -18,6 +19,16 @@ describe('App', () => {
           useValue: {
             loadMe: async () => ({ username: 'parent-a' }),
             user: () => ({ username: 'parent-a' }),
+          },
+        },
+        {
+          provide: CatalogService,
+          useValue: {
+            load: async () => undefined,
+            foods: () => [],
+            allergens: () => [],
+            archivedAllergens: () => [],
+            allergenById: () => new Map(),
           },
         },
         {
@@ -42,8 +53,10 @@ describe('App', () => {
 
   it('renders the foods empty state on /foods', async () => {
     const harness = await RouterTestingHarness.create('/foods')
+    await harness.fixture.whenStable()
+    harness.detectChanges()
     const el = harness.routeNativeElement as HTMLElement
-    expect(el.textContent).toContain(HE.common.empty)
+    expect(el.textContent).toContain(HE.foods.add)
   })
 
   it('redirects an unknown path to the calendar', async () => {

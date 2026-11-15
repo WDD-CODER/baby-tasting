@@ -135,3 +135,4 @@ Calendar placement, any status beyond `לא נוסה`, locks, age-based recommen
 - `pnpm run test` → 1: Karma 23 pass, 1 fail — `src/app/app.spec.ts` "renders the foods empty state on /foods" expects the old placeholder page and sees the new foods page loading. That file is outside this plan's scope: needs `approved: src/app/app.spec.ts` (stub `CatalogService` and expect the new page).
 - `e2e/001-2-components.spec.ts` section count 13 → 14 (new emoji-picker demo section; inside `e2e/**`).
 - `[ui]` items: `e2e/003-{1,2,3}-*.spec.ts` written, not run.
+- Resume (answer 003-1 approved): `src/app/app.spec.ts` now stubs `CatalogService` and expects the add button of the new foods page; `pnpm run test` → 0 (24 pass), build → 0, lint → 0.
