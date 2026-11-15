@@ -1,0 +1,230 @@
+{
+  "run": "night-1",
+  "branch": "orch/night-1",
+  "base": "main",
+  "startedAt": "2026-11-15T19:48:39.821Z",
+  "mainShaAtStart": "ebf1b1f24e30f84c61981a4b78904df83e192c8f",
+  "plans": {
+    "001": {
+      "nnn": "001",
+      "title": "Foundation: app shell, design system, server base and Render file",
+      "branch": "feat/001-foundation-shell-design-server",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T19:49:44.859Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-15T20:00:50.751Z"
+        }
+      },
+      "humanItems": [
+        "The look matches Baby Tracker's feel (dark slate, Heebo, indigo accent)."
+      ],
+      "history": [
+        {
+          "at": "2026-11-15T19:49:44.647Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T19:49:44.861Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T19:59:56.015Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T19:59:56.443Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:00:46.805Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:00:50.754Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:01:14.759Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:01:51.096Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 26.5,
+      "sha": "65605d44dc523678ad4c80c22b2afa53cb089396",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 608.4,
+          "tokens": {
+            "input": 2465366,
+            "output": 57046
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 23.5,
+          "tokens": {
+            "input": 327507,
+            "output": 1688
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "`/dev/components` (development build) shows the heading `רכיבים משותפים` and one section per shared component.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "2ee9fd86086e57a8663a79bc7ea4c7d2a7001cca"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-15T19:49:44.444Z",
+      "plan": "001",
+      "text": "the folder baby-tasting-orch-night-1-001 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T19:59:53.466Z",
+      "plan": "001",
+      "text": "builder left undone (round 0): [ui] At 360px the shell shows the top bar and four tabs, and /foods shows its empty state: written, not run (e2e/001-1-shell.spec.ts); [ui] /dev/components shows the heading and one section per component: written, not run (e2e/001-2-components.spec.ts); [human] The look matches Baby Tracker's feel:"
+    },
+    {
+      "at": "2026-11-15T19:59:56.257Z",
+      "plan": "001",
+      "text": "[ui] `/dev/components` (development build) shows the heading `רכיבים משותפים` and one section per shared component.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-15T20:00:00.256Z",
+      "plan": "001",
+      "text": "the folder baby-tasting-orch-night-1-001 was installed (root, server)"
+    },
+    {
+      "at": "2026-11-15T20:01:29.303Z",
+      "plan": "001",
+      "text": "the folder baby-tasting-orch-merge-night-1 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 26.5,
+  "updatedAt": "2026-11-15T20:03:22.523Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: added INV-1..6 lines to the plan's own Architecture Impact (the arch check required them; the plan file is always writable) — reverse: restore the single INV-none line",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: the unsaved-changes prompt uses the destructive confirm style for the 'leave' button (DESIGN.md D-7) — reverse: pass destructive: false in unsaved-changes.guard.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: the baby slot in the top bar stays empty until a later plan fills ShellService.babyLabel (DESIGN.md D-8) — reverse: none needed",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: the health route reports db 'down' with HTTP 200 when the ping fails, rather than a 5xx — reverse: return 503 in server/routes/health.js",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D5",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: the Hebrew copy for the four empty-state action buttons is my own wording, since the plan left it open — reverse: edit HE.pages in he.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D6",
+      "plan": "001",
+      "type": "seen",
+      "text": "seen: mongodb-memory-server's postinstall build script is ignored by pnpm (server install prints 'Ignored build scripts'); the tests passed in this run, but a fresh machine may need to download the mongod binary on first use",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-15T20:03:22.520Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-15T20:03:22.522Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}
