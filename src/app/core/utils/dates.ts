@@ -67,6 +67,11 @@ export function weekTitle(start: string): string {
   return `${dayOfMonth(start)} ${HE.calendar.inMonth}${monthName(start)}${startYear} – ${dayOfMonth(end)} ${HE.calendar.inMonth}${monthName(end)} ${end.slice(0, 4)}`
 }
 
+/** `15 בנובמבר` */
+export function shortDate(iso: string): string {
+  return `${dayOfMonth(iso)} ${HE.calendar.inMonth}${monthName(iso)}`
+}
+
 /** `נובמבר 2026` */
 export function monthTitle(iso: string): string {
   return `${monthName(iso)} ${iso.slice(0, 4)}`

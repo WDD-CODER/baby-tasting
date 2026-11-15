@@ -12,6 +12,12 @@
     <span class="tile__check" aria-hidden="true">✓</span>
   }
   @if (isAllergen()) {
-    <span class="tile__badge" aria-hidden="true">{{ badge()?.text ?? '' }}</span>
+    <span
+      class="tile__badge"
+      [class.tile__badge--okay]="badge()?.tone === 'okay'"
+      [class.tile__badge--good]="badge()?.tone === 'good'"
+      aria-hidden="true"
+      >{{ badge()?.text ?? '' }}</span
+    >
   }
 </button>

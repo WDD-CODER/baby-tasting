@@ -36,6 +36,9 @@ Heebo via `@fontsource/heebo`, weights 400, 500, 700, 800, fallback `system-ui`.
 - Accent ring: 2px `--color-accent-border`.
 - Badge: 18px circle at the item's inline-end top corner.
 - introducing = `--color-tier-okay`; maintenance = `--color-tier-good`; locked = `--color-tier-bad` with 🔒; alert = `--color-tier-bad`.
+- Badge ordinal: a given item of an introducing allergen shows `n/N` (its ordinal among the allergen's given days) in a `--color-tier-okay` pill, bold; a maintenance allergen's item shows a plain `--color-tier-good` dot; every other allergen item keeps the neutral dot.
+- State chips (`app-chip`): `טרם התחיל` and `הסתיים` neutral, `בחשיפה` okay tone, `בתחזוקה` good tone.
+- Alert rows: a 4px `--color-tier-bad` bar at the inline-start, text, chevron at the inline-end; at most 3 rows, then `+N נוספות`.
 
 ## Item states
 
@@ -80,6 +83,8 @@ Calendar tile (plan 004): 32px emoji inside a 44px touch target; allergen = 2px 
 - D-4: font sizes are tokens `--fs-xs … --fs-xl` (12, 14, 16, 20, 24px) — reverse: change the values in `tokens.scss`.
 - D-5: the confirm dialog is a centred card (not a sheet); destructive confirmation uses the danger button — reverse: switch the dialog to `app-bottom-sheet`.
 - D-6: toasts stack above the bottom navigation and auto-hide after 4 s — reverse: edit `toast.ts` / `toast.scss`.
+- D-8 (plan 005): the badge grows from an 18px circle to a pill (min 18px) so `2/3` fits — reverse: show a dot only and put the ordinal in the item sheet.
+- D-9 (plan 005): an alert's suggested food is shown first in the add-food sheet under `מוצע` with an accent outline; it is not added until tapped — reverse: add it on the alert tap.
 - D-7: the unsaved-changes prompt uses the destructive confirm style for "לצאת" — reverse: pass `destructive: false` in `unsaved-changes.guard.ts`.
 - D-8: the baby slot in the top bar is empty until a later plan fills `ShellService.babyLabel` — reverse: none needed.
 - D-9: the week grid has a 56px label column and 7 columns of at least 56px, scrolling inside itself at 360px; today's column has an accent-border tint — reverse: edit `week-view.scss`.

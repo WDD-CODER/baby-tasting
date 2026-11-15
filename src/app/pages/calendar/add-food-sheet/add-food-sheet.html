@@ -8,6 +8,23 @@
     (input)="onQuery($event)"
   />
 
+  @if (preselected(); as food) {
+    <h3 class="group">{{ suggestedLabel }}</h3>
+    <ul class="list">
+      <li>
+        <button
+          type="button"
+          class="food food--preselected"
+          aria-current="true"
+          (click)="pick(food)"
+        >
+          <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+          <span class="food__name">{{ food.name }}</span>
+        </button>
+      </li>
+    </ul>
+  }
+
   @if (recent().length) {
     <h3 class="group">{{ t.recent }}</h3>
     <ul class="list">

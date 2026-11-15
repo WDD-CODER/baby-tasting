@@ -12,12 +12,14 @@ import { Router } from '@angular/router'
 import { HE } from '../../../core/i18n/he'
 import { CalendarItem, ItemPatch, Meal } from '../../../core/models/calendar-item'
 import { Food } from '../../../core/models/food'
+import { AllergenStatusService } from '../../../core/services/allergen-status.service'
 import { BabyService } from '../../../core/services/baby.service'
 import { CalendarService } from '../../../core/services/calendar.service'
 import { CatalogService } from '../../../core/services/catalog.service'
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service'
 import { ToastService } from '../../../core/services/toast.service'
 import { ageParts } from '../../../core/utils/age'
+import { alertText } from '../../../core/utils/alerts'
 import { refusalFor, refusalMessage } from '../../../core/utils/calendar-rules'
 import {
   addDays,
@@ -35,7 +37,7 @@ import { ErrorState } from '../../../shared/ui/error-state/error-state'
 import { IconButton } from '../../../shared/ui/icon-button/icon-button'
 import { LoadingState } from '../../../shared/ui/loading-state/loading-state'
 import { AddFoodSheet } from '../add-food-sheet/add-food-sheet'
-import { CalendarExtensions } from '../calendar-extensions.service'
+import { CalendarExtensions, ItemBadge } from '../calendar-extensions.service'
 import { Cell, MoveRequest } from '../calendar-types'
 import { DaySheet } from '../day-sheet/day-sheet'
 import { ItemActionsSheet } from '../item-actions-sheet/item-actions-sheet'
@@ -70,10 +72,12 @@ export class CalendarPage {
   private readonly baby = inject(BabyService)
   private readonly confirmDialog = inject(ConfirmDialogService)
   private readonly toast = inject(ToastService)
+  private readonly allergenStatus = inject(AllergenStatusService)
   private readonly router = inject(Router)
   protected readonly extensions = inject(CalendarExtensions)
 
   protected readonly t = HE.calendar
+  protected readonly alertsT = HE.alerts
   protected readonly today = signal(today())
   protected readonly view_ = signal<ViewMode>('week')
   protected readonly anchor_ = signal(today())
@@ -81,6 +85,7 @@ export class CalendarPage {
   protected readonly failed_ = signal(false)
   protected readonly daySheet_ = signal<string | null>(null)
   protected readonly addFor_ = signal<Cell | null>(null)
+  protected readonly preselect_ = signal<string | null>(null)
   protected readonly actionsId_ = signal<string | null>(null)
   protected readonly items = this.calendar.items
   protected readonly foods = this.catalog.foods
@@ -116,6 +121,18 @@ export class CalendarPage {
   constructor() {
     this.calendar.refreshOnFocus(inject(DestroyRef))
     void this.catalog.load().catch(() => this.failed_.set(true))
+    void this.allergenStatus.refresh()
+    this.extensions.onAlertAction.set((id) => this.openAlert(id))
+    effect(() => {
+      const alerts = this.allergenStatus.alerts()
+      this.extensions.alerts.set(
+        alerts.map((a) => ({ id: a.id, tone: 'bad' as const, text: alertText(a), tappable: true })),
+      )
+    })
+    effect(() => {
+      const byId = this.allergenStatus.byAllergenId()
+      this.extensions.badgeFor.set((item: CalendarItem) => this.badgeOf(item, byId))
+    })
     effect(() => {
       const { from, to } = this.range()
       untracked(() => void this.load(from, to))
@@ -165,7 +182,27 @@ export class CalendarPage {
   }
 
   protected requestAdd(cell: Cell): void {
+    this.preselect_.set(null)
     this.addFor_.set(cell)
+  }
+
+  /** An alert opens the add-food sheet for today, meal 1, with the allergen's last given (or first) food suggested. */
+  protected openAlert(id: string): void {
+    const alert = this.allergenStatus.alerts().find((a) => a.id === id)
+    if (!alert) return
+    const foods = this.foods()
+      .filter((f) => f.allergenId === alert.allergenId)
+      .sort((a, b) => a.name.localeCompare(b.name, 'he'))
+    const lastGiven = this.items()
+      .filter((it) => it.status === 'given' && foods.some((f) => f.id === it.foodId))
+      .sort((a, b) => (a.date === b.date ? b.meal - a.meal : a.date < b.date ? 1 : -1))[0]
+    this.preselect_.set(lastGiven?.foodId ?? foods[0]?.id ?? null)
+    this.addFor_.set({ date: today(), meal: 1 })
+  }
+
+  protected closeAdd(): void {
+    this.addFor_.set(null)
+    this.preselect_.set(null)
   }
 
   protected async pickFood(food: Food): Promise<void> {
@@ -185,7 +222,8 @@ export class CalendarPage {
       })
       if (!ok) return
     }
-    this.addFor_.set(null)
+    if (!(await this.confirmStartAnother(food))) return
+    this.closeAdd()
     await this.calendar.add(cell.date, cell.meal, food.id)
   }
 
@@ -241,6 +279,38 @@ export class CalendarPage {
     if (!ok) return
     this.actionsId_.set(null)
     await this.calendar.remove(item.id)
+  }
+
+  /** R3: starting a new allergen while another one is being introduced asks first (never blocks). */
+  private async confirmStartAnother(food: Food): Promise<boolean> {
+    if (!food.allergenId) return true
+    const states = this.allergenStatus.status()
+    if (states.find((s) => s.allergenId === food.allergenId)?.state !== 'not_started') return true
+    const current = states.find((s) => s.state === 'introducing')
+    if (!current) return true
+    const names = this.catalog.allergenById()
+    return this.confirmDialog.confirm({
+      title: HE.allergens.startAnother
+        .replace('{current}', names.get(current.allergenId)?.name ?? '')
+        .replace('{new}', names.get(food.allergenId)?.name ?? ''),
+      confirmLabel: HE.allergens.startAnotherConfirm,
+      cancelLabel: HE.allergens.startAnotherCancel,
+    })
+  }
+
+  private badgeOf(
+    item: CalendarItem,
+    byId: ReturnType<AllergenStatusService['byAllergenId']>,
+  ): ItemBadge | null {
+    const allergenId = this.foodById(item.foodId)?.allergenId
+    const state = allergenId ? byId.get(allergenId) : undefined
+    if (!state) return null
+    if (state.state === 'introducing' && item.status === 'given') {
+      const ordinal = state.intro.givenDates.indexOf(item.date) + 1
+      return ordinal > 0 ? { text: `${ordinal}/${state.intro.required}`, tone: 'okay' } : null
+    }
+    if (state.state === 'maintenance') return { text: '', tone: 'good' }
+    return null
   }
 
   private foodById(id: string): Food | undefined {

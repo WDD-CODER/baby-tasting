@@ -3,6 +3,7 @@ import { firstValueFrom } from 'rxjs'
 import { ApiError } from '../models/api-error'
 import { CalendarItem, ItemPatch, Meal } from '../models/calendar-item'
 import { refusalMessage } from '../utils/calendar-rules'
+import { AllergenStatusService } from './allergen-status.service'
 import { ApiService } from './api.service'
 import { ToastService } from './toast.service'
 
@@ -17,6 +18,7 @@ interface ItemResponse {
 export class CalendarService {
   private readonly api = inject(ApiService)
   private readonly toast = inject(ToastService)
+  private readonly allergenStatus = inject(AllergenStatusService)
   private readonly items_ = signal<CalendarItem[]>([])
   private range_: { from: string; to: string } | null = null
   private nextTemp_ = 1
@@ -34,6 +36,7 @@ export class CalendarService {
   /** Reloads the loaded range quietly (a failure keeps what is shown). */
   async refresh(): Promise<void> {
     if (!this.range_) return
+    void this.allergenStatus.refresh()
     try {
       await this.loadRange(this.range_.from, this.range_.to)
     } catch {

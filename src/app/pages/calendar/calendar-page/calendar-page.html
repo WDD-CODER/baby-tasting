@@ -1,5 +1,11 @@
 <section class="calendar">
-  <app-alert-strip [alerts]="extensions.alerts()" (act)="extensions.onAlertAction()($event)" />
+  <app-alert-strip
+    [alerts]="extensions.alerts()"
+    [limit]="3"
+    [moreLabel]="alertsT.more"
+    [lessLabel]="alertsT.less"
+    (act)="extensions.onAlertAction()($event)"
+  />
 
   <header
     class="calendar__header"
@@ -66,7 +72,8 @@
     [open]="addFor_() !== null"
     [foods]="foods()"
     [recentIds]="recentIds()"
-    (closed)="addFor_.set(null)"
+    [preselectFoodId]="preselect_()"
+    (closed)="closeAdd()"
     (picked)="pickFood($event)"
     (newFoodRequested)="newFood()"
   />

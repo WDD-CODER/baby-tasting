@@ -15,12 +15,15 @@ export class AddFoodSheet {
   readonly foods = input.required<Food[]>()
   /** Ids of the most recently given foods, newest first (at most 8). */
   readonly recentIds = input<string[]>([])
+  /** A food an alert suggests: shown first and marked; the parent still taps it to add. */
+  readonly preselectFoodId = input<string | null>(null)
 
   readonly closed = output<void>()
   readonly picked = output<Food>()
   readonly newFoodRequested = output<void>()
 
   protected readonly t = HE.calendar
+  protected readonly suggestedLabel = HE.allergens.suggested
   protected readonly query_ = signal('')
 
   protected readonly active = computed(() =>
@@ -31,6 +34,10 @@ export class AddFoodSheet {
   protected readonly matches = computed(() => {
     const q = this.query_().trim().toLowerCase()
     return q === '' ? this.active() : this.active().filter((f) => f.name.toLowerCase().includes(q))
+  })
+  protected readonly preselected = computed(() => {
+    const id = this.preselectFoodId()
+    return this.active().find((f) => f.id === id) ?? null
   })
   protected readonly recent = computed(() => {
     if (this.query_().trim() !== '') return []

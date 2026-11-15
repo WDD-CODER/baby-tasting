@@ -60,6 +60,10 @@
     color: var(--color-accent);
     font-size: var(--fs-sm);
   }
+
+  &--preselected {
+    outline: 2px solid var(--color-accent-border);
+  }
 }
 
 .none {
