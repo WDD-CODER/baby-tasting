@@ -1,0 +1,15 @@
+<form class="login" (ngSubmit)="submit()">
+  <app-text-field
+    name="username"
+    [label]="t.username"
+    [error]="error_()"
+    [autofocus]="true"
+    autocapitalize="none"
+    autocomplete="username"
+    [ngModel]="username_()"
+    (ngModelChange)="username_.set($event)"
+  />
+  <app-button type="submit" size="lg" [fullWidth]="true" [loading]="loading_()">{{
+    t.submit
+  }}</app-button>
+</form>

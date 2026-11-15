@@ -1,0 +1,20 @@
+:host {
+  display: block;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+  }
+
+  &__logout {
+    margin-block-start: var(--space-6);
+  }
+}

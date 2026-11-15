@@ -4,12 +4,30 @@ import { RouterTestingHarness } from '@angular/router/testing'
 import { App } from './app'
 import { HE } from './core/i18n/he'
 import { routes } from './app.routes'
+import { AuthService } from './core/services/auth.service'
+import { BabyService } from './core/services/baby.service'
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter(routes)],
+      providers: [
+        provideRouter(routes),
+        {
+          provide: AuthService,
+          useValue: {
+            loadMe: async () => ({ username: 'parent-a' }),
+            user: () => ({ username: 'parent-a' }),
+          },
+        },
+        {
+          provide: BabyService,
+          useValue: {
+            load: async () => ({ id: '1', name: 'נועה', birthDate: '2020-01-01' }),
+            baby: () => null,
+          },
+        },
+      ],
     }).compileComponents()
   })
 

@@ -8,19 +8,21 @@
     <router-outlet />
   </main>
 
-  <nav class="shell__nav">
-    @for (tab of tabs; track tab.path) {
-      <a
-        class="tab"
-        [routerLink]="tab.path"
-        routerLinkActive="tab--active"
-        [routerLinkActiveOptions]="{ exact: tab.exact }"
-      >
-        <span class="tab__icon" aria-hidden="true">{{ tab.icon }}</span>
-        <span class="tab__label">{{ tab.label }}</span>
-      </a>
-    }
-  </nav>
+  @if (showNav_()) {
+    <nav class="shell__nav">
+      @for (tab of tabs; track tab.path) {
+        <a
+          class="tab"
+          [routerLink]="tab.path"
+          routerLinkActive="tab--active"
+          [routerLinkActiveOptions]="{ exact: tab.exact }"
+        >
+          <span class="tab__icon" aria-hidden="true">{{ tab.icon }}</span>
+          <span class="tab__label">{{ tab.label }}</span>
+        </a>
+      }
+    </nav>
+  }
 
   <app-toast />
   @if (confirm.request(); as req) {

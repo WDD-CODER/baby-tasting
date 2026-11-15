@@ -1,1 +1,7 @@
-<app-empty-state icon="⚙️" [title]="t.emptyTitle" [actionLabel]="t.emptyAction" />
+<section class="settings">
+  <h2 class="settings__title">{{ t.section }}</h2>
+  <app-baby-form />
+  <app-button class="settings__logout" variant="secondary" [fullWidth]="true" (pressed)="logout()">
+    {{ logoutLabel }}
+  </app-button>
+</section>

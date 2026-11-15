@@ -1,6 +1,24 @@
 export const HE = {
   app: { name: 'טעימות' },
   nav: { calendar: 'יומן', foods: 'מזונות', allergens: 'אלרגנים', settings: 'הגדרות' },
+  auth: {
+    username: 'שם משתמש',
+    submit: 'כניסה',
+    logout: 'יציאה',
+    unknownUser: 'שם המשתמש לא מזוהה',
+    rateLimited: 'יותר מדי ניסיונות. נסו שוב בעוד כמה דקות',
+  },
+  welcome: { title: 'ברוכים הבאים! איך קוראים לתינוק/ת?' },
+  baby: {
+    section: 'התינוק/ת',
+    name: 'שם',
+    birthDate: 'תאריך לידה',
+    save: 'שמירה',
+    months: 'חודשים',
+    days: 'ימים',
+    ageDays: 'גיל בימים',
+    invalid: 'בדקו את השם ואת תאריך הלידה',
+  },
   common: {
     save: 'שמירה',
     cancel: 'ביטול',
