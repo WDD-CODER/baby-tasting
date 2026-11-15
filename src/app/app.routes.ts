@@ -43,6 +43,23 @@ export const routes: Routes = [
           import('./pages/allergens/allergens-page/allergens-page').then((m) => m.AllergensPage),
       },
       {
+        path: 'allergens/reactions',
+        loadComponent: () =>
+          import('./pages/reactions/reactions-list/reactions-list').then((m) => m.ReactionsList),
+      },
+      {
+        path: 'reactions/new',
+        canDeactivate: [unsavedChangesGuard],
+        loadComponent: () =>
+          import('./pages/reactions/reaction-form/reaction-form').then((m) => m.ReactionForm),
+      },
+      {
+        path: 'reactions/:id',
+        canDeactivate: [unsavedChangesGuard],
+        loadComponent: () =>
+          import('./pages/reactions/reaction-form/reaction-form').then((m) => m.ReactionForm),
+      },
+      {
         path: 'allergens/:id',
         loadComponent: () =>
           import('./pages/allergens/allergen-detail/allergen-detail').then((m) => m.AllergenDetail),

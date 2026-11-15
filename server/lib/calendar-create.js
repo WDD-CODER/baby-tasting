@@ -1,7 +1,9 @@
 // Creating a calendar item with every placement rule: shared by the calendar route and suggestion accept.
 import { checkDuplicate, checkPlacement, checkStatus } from '../domain/calendar-rules.js'
 import { isRealDate } from '../domain/dates.js'
+import { isPlacementLocked } from '../domain/locks.js'
 import { HttpError } from './http-error.js'
+import { getLockedIds } from './locks.js'
 
 export const STATUSES = ['planned', 'given', 'skipped']
 
@@ -18,9 +20,15 @@ export function parseDate(value) {
 }
 
 export function refusal(code) {
+  if (code === 'food_locked') return new HttpError(409, code, 'This food is locked after a reaction')
   if (code === 'allergen_meal_1') return new HttpError(422, code, 'Allergen foods are given in meal 1')
   if (code === 'given_in_future') return new HttpError(422, code, 'A future date cannot be marked given')
   return new HttpError(409, code, 'This food is already in this meal')
+}
+
+export async function isFoodLocked(repos, householdId, food) {
+  const ids = await getLockedIds(repos, householdId)
+  return isPlacementLocked({ food: { id: String(food._id), allergenId: food.allergenId ?? null }, ...ids })
 }
 
 // Validates `{ date, meal, foodId, status? }` and saves it; throws an HttpError when refused.
@@ -32,6 +40,7 @@ export async function createCalendarItem({ repos, householdId, babyId, user, inp
   if (typeof input?.foodId !== 'string') throw invalid('foodId is required')
   const food = await repos.foods.findById(householdId, input.foodId)
   if (!food || food.archived) throw invalid('Unknown food')
+  if (await isFoodLocked(repos, householdId, food)) throw refusal('food_locked')
   const placement = checkPlacement({ food, meal })
   if (placement) throw refusal(placement)
   const future = checkStatus({ status, date, today })

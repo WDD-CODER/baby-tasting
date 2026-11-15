@@ -1,14 +1,24 @@
 import { Router } from 'express'
 import { checkDuplicate, checkPlacement, checkStatus } from '../domain/calendar-rules.js'
 import { isoDiffDays, isRealDate } from '../domain/dates.js'
-import { createCalendarItem, invalid, parseDate, parseMeal, refusal, STATUSES } from '../lib/calendar-create.js'
+import { isPlacementLocked } from '../domain/locks.js'
+import {
+  createCalendarItem,
+  invalid,
+  isFoodLocked,
+  parseDate,
+  parseMeal,
+  refusal,
+  STATUSES,
+} from '../lib/calendar-create.js'
 import { todayIso } from '../lib/dates.js'
+import { getLockedIds } from '../lib/locks.js'
 import { handle, notFound } from './catalog-helpers.js'
 
 const AMOUNTS = ['taste', 'teaspoon', 'portion']
 const MAX_RANGE_DAYS = 62
 
-export function toItemDto(doc) {
+export function toItemDto(doc, locked = false) {
   return {
     id: String(doc._id),
     date: doc.date,
@@ -20,6 +30,7 @@ export function toItemDto(doc) {
     liked: doc.liked ?? null,
     givenBy: doc.givenBy ?? null,
     givenAt: doc.givenAt ? new Date(doc.givenAt).toISOString() : null,
+    locked,
   }
 }
 
@@ -59,8 +70,15 @@ export function createCalendarRouter({ repos }) {
       const { from, to } = req.query
       if (!isRealDate(from) || !isRealDate(to) || to < from) throw invalid('from and to must be real YYYY-MM-DD dates')
       if (isoDiffDays(from, to) + 1 > MAX_RANGE_DAYS) throw invalid(`range is at most ${MAX_RANGE_DAYS} days`)
-      const docs = await repos.calendarItems.listRange(req.householdId, from, to)
-      res.json({ items: docs.map(toItemDto) })
+      const [docs, foods, ids] = await Promise.all([
+        repos.calendarItems.listRange(req.householdId, from, to),
+        repos.foods.listAll(req.householdId),
+        getLockedIds(repos, req.householdId),
+      ])
+      const foodById = new Map(foods.map((f) => [String(f._id), { id: String(f._id), allergenId: f.allergenId ?? null }]))
+      res.json({
+        items: docs.map((d) => toItemDto(d, isPlacementLocked({ food: foodById.get(d.foodId), ...ids }))),
+      })
     }),
   )
 
@@ -112,6 +130,7 @@ export function createCalendarRouter({ repos }) {
       const date = parseDate(req.body?.date)
       const meal = parseMeal(req.body?.meal)
       const food = await repos.foods.findById(req.householdId, doc.foodId)
+      if (food && (await isFoodLocked(repos, req.householdId, food))) throw refusal('food_locked')
       const placement = checkPlacement({ food, meal })
       if (placement) throw refusal(placement)
       const future = checkStatus({ status: doc.status, date, today: todayIso() })

@@ -1,0 +1,122 @@
+<section class="reaction">
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (loadFailed_()) {
+    <app-error-state [message]="t.notFound" (retry)="init()" />
+  } @else {
+    @if (urgent_()) {
+      <div class="reaction__notice" role="alert">{{ t.emergency }}</div>
+    }
+    <h2 class="reaction__title">{{ isEdit ? t.editTitle : t.newTitle }}</h2>
+
+    <form class="reaction__fields" (ngSubmit)="submit()">
+      <app-text-field
+        name="noticedAt"
+        type="datetime-local"
+        [label]="t.when"
+        [ngModel]="noticedAt_()"
+        (ngModelChange)="noticedAt_.set($event)"
+      />
+
+      <fieldset class="reaction__group">
+        <legend class="reaction__legend">{{ t.related }}</legend>
+        @for (option of options_(); track option.id) {
+          <label class="reaction__check">
+            <input
+              type="checkbox"
+              [checked]="isRelated(option.id)"
+              (change)="toggleRelated(option.id)"
+            />
+            <span>{{ option.label }}</span>
+          </label>
+        } @empty {
+          <p class="reaction__hint">{{ t.noRelated }}</p>
+        }
+      </fieldset>
+
+      <fieldset class="reaction__group">
+        <legend class="reaction__legend">{{ t.symptoms }}</legend>
+        <div class="reaction__chips">
+          @for (s of symptomOptions; track s.key) {
+            <app-chip [selected]="symptoms_().includes(s.key)" (pressed)="toggleSymptom(s.key)">{{
+              s.label
+            }}</app-chip>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="reaction__group">
+        <legend class="reaction__legend">{{ t.severity }}</legend>
+        <div class="reaction__chips">
+          @for (s of severityOptions; track s.key) {
+            <app-chip [selected]="severity_() === s.key" (pressed)="severity_.set(s.key)">{{
+              s.label
+            }}</app-chip>
+          }
+        </div>
+      </fieldset>
+
+      <label class="reaction__text">
+        <span class="reaction__legend">{{ t.text }}</span>
+        <textarea
+          class="reaction__textarea"
+          rows="3"
+          [attr.maxlength]="maxText"
+          [value]="text_()"
+          (input)="onText($event)"
+        ></textarea>
+      </label>
+
+      <div class="reaction__photos">
+        @for (photo of photos_(); track photo.publicId) {
+          <div class="thumb">
+            <img class="thumb__img" [src]="photo.url" alt="" />
+            <button
+              type="button"
+              class="thumb__remove"
+              [attr.aria-label]="t.removePhoto"
+              (click)="removePhoto(photo)"
+            >
+              <span aria-hidden="true">✕</span>
+            </button>
+          </div>
+        }
+        <input
+          #files
+          class="reaction__file"
+          type="file"
+          accept="image/*"
+          capture="environment"
+          multiple
+          (change)="onFiles($event)"
+        />
+        <app-button
+          variant="secondary"
+          [disabled]="!canAddPhoto_()"
+          [loading]="uploading_() > 0"
+          (pressed)="files.click()"
+        >
+          {{ photosOn_() ? t.addPhoto : t.photosOff }}
+        </app-button>
+      </div>
+
+      @if (error_()) {
+        <p class="reaction__error" role="alert">{{ error_() }}</p>
+      }
+      <app-button type="submit" [fullWidth]="true" [loading]="saving_()" [disabled]="!ready_()">
+        {{ t.save }}
+      </app-button>
+      @if (!isEdit) {
+        <p class="reaction__hint">{{ t.saveNote }}</p>
+      }
+      <app-button variant="secondary" [fullWidth]="true" (pressed)="cancel()">{{
+        t.back
+      }}</app-button>
+      @if (isEdit) {
+        <app-button variant="danger" [fullWidth]="true" (pressed)="remove()">{{
+          t.delete
+        }}</app-button>
+      }
+    </form>
+  }
+</section>

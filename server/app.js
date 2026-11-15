@@ -17,11 +17,14 @@ import { createCalendarRouter } from './routes/calendar.js'
 import { createCatalogContext } from './routes/catalog-helpers.js'
 import { createFoodsRouter } from './routes/foods.js'
 import { healthRouter } from './routes/health.js'
+import { createPhotoStore } from './lib/cloudinary.js'
+import { createReactionsRouter } from './routes/reactions.js'
+import { createUploadsRouter } from './routes/uploads.js'
 import { createSettingsRouter } from './routes/settings.js'
 import { createSuggestionsRouter } from './routes/suggestions.js'
 import { createTestResetRouter } from './routes/test-reset.js'
 
-export function createApp({ config, db }) {
+export function createApp({ config, db, photoStore = createPhotoStore(config.cloudinary ?? null) }) {
   const app = express()
   const repos = createRepos(db)
   const requireAuth = createRequireAuth({ repos })
@@ -36,7 +39,8 @@ export function createApp({ config, db }) {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          imgSrc: ["'self'", 'data:'],
+          imgSrc: ["'self'", 'data:', 'blob:', 'https://res.cloudinary.com'],
+          connectSrc: ["'self'", 'https://api.cloudinary.com'],
           styleSrc: ["'self'", "'unsafe-inline'"],
           fontSrc: ["'self'", 'data:'],
           upgradeInsecureRequests: null,
@@ -68,6 +72,8 @@ export function createApp({ config, db }) {
   app.use('/api/v1/foods', requireAuth, catalogContext, createFoodsRouter({ repos }))
   app.use('/api/v1/calendar', requireAuth, catalogContext, createCalendarRouter({ repos }))
   app.use('/api/v1/suggestions', requireAuth, catalogContext, createSuggestionsRouter({ repos }))
+  app.use('/api/v1/uploads', requireAuth, createUploadsRouter({ photoStore }))
+  app.use('/api/v1/reactions', requireAuth, catalogContext, createReactionsRouter({ repos, photoStore }))
   app.use('/api', notFound)
 
   app.use(express.static(config.staticDir))

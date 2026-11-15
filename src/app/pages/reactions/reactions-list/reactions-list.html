@@ -1,0 +1,31 @@
+<section class="reactions">
+  <a class="reactions__back" routerLink="/allergens">{{ t.back }}</a>
+  <h2 class="reactions__title">{{ t.title }}</h2>
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state [message]="t.loadFailed" (retry)="load()" />
+  } @else {
+    <ul class="reactions__list">
+      @for (row of rows_(); track row.id) {
+        <li>
+          <a class="row" [routerLink]="['/reactions', row.id]">
+            @if (row.thumb) {
+              <img class="row__thumb" [src]="row.thumb" alt="" />
+            }
+            <span class="row__body">
+              <span class="row__head">
+                <span class="row__date">{{ row.date }}</span>
+                <app-chip [tone]="row.tone">{{ row.severity }}</app-chip>
+              </span>
+              <span class="row__foods">{{ row.foods }}</span>
+              <span class="row__symptoms">{{ row.symptoms }}</span>
+            </span>
+          </a>
+        </li>
+      } @empty {
+        <li class="reactions__none">{{ t.empty }}</li>
+      }
+    </ul>
+  }
+</section>

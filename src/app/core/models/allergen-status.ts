@@ -1,9 +1,11 @@
-export type AllergenState = 'not_started' | 'introducing' | 'maintenance' | 'finished'
-export type AlertKind = 'intro_missing' | 'maintenance_gap' | 'maintenance_week'
+export type AllergenState = 'not_started' | 'introducing' | 'maintenance' | 'finished' | 'locked'
+export type AlertKind = 'intro_missing' | 'maintenance_gap' | 'maintenance_week' | 'locked'
 
 export interface AllergenStatus {
   allergenId: string
   state: AllergenState
+  /** The computed state under a lock. */
+  baseState?: AllergenState
   givenDays: number
   intro: {
     daysGiven: number
@@ -22,8 +24,13 @@ export interface AllergenStatus {
 export interface Alert {
   id: string
   kind: AlertKind
-  allergenId: string
-  allergenName: string
+  /** Absent on the alert of a locked regular food. */
+  allergenId?: string
+  foodId?: string
+  allergenName?: string
+  /** `locked` alerts: the allergen or food name and its future planned items. */
+  targetName?: string
+  plannedCount?: number
   n?: number
   x?: number
   y?: number

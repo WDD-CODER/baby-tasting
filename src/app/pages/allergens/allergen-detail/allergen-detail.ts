@@ -14,6 +14,7 @@ const TONES: Record<AllergenState, ChipTone> = {
   introducing: 'okay',
   maintenance: 'good',
   finished: 'neutral',
+  locked: 'bad',
 }
 
 @Component({

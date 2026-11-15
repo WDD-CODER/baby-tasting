@@ -6,7 +6,7 @@ import { suggestWeek } from '../domain/suggestions.js'
 import { createCalendarItem } from '../lib/calendar-create.js'
 import { todayIso } from '../lib/dates.js'
 import { HttpError } from '../lib/http-error.js'
-import { getLockedIds } from '../lib/locks.js'
+import { getActiveLocks } from '../lib/locks.js'
 import { toItemDto } from './calendar.js'
 import { handle } from './catalog-helpers.js'
 
@@ -25,15 +25,19 @@ export function createSuggestionsRouter({ repos }) {
       }
       const householdId = req.householdId
       const today = todayIso()
-      const [baby, stored, allergenDocs, foodDocs, given, weekDocs, locks] = await Promise.all([
+      const [baby, stored, allergenDocs, foodDocs, given, weekDocs, activeLocks] = await Promise.all([
         repos.babies.getForHousehold(householdId),
         repos.settings.get(householdId),
         repos.allergens.listAll(householdId),
         repos.foods.listAll(householdId),
         repos.calendarItems.listGiven(householdId),
         repos.calendarItems.listRange(householdId, weekStart, isoAddDays(weekStart, 6)),
-        getLockedIds(repos, householdId),
+        getActiveLocks(repos, householdId),
       ])
+      const locks = {
+        lockedFoodIds: activeLocks.filter((l) => l.targetType === 'food').map((l) => l.targetId),
+        lockedAllergenIds: activeLocks.filter((l) => l.targetType === 'allergen').map((l) => l.targetId),
+      }
       const settings = withDefaults(stored)
       const allergens = allergenDocs.map((a) => ({ id: idOf(a), name: a.name, archived: a.archived === true }))
       const lastGiven = new Map()
@@ -55,6 +59,7 @@ export function createSuggestionsRouter({ repos }) {
         foods: foods.map((f) => ({ id: f.id, allergenId: f.allergenId })),
         items: given.map((it) => ({ date: it.date, foodId: it.foodId, status: it.status })),
         today,
+        locks: activeLocks,
       })
       const queue = foodDocs
         .filter((f) => typeof f.queuePosition === 'number' && f.archived !== true)

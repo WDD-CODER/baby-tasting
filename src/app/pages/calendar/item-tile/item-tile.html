@@ -11,11 +11,12 @@
   @if (item().status === 'given') {
     <span class="tile__check" aria-hidden="true">✓</span>
   }
-  @if (isAllergen()) {
+  @if (isAllergen() || badge()) {
     <span
       class="tile__badge"
       [class.tile__badge--okay]="badge()?.tone === 'okay'"
       [class.tile__badge--good]="badge()?.tone === 'good'"
+      [class.tile__badge--bad]="badge()?.tone === 'bad'"
       aria-hidden="true"
       >{{ badge()?.text ?? '' }}</span
     >

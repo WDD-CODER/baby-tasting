@@ -217,6 +217,10 @@ export class CalendarPage {
   protected openAlert(id: string): void {
     const alert = this.allergenStatus.alerts().find((a) => a.id === id)
     if (!alert) return
+    if (alert.kind === 'locked') {
+      void this.router.navigate(['/allergens'])
+      return
+    }
     const foods = this.foods()
       .filter((f) => f.allergenId === alert.allergenId)
       .sort((a, b) => a.name.localeCompare(b.name, 'he'))
@@ -305,7 +309,7 @@ export class CalendarPage {
     if (!cell) return
     const refusal = refusalFor({ food, items: this.items(), date: cell.date, meal: cell.meal })
     if (refusal) {
-      this.toast.show(refusalMessage(refusal), 'bad')
+      this.toast.show(refusalMessage(refusal, food.name), 'bad')
       return
     }
     if (this.needsWarning(food)) {
@@ -342,18 +346,26 @@ export class CalendarPage {
   }
 
   protected async moveItem(request: MoveRequest): Promise<void> {
+    const movedFood = this.foodById(request.item.foodId)
     const refusal = refusalFor({
-      food: this.foodById(request.item.foodId),
+      food: movedFood,
       items: this.items(),
       date: request.date,
       meal: request.meal,
       excludeId: request.item.id,
     })
     if (refusal) {
-      this.toast.show(refusalMessage(refusal), 'bad')
+      this.toast.show(refusalMessage(refusal, movedFood?.name ?? ''), 'bad')
       return
     }
     await this.calendar.move(request.item.id, request.date, request.meal)
+  }
+
+  protected openReaction(): void {
+    const item = this.actionsItem()
+    if (!item) return
+    this.actionsId_.set(null)
+    void this.router.navigate(['/reactions/new'], { queryParams: { itemId: item.id } })
   }
 
   protected async moveFromActions(target: { date: string; meal: Meal }): Promise<void> {
@@ -397,6 +409,7 @@ export class CalendarPage {
     item: CalendarItem,
     byId: ReturnType<AllergenStatusService['byAllergenId']>,
   ): ItemBadge | null {
+    if (item.locked) return { text: HE.locks.badge, tone: 'bad' }
     const allergenId = this.foodById(item.foodId)?.allergenId
     const state = allergenId ? byId.get(allergenId) : undefined
     if (!state) return null

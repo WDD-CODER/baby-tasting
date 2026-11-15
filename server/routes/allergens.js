@@ -51,6 +51,17 @@ export function createAllergensRouter({ repos }) {
     }),
   )
 
+  // The only way a lock ends: a parent releases it, and who and when are recorded.
+  router.post(
+    '/:id/release',
+    handle(async (req, res) => {
+      await load(req)
+      const lock = await repos.locks.release(req.householdId, 'allergen', req.params.id, req.user.username, new Date())
+      if (!lock) throw notFound()
+      res.json({ released: { releasedBy: lock.releasedBy, releasedAt: new Date(lock.releasedAt).toISOString() } })
+    }),
+  )
+
   router.post(
     '/:id/archive',
     handle(async (req, res) => {
