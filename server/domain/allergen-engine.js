@@ -4,9 +4,21 @@ import { ageInMonths, dayOfWeek, isoAddDays, isoDiffDays, weekStartSunday } from
 
 const WEEKLY_ALERT_FROM_DAY = 4 // Thursday (Sunday = 0)
 
-// Plan 007 fills this in; until then the locks change nothing.
-export function applyLocks(result, _locks) {
-  return result
+// Layers the active locks onto the computed result: a locked allergen keeps its computed state in `baseState`,
+// loses its reminder alerts and gets exactly one `locked` alert. `locks` are `{ targetType, targetId }`.
+const REMINDER_KINDS = new Set(['intro_missing', 'maintenance_gap', 'maintenance_week'])
+
+export function applyLocks(result, locks = []) {
+  const lockedIds = new Set(locks.filter((l) => l.targetType === 'allergen').map((l) => l.targetId))
+  if (lockedIds.size === 0) return result
+  const allergens = result.allergens.map((entry) =>
+    lockedIds.has(entry.allergenId) ? { ...entry, baseState: entry.state, state: 'locked' } : entry,
+  )
+  const alerts = result.alerts.filter((a) => !(REMINDER_KINDS.has(a.kind) && lockedIds.has(a.allergenId)))
+  for (const entry of allergens) {
+    if (entry.state === 'locked') alerts.push({ id: 'locked:' + entry.allergenId, kind: 'locked', allergenId: entry.allergenId })
+  }
+  return { ...result, allergens, alerts }
 }
 
 function datesBetween(afterDay, beforeDay) {

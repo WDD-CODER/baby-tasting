@@ -21,6 +21,10 @@ export class CalendarItemsRepository extends BaseRepository {
     return this.findMany(householdId, { foodId }, { sort: { date: 1, meal: 1 } })
   }
 
+  listPlannedFrom(householdId, date) {
+    return this.findMany(householdId, { status: 'planned', date: { $gte: date } })
+  }
+
   listGiven(householdId) {
     return this.findMany(householdId, { status: 'given' }, { sort: { date: 1, meal: 1 } })
   }

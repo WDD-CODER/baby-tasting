@@ -25,7 +25,7 @@ export class TextField implements ControlValueAccessor {
   readonly label = input.required<string>()
   readonly hint = input('')
   readonly error = input('')
-  readonly type = input<'text' | 'number' | 'date' | 'password'>('text')
+  readonly type = input<'text' | 'number' | 'date' | 'datetime-local' | 'password'>('text')
   readonly autocomplete = input('off')
   readonly autocapitalize = input('sentences')
   readonly autofocus = input(false)

@@ -4,8 +4,10 @@ import { HE } from '../../../core/i18n/he'
 import { AllergenState, AllergenStatus } from '../../../core/models/allergen-status'
 import { AllergenStatusService } from '../../../core/services/allergen-status.service'
 import { CatalogService } from '../../../core/services/catalog.service'
+import { LocksService } from '../../../core/services/locks.service'
 import { alertText } from '../../../core/utils/alerts'
 import { shortDate } from '../../../core/utils/dates'
+import { Button } from '../../../shared/ui/button/button'
 import { Chip, ChipTone } from '../../../shared/ui/chip/chip'
 import { EmptyState } from '../../../shared/ui/empty-state/empty-state'
 import { ErrorState } from '../../../shared/ui/error-state/error-state'
@@ -21,6 +23,7 @@ interface AllergenCard {
   lastGiven: string | null
   week: string | null
   alert: string | null
+  locked: boolean
 }
 
 const TONES: Record<AllergenState, ChipTone> = {
@@ -28,9 +31,11 @@ const TONES: Record<AllergenState, ChipTone> = {
   introducing: 'okay',
   maintenance: 'good',
   finished: 'neutral',
+  locked: 'bad',
 }
 
 function rank(status: AllergenStatus, hasAlert: boolean): number {
+  if (status.state === 'locked') return 0
   if (status.state === 'introducing') return 0
   if (hasAlert) return 1
   if (status.state === 'maintenance') return 2
@@ -40,7 +45,7 @@ function rank(status: AllergenStatus, hasAlert: boolean): number {
 
 @Component({
   selector: 'app-allergens-page',
-  imports: [RouterLink, Chip, EmptyState, ErrorState, LoadingState],
+  imports: [RouterLink, Button, Chip, EmptyState, ErrorState, LoadingState],
   templateUrl: './allergens-page.html',
   styleUrl: './allergens-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,8 +54,11 @@ export class AllergensPage {
   private readonly catalog = inject(CatalogService)
   private readonly allergenStatus = inject(AllergenStatusService)
   private readonly router = inject(Router)
+  private readonly locks = inject(LocksService)
 
   protected readonly t = HE.allergens
+  protected readonly lockT = HE.locks
+  protected readonly reactionsLink = HE.reactions.listLink
   protected readonly empty = HE.common.empty
   protected readonly emptyAction = HE.pages.allergens.emptyAction
   protected readonly loading_ = signal(true)
@@ -59,7 +67,11 @@ export class AllergensPage {
   protected readonly cards = computed<AllergenCard[]>(() => {
     const names = this.catalog.allergens()
     const statuses = this.allergenStatus.byAllergenId()
-    const alerts = new Map(this.allergenStatus.alerts().map((a) => [a.allergenId, a]))
+    const alerts = new Map(
+      this.allergenStatus
+        .alerts()
+        .flatMap((a) => (a.allergenId ? [[a.allergenId, a] as const] : [])),
+    )
     return names
       .flatMap((allergen) => {
         const status = statuses.get(allergen.id)
@@ -87,6 +99,7 @@ export class AllergensPage {
                   .replace('{y}', String(status.weekTarget))
               : null,
           alert: alert ? alertText(alert) : null,
+          locked: status.state === 'locked',
         }
         return [{ card, order: rank(status, alert !== undefined) }]
       })
@@ -96,6 +109,10 @@ export class AllergensPage {
 
   constructor() {
     void this.load()
+  }
+
+  protected async release(card: AllergenCard): Promise<void> {
+    await this.locks.release('allergen', card.id, card.name)
   }
 
   protected manage(): void {

@@ -11,11 +11,13 @@ import { HE } from '../../../core/i18n/he'
 import { Food } from '../../../core/models/food'
 import { FOOD_CATEGORIES, FoodCategory, categoryLabel } from '../../../core/models/food-category'
 import { CatalogService } from '../../../core/services/catalog.service'
+import { LocksService } from '../../../core/services/locks.service'
 import { ToastService } from '../../../core/services/toast.service'
 import { Button } from '../../../shared/ui/button/button'
 import { Chip } from '../../../shared/ui/chip/chip'
 import { EmptyState } from '../../../shared/ui/empty-state/empty-state'
 import { ErrorState } from '../../../shared/ui/error-state/error-state'
+import { IconButton } from '../../../shared/ui/icon-button/icon-button'
 import { LoadingState } from '../../../shared/ui/loading-state/loading-state'
 
 interface FoodGroup {
@@ -35,6 +37,7 @@ interface FoodGroup {
     Chip,
     EmptyState,
     ErrorState,
+    IconButton,
     LoadingState,
   ],
   templateUrl: './foods-page.html',
@@ -46,7 +49,10 @@ export class FoodsPage {
   private readonly router = inject(Router)
   private readonly toast = inject(ToastService)
 
+  private readonly locks = inject(LocksService)
+
   protected readonly t = HE.foods
+  protected readonly lockT = HE.locks
   protected readonly empty = HE.common.empty
   protected readonly categories = FOOD_CATEGORIES.map((key) => ({ key, label: categoryLabel(key) }))
   protected readonly query_ = signal('')
@@ -108,6 +114,10 @@ export class FoodsPage {
   }
 
   protected readonly queue_ = this.catalog.queue
+
+  protected async release(food: Food): Promise<void> {
+    await this.locks.release('food', food.id, food.name)
+  }
 
   protected async toggleQueue(food: Food): Promise<void> {
     try {

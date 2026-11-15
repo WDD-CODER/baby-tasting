@@ -5,6 +5,7 @@ import { CalendarItem, ItemPatch, Meal } from '../models/calendar-item'
 import { refusalMessage } from '../utils/calendar-rules'
 import { AllergenStatusService } from './allergen-status.service'
 import { ApiService } from './api.service'
+import { CatalogService } from './catalog.service'
 import { ToastService } from './toast.service'
 
 interface ItemsResponse {
@@ -19,6 +20,7 @@ export class CalendarService {
   private readonly api = inject(ApiService)
   private readonly toast = inject(ToastService)
   private readonly allergenStatus = inject(AllergenStatusService)
+  private readonly catalog = inject(CatalogService)
   private readonly items_ = signal<CalendarItem[]>([])
   private range_: { from: string; to: string } | null = null
   private nextTemp_ = 1
@@ -74,6 +76,7 @@ export class CalendarService {
     return this.write(
       (list) => [...list, temp],
       () => firstValueFrom(this.api.post<ItemResponse>('/calendar', { date, meal, foodId })),
+      this.catalog.foodById(foodId)?.name ?? '',
     )
   }
 
@@ -88,6 +91,7 @@ export class CalendarService {
     return this.write(
       (list) => list.map((it) => (it.id === id ? { ...it, date, meal } : it)),
       () => firstValueFrom(this.api.post<ItemResponse>(`/calendar/${id}/move`, { date, meal })),
+      this.nameOfItem(id),
     )
   }
 
@@ -104,6 +108,11 @@ export class CalendarService {
     this.range_ = null
   }
 
+  private nameOfItem(id: string): string {
+    const item = this.items_().find((it) => it.id === id)
+    return item ? (this.catalog.foodById(item.foodId)?.name ?? '') : ''
+  }
+
   private applyPatch(item: CalendarItem, patch: ItemPatch): CalendarItem {
     const next = { ...item, ...patch }
     if (patch.status === 'planned') next.amount = null
@@ -114,6 +123,7 @@ export class CalendarService {
   private async write(
     apply: (list: CalendarItem[]) => CalendarItem[],
     call: () => Promise<unknown>,
+    foodName = '',
   ): Promise<boolean> {
     const before = this.items_()
     this.items_.set(apply(before))
@@ -123,7 +133,7 @@ export class CalendarService {
       return true
     } catch (err) {
       this.items_.set(before)
-      this.toast.show(refusalMessage((err as ApiError | undefined)?.code ?? ''), 'bad')
+      this.toast.show(refusalMessage((err as ApiError | undefined)?.code ?? '', foodName), 'bad')
       return false
     }
   }

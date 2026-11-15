@@ -16,6 +16,8 @@ export interface CalendarItem {
   liked: boolean | null
   givenBy: string | null
   givenAt: string | null
+  /** The food or its allergen is locked after a reaction. */
+  locked?: boolean
 }
 
 export interface ItemPatch {

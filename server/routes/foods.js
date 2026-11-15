@@ -1,11 +1,16 @@
 import { Router } from 'express'
 import { deriveFoodStatus } from '../domain/calendar-rules.js'
+import { isPlacementLocked } from '../domain/locks.js'
 import { parseFoodInput } from '../lib/catalog-validation.js'
+import { getLockedIds } from '../lib/locks.js'
 import { HttpError } from '../lib/http-error.js'
 import { duplicateName, handle, notFound, wantsArchived } from './catalog-helpers.js'
 
-export function toFoodDto(doc, status = null) {
+// `lock` is `{ locked, foodLocked }`: locked by itself or by its allergen / locked by its own food lock.
+export function toFoodDto(doc, status = null, lock = null) {
   return {
+    locked: lock?.locked === true,
+    foodLocked: lock?.foodLocked === true,
     id: String(doc._id),
     name: doc.name,
     emoji: doc.emoji,
@@ -38,7 +43,17 @@ export function createFoodsRouter({ repos }) {
         ? await repos.foods.listAll(req.householdId)
         : await repos.foods.listActive(req.householdId)
       const statuses = deriveFoodStatus(await repos.calendarItems.listGiven(req.householdId))
-      res.json({ foods: docs.map((d) => toFoodDto(d, statuses[String(d._id)])) })
+      const ids = await getLockedIds(repos, req.householdId)
+      res.json({
+        foods: docs.map((d) => {
+          const id = String(d._id)
+          const food = { id, allergenId: d.allergenId ?? null }
+          return toFoodDto(d, statuses[id], {
+            locked: isPlacementLocked({ food, ...ids }),
+            foodLocked: ids.lockedFoodIds.includes(id),
+          })
+        }),
+      })
     }),
   )
 
@@ -105,6 +120,16 @@ export function createFoodsRouter({ repos }) {
       }
       const saved = await repos.foods.updateOne(req.householdId, req.params.id, patch, req.user.username)
       res.json({ food: toFoodDto(saved) })
+    }),
+  )
+
+  router.post(
+    '/:id/release',
+    handle(async (req, res) => {
+      await load(req)
+      const lock = await repos.locks.release(req.householdId, 'food', req.params.id, req.user.username, new Date())
+      if (!lock) throw notFound()
+      res.json({ released: { releasedBy: lock.releasedBy, releasedAt: new Date(lock.releasedAt).toISOString() } })
     }),
   )
 

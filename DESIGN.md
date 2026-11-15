@@ -40,6 +40,10 @@ Heebo via `@fontsource/heebo`, weights 400, 500, 700, 800, fallback `system-ui`.
 - State chips (`app-chip`): `טרם התחיל` and `הסתיים` neutral, `בחשיפה` okay tone, `בתחזוקה` good tone.
 - Alert rows: a 4px `--color-tier-bad` bar at the inline-start, text, chevron at the inline-end; at most 3 rows, then `+N נוספות`.
 
+- Lock badge (plan 007): a locked food's or allergen's calendar tile gets the 18px badge `🔒` on a `--color-tier-bad` fill (any food, not only allergens); the `/allergens` state chip reads `🔒 נעול` in the bad tone and `/foods` rows show `🔒`.
+- 101 notice (plan 007): a sticky card at the top of the reaction page, 2px `--color-tier-bad` border, bold bad-coloured text, shown while `קושי בנשימה` or `חמור` is chosen.
+- Photo thumbnails (plan 007): 72px squares with `--radius-card` and `object-fit: cover` (56px in the reactions list), a 28px round `✕` at the inline-end top corner of a form thumbnail.
+
 ## Item states
 
 planned = outline; given = filled + ✓; skipped = 50% opacity + line-through; suggested = dashed outline.
@@ -92,3 +96,5 @@ Calendar tile (plan 004): 32px emoji inside a 44px touch target; allergen = 2px 
 - D-9: the week grid has a 56px label column and 7 columns of at least 56px, scrolling inside itself at 360px; today's column has an accent-border tint — reverse: edit `week-view.scss`.
 - D-10: swiping the header area left goes to the next week or month, right to the previous (matching the arrows in RTL) — reverse: swap the sign in `calendar-page.ts` `swipeEnd`.
 - D-11: the allergen badge is a neutral dot until plan 005 fills state colours — reverse: none needed.
+- D-12 (plan 007): the 🔒 badge also shows on non-allergen foods (a locked regular food has no accent ring); `app-text-field` accepts `datetime-local` for the reaction time — reverse: show the badge on allergen tiles only in `item-tile.html`, drop the type from `text-field.ts`.
+- D-13 (plan 007): a locked food row on `/foods` gets a 🔓 icon-button (release) at the inline-end only when the food itself is locked; a food locked through its allergen is released from `/allergens` — reverse: remove the button in `foods-page.html`.

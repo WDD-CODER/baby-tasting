@@ -1,32 +1,46 @@
 import { Router } from 'express'
 import { computeAllergens } from '../domain/allergen-engine.js'
+import { foodLockAlerts, plannedCount } from '../domain/locks.js'
 import { withDefaults } from '../domain/settings.js'
 import { todayIso } from '../lib/dates.js'
+import { getActiveLocks } from '../lib/locks.js'
 import { handle, notFound } from './catalog-helpers.js'
 
 const idOf = (doc) => String(doc._id)
 
 async function compute(repos, req) {
-  const [baby, stored, allergens, foods, items] = await Promise.all([
+  const today = todayIso()
+  const [baby, stored, allergens, foods, items, planned, locks] = await Promise.all([
     repos.babies.getForHousehold(req.householdId),
     repos.settings.get(req.householdId),
     repos.allergens.listAll(req.householdId),
     repos.foods.listAll(req.householdId),
     repos.calendarItems.listGiven(req.householdId),
+    repos.calendarItems.listPlannedFrom(req.householdId, today),
+    getActiveLocks(repos, req.householdId),
   ])
+  const foodList = foods.map((f) => ({ id: idOf(f), name: f.name, allergenId: f.allergenId ?? null }))
   const result = computeAllergens({
     birthDate: baby?.birthDate ?? null,
     settings: withDefaults(stored),
     allergens: allergens.map((a) => ({ id: idOf(a), name: a.name, archived: a.archived === true })),
-    foods: foods.map((f) => ({ id: idOf(f), allergenId: f.allergenId ?? null })),
+    foods: foodList,
     items: items.map((it) => ({ date: it.date, foodId: it.foodId, status: it.status })),
-    today: todayIso(),
+    today,
+    locks,
   })
   const names = new Map(allergens.map((a) => [idOf(a), a.name]))
-  return {
-    allergens: result.allergens,
-    alerts: result.alerts.map((alert) => ({ ...alert, allergenName: names.get(alert.allergenId) ?? '' })),
-  }
+  const plannedItems = planned.map((it) => ({ date: it.date, foodId: it.foodId, status: it.status }))
+  const alerts = result.alerts.map((alert) => {
+    const out = { ...alert, allergenName: names.get(alert.allergenId) ?? '' }
+    if (alert.kind === 'locked') {
+      out.targetName = out.allergenName
+      out.plannedCount = plannedCount({ items: plannedItems, foods: foodList, today, allergenId: alert.allergenId })
+    }
+    return out
+  })
+  alerts.push(...foodLockAlerts({ locks, items: plannedItems, foods: foodList, today }))
+  return { allergens: result.allergens, alerts }
 }
 
 // Mounted at /api/v1 (before the /allergens/:id routes): /allergens/status, /allergens/:id/history, /alerts.

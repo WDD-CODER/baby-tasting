@@ -1,4 +1,5 @@
 <section class="allergens">
+  <a class="allergens__reactions" routerLink="/allergens/reactions">{{ reactionsLink }}</a>
   @if (loading_()) {
     <app-loading-state />
   } @else if (failed_()) {
@@ -12,7 +13,9 @@
           <a class="card" [routerLink]="['/allergens', card.id]">
             <span class="card__head">
               <span class="card__name">{{ card.name }}</span>
-              <app-chip [tone]="card.tone">{{ card.stateLabel }}</app-chip>
+              <app-chip [tone]="card.tone"
+                >{{ card.locked ? '🔒 ' : '' }}{{ card.stateLabel }}</app-chip
+              >
             </span>
             @if (card.progress) {
               <span class="card__line">{{ card.progress }}</span>
@@ -27,6 +30,11 @@
               <span class="card__alert">{{ card.alert }}</span>
             }
           </a>
+          @if (card.locked) {
+            <app-button variant="secondary" (pressed)="release(card)">{{
+              lockT.release
+            }}</app-button>
+          }
         </li>
       }
     </ul>

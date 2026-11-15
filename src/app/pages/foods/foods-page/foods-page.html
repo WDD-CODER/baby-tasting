@@ -74,8 +74,20 @@
               @if (food.warning) {
                 <span class="food__warning" aria-hidden="true">{{ t.warningIcon }}</span>
               }
+              @if (food.locked) {
+                <span class="food__lock" [attr.aria-label]="lockT.locked" role="img">{{
+                  lockT.badge
+                }}</span>
+              }
               <span class="food__status">{{ statusText(food) }}</span>
             </a>
+            @if (food.foodLocked) {
+              <app-icon-button
+                icon="🔓"
+                [ariaLabel]="lockT.release + ' ' + food.name"
+                (pressed)="release(food)"
+              />
+            }
             <button
               type="button"
               class="row__queue"

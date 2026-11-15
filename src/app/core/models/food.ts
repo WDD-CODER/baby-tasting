@@ -26,6 +26,10 @@ export interface Food {
   /** Place in the tasting queue; null = not queued. */
   queuePosition: number | null
   status: FoodStatus
+  /** Locked after a reaction, by itself or through its allergen. */
+  locked?: boolean
+  /** Locked by its own lock (released from the foods page). */
+  foodLocked?: boolean
 }
 
 export interface FoodInput {

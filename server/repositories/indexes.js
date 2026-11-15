@@ -14,5 +14,7 @@ export async function createIndexes(db) {
   }
   await db.collection('calendarItems').createIndex({ householdId: 1, date: 1 })
   await db.collection('calendarItems').createIndex({ householdId: 1, foodId: 1 })
+  await db.collection('reactions').createIndex({ householdId: 1, noticedAt: -1 })
+  await db.collection('locks').createIndex({ householdId: 1, targetType: 1, targetId: 1 })
   await db.collection('settings').createIndex({ householdId: 1 }, { unique: true })
 }

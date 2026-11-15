@@ -19,7 +19,7 @@ export async function startTestApp() {
     db,
     config,
     // a fresh app has a fresh login rate-limit counter
-    newApp: () => createApp({ config, db }),
+    newApp: (extra = {}) => createApp({ config, db, ...extra }),
     stop: async () => {
       await close()
       await mongod.stop()

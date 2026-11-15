@@ -136,3 +136,18 @@ test('ageInMonths counts whole months', () => {
   assert.equal(ageInMonths('2026-01-15', '2026-03-15'), 2)
   assert.equal(ageInMonths('2026-01-15', '2026-03-14'), 1)
 })
+
+test('a locked allergen: state locked, baseState kept, no reminder alerts and exactly one locked alert', () => {
+  const base = { birthDate: '2026-01-01', settings: DEFAULT_SETTINGS, allergens, foods }
+  const locks = [{ targetType: 'allergen', targetId: 'a1' }]
+  const intro = computeAllergens({ ...base, items: given([1, 3]), today: day(4), locks })
+  assert.equal(intro.allergens[0].state, 'locked')
+  assert.equal(intro.allergens[0].baseState, 'introducing')
+  assert.deepEqual(intro.alerts.map((a) => a.kind), ['locked'])
+  assert.equal(intro.alerts[0].id, 'locked:a1')
+  const gap = computeAllergens({ ...base, items: given([1, 2, 3]), today: day(30), locks })
+  assert.equal(gap.allergens[0].baseState, 'maintenance')
+  assert.deepEqual(gap.alerts.map((a) => a.kind), ['locked'])
+  const open = computeAllergens({ ...base, items: given([1, 2, 3]), today: day(30) })
+  assert.equal(open.alerts[0].kind, 'maintenance_gap')
+})

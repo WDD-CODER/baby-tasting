@@ -3,6 +3,16 @@
 }
 
 .allergens {
+  &__reactions {
+    display: inline-flex;
+    align-items: center;
+
+    min-block-size: var(--touch-target);
+
+    color: var(--color-accent);
+    font-weight: var(--fw-medium);
+  }
+
   &__list {
     display: flex;
     flex-direction: column;
