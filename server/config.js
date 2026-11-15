@@ -43,5 +43,6 @@ export function loadConfig(env = process.env) {
     allowedOrigins: list(env.ALLOWED_ORIGIN),
     staticDir: env.STATIC_DIR || path.join(repoRoot, 'dist', 'baby-tasting', 'browser'),
     cloudinary,
+    e2eReset: env.E2E_RESET === '1' && nodeEnv !== 'production',
   }
 }

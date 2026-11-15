@@ -1,15 +1,27 @@
 import path from 'node:path'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
+import { createRequireAuth } from './middleware/auth.js'
 import { errorHandler } from './middleware/error-handler.js'
 import { notFound } from './middleware/not-found.js'
 import { requestLogger } from './middleware/request-logger.js'
+import { createRepos } from './repositories/index.js'
+import { createIndexes } from './repositories/indexes.js'
+import { createAuthRouter } from './routes/auth.js'
+import { createBabyRouter } from './routes/baby.js'
 import { healthRouter } from './routes/health.js'
+import { createTestResetRouter } from './routes/test-reset.js'
 
 export function createApp({ config, db }) {
   const app = express()
+  const repos = createRepos(db)
+  const requireAuth = createRequireAuth({ repos })
+  const authConfig = { ...config, appUsers: config.appUsers ?? [] }
+  createIndexes(db).catch((err) => console.error('index creation failed', err))
 
+  if (config.nodeEnv === 'production') app.set('trust proxy', 1)
   app.disable('x-powered-by')
   app.use(requestLogger)
   app.use(
@@ -29,8 +41,12 @@ export function createApp({ config, db }) {
     app.use(cors({ origin: config.allowedOrigins, credentials: true }))
   }
   app.use(express.json({ limit: '100kb' }))
+  app.use(cookieParser())
 
   app.use('/api/v1', healthRouter(db))
+  app.use('/api/v1', createAuthRouter({ repos, config: authConfig, requireAuth }))
+  if (config.e2eReset) app.use('/api/v1', createTestResetRouter({ repos }))
+  app.use('/api/v1/baby', requireAuth, createBabyRouter({ repos }))
   app.use('/api', notFound)
 
   app.use(express.static(config.staticDir))

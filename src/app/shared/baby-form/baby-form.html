@@ -1,0 +1,25 @@
+<form class="baby-form" (ngSubmit)="submit()">
+  <app-text-field
+    name="babyName"
+    [label]="t.name"
+    [error]="error_()"
+    [ngModel]="name_()"
+    (ngModelChange)="name_.set($event)"
+  />
+  <app-text-field
+    name="babyBirthDate"
+    type="date"
+    [label]="t.birthDate"
+    [hint]="ageHint_()"
+    [ngModel]="birthDate_()"
+    (ngModelChange)="birthDate_.set($event)"
+  />
+  <app-button
+    type="submit"
+    [fullWidth]="true"
+    [loading]="saving_()"
+    [disabled]="!changed_() || !ready_()"
+  >
+    {{ t.save }}
+  </app-button>
+</form>

@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, forwardRef, input, signal } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  afterNextRender,
+  forwardRef,
+  inject,
+  input,
+  signal,
+} from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
 let nextId = 0
@@ -17,13 +26,23 @@ export class TextField implements ControlValueAccessor {
   readonly hint = input('')
   readonly error = input('')
   readonly type = input<'text' | 'number' | 'date' | 'password'>('text')
+  readonly autocomplete = input('off')
+  readonly autocapitalize = input('sentences')
+  readonly autofocus = input(false)
 
   protected readonly id = `app-text-field-${nextId++}`
   protected readonly value_ = signal('')
   protected readonly isDisabled_ = signal(false)
 
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef)
   private onChange_: (value: string) => void = () => undefined
   private onTouched_: () => void = () => undefined
+
+  constructor() {
+    afterNextRender(() => {
+      if (this.autofocus()) this.host.nativeElement.querySelector('input')?.focus()
+    })
+  }
 
   writeValue(value: string | null): void {
     this.value_.set(value ?? '')
