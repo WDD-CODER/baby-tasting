@@ -26,4 +26,11 @@ export class SettingsService {
     this.settings_.set(res.settings)
     return res.settings
   }
+
+  /** Puts every rule value back to its default. */
+  async reset(): Promise<Settings> {
+    const res = await firstValueFrom(this.api.post<SettingsResponse>('/settings/reset'))
+    this.settings_.set(res.settings)
+    return res.settings
+  }
 }

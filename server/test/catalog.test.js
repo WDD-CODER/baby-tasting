@@ -167,3 +167,19 @@ test('an unknown or malformed id is 404', async () => {
   assert.equal((await agent.patch('/api/v1/foods/not-an-id').send({ name: 'x' })).status, 404)
   assert.equal((await agent.delete('/api/v1/allergens/64b000000000000000000000')).status, 404)
 })
+
+test('GET /foods/:id/history lists the given days newest first', async () => {
+  const agent = await agentWithBaby()
+  const { body } = await agent.get('/api/v1/foods')
+  const food = body.foods.find((f) => !f.allergenId)
+  for (const date of ['2026-01-03', '2026-01-05']) {
+    const made = await agent.post('/api/v1/calendar').send({ date, meal: 2, foodId: food.id, status: 'given' })
+    assert.equal(made.status, 201)
+  }
+  await agent.post('/api/v1/calendar').send({ date: '2099-01-01', meal: 2, foodId: food.id })
+  const res = await agent.get('/api/v1/foods/' + food.id + '/history')
+  assert.equal(res.status, 200)
+  assert.deepEqual(res.body.items.map((i) => i.date), ['2026-01-05', '2026-01-03'])
+  assert.deepEqual(Object.keys(res.body.items[0]).sort(), ['amount', 'date', 'id', 'liked', 'meal', 'note'])
+  assert.equal((await agent.get('/api/v1/foods/64b000000000000000000000/history')).status, 404)
+})

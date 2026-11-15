@@ -1,7 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core'
 import { firstValueFrom } from 'rxjs'
 import { Allergen } from '../models/allergen'
-import { Food, FoodInput } from '../models/food'
+import { Food, FoodHistoryItem, FoodInput } from '../models/food'
 import { ApiService } from './api.service'
 
 interface FoodsResponse {
@@ -57,6 +57,14 @@ export class CatalogService {
 
   foodById(id: string): Food | undefined {
     return this.allFoods_().find((f) => f.id === id)
+  }
+
+  /** The days a food was given, newest first. */
+  async history(id: string): Promise<FoodHistoryItem[]> {
+    const res = await firstValueFrom(
+      this.api.get<{ items: FoodHistoryItem[] }>(`/foods/${id}/history`),
+    )
+    return res.items
   }
 
   async saveFood(input: FoodInput, id?: string): Promise<Food> {

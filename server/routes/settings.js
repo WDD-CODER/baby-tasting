@@ -23,5 +23,13 @@ export function createSettingsRouter({ repos }) {
     }),
   )
 
+  router.post(
+    '/reset',
+    handle(async (req, res) => {
+      await repos.settings.reset(req.householdId, req.user.username)
+      res.json({ settings: withDefaults({}) })
+    }),
+  )
+
   return router
 }

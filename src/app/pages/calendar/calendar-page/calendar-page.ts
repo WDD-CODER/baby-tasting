@@ -8,7 +8,7 @@ import {
   signal,
   untracked,
 } from '@angular/core'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { HE } from '../../../core/i18n/he'
 import { CalendarItem, ItemPatch, Meal } from '../../../core/models/calendar-item'
 import { Food } from '../../../core/models/food'
@@ -40,6 +40,7 @@ import { ErrorState } from '../../../shared/ui/error-state/error-state'
 import { IconButton } from '../../../shared/ui/icon-button/icon-button'
 import { LoadingState } from '../../../shared/ui/loading-state/loading-state'
 import { AddFoodSheet } from '../add-food-sheet/add-food-sheet'
+import { CalendarHint } from '../calendar-hint/calendar-hint'
 import { CalendarExtensions, ItemBadge, SuggestedItem } from '../calendar-extensions.service'
 import { Cell, MoveRequest } from '../calendar-types'
 import { DaySheet } from '../day-sheet/day-sheet'
@@ -58,6 +59,7 @@ const SWIPE_DISTANCE = 50
     AddFoodSheet,
     BottomSheet,
     Button,
+    CalendarHint,
     Chip,
     DaySheet,
     ErrorState,
@@ -79,6 +81,7 @@ export class CalendarPage {
   private readonly toast = inject(ToastService)
   private readonly allergenStatus = inject(AllergenStatusService)
   private readonly router = inject(Router)
+  private readonly route = inject(ActivatedRoute)
   private readonly suggestions = inject(SuggestionsService)
   protected readonly extensions = inject(CalendarExtensions)
 
@@ -139,7 +142,10 @@ export class CalendarPage {
 
   constructor() {
     this.calendar.refreshOnFocus(inject(DestroyRef))
-    void this.catalog.load().catch(() => this.failed_.set(true))
+    void this.catalog
+      .load()
+      .then(() => this.openAddFromQuery())
+      .catch(() => this.failed_.set(true))
     void this.allergenStatus.refresh()
     this.extensions.onAlertAction.set((id) => this.openAlert(id))
     this.extensions.onSuggestionAccept.set((item) => void this.acceptSuggestions([item]))
@@ -164,6 +170,21 @@ export class CalendarPage {
       const { from, to } = this.range()
       untracked(() => void this.load(from, to))
     })
+  }
+
+  /** `/?add=<foodId>` (from the food page) opens the add-food sheet for today with that food preselected. */
+  private openAddFromQuery(): void {
+    const foodId = this.route.snapshot.queryParamMap.get('add')
+    if (!foodId) return
+    const food = this.foodById(foodId)
+    void this.router.navigate([], {
+      queryParams: { add: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    })
+    if (!food) return
+    this.preselect_.set(food.id)
+    this.addFor_.set({ date: today(), meal: food.allergenId ? 1 : 2 })
   }
 
   protected async load(from = this.range().from, to = this.range().to): Promise<void> {
@@ -366,6 +387,13 @@ export class CalendarPage {
     if (!item) return
     this.actionsId_.set(null)
     void this.router.navigate(['/reactions/new'], { queryParams: { itemId: item.id } })
+  }
+
+  protected openDetails(): void {
+    const item = this.actionsItem()
+    if (!item) return
+    this.actionsId_.set(null)
+    void this.router.navigate(['/foods', item.foodId])
   }
 
   protected async moveFromActions(target: { date: string; meal: Meal }): Promise<void> {

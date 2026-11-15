@@ -1,0 +1,21 @@
+<section class="log">
+  <h2 class="log__title">{{ t.title }}</h2>
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state [message]="t.loadFailed" (retry)="load()" />
+  } @else {
+    <ul class="log__list">
+      @for (row of rows_(); track $index) {
+        <li class="log__row">{{ row.user }} · {{ row.time }} · {{ row.text }}</li>
+      } @empty {
+        <li class="log__none">{{ t.empty }}</li>
+      }
+    </ul>
+    @if (hasMore_()) {
+      <app-button variant="secondary" [fullWidth]="true" (pressed)="more()">{{
+        t.more
+      }}</app-button>
+    }
+  }
+</section>

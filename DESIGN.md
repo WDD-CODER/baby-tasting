@@ -87,6 +87,8 @@ Calendar tile (plan 004): 32px emoji inside a 44px touch target; allergen = 2px 
 - D-4: font sizes are tokens `--fs-xs … --fs-xl` (12, 14, 16, 20, 24px) — reverse: change the values in `tokens.scss`.
 - D-5: the confirm dialog is a centred card (not a sheet); destructive confirmation uses the danger button — reverse: switch the dialog to `app-bottom-sheet`.
 - D-6: toasts stack above the bottom navigation and auto-hide after 4 s — reverse: edit `toast.ts` / `toast.scss`.
+- D-9 (plan 008): the progress summary on `/foods` is a collapsible `details` card; each category row has a 6px bar filled with `--color-cat-nutrition` on a `--color-border` track — reverse: replace the bar with the `tried/total` text only.
+- D-10 (plan 008): the rule values are plain number fields with the one-line explanation and the range (`min–max`) as the hint; out of range shows `טווח מותר: {min}–{max}` and disables `שמירה` — reverse: use a stepper component.
 - D-8 (plan 005): the badge grows from an 18px circle to a pill (min 18px) so `2/3` fits — reverse: show a dot only and put the ordinal in the item sheet.
 - D-9 (plan 005): an alert's suggested food is shown first in the add-food sheet under `מוצע` with an accent outline; it is not added until tapped — reverse: add it on the alert tap.
 - D-10 (plan 006): a suggested tile is a 2px dashed `--color-accent` outline at 70% opacity, never draggable; tap opens a sheet with the reason and `אישור` / `הסרה`; the bar under the header shows `{n} הצעות` · `אשר הכול` · `בטל הכול` — reverse: edit `.suggested` in `week-view.scss` and `.suggest-bar` in `calendar-page.scss`.

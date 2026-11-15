@@ -8,17 +8,34 @@ import {
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core'
 import { Router, RouterLink } from '@angular/router'
 import { HE } from '../../../core/i18n/he'
+import { AllergenState } from '../../../core/models/allergen-status'
 import { Food } from '../../../core/models/food'
 import { FOOD_CATEGORIES, FoodCategory, categoryLabel } from '../../../core/models/food-category'
 import { CatalogService } from '../../../core/services/catalog.service'
 import { LocksService } from '../../../core/services/locks.service'
+import { ProgressService } from '../../../core/services/progress.service'
 import { ToastService } from '../../../core/services/toast.service'
 import { Button } from '../../../shared/ui/button/button'
-import { Chip } from '../../../shared/ui/chip/chip'
+import { Chip, ChipTone } from '../../../shared/ui/chip/chip'
 import { EmptyState } from '../../../shared/ui/empty-state/empty-state'
 import { ErrorState } from '../../../shared/ui/error-state/error-state'
 import { IconButton } from '../../../shared/ui/icon-button/icon-button'
 import { LoadingState } from '../../../shared/ui/loading-state/loading-state'
+
+const ALLERGEN_STATE_ORDER: AllergenState[] = [
+  'not_started',
+  'introducing',
+  'maintenance',
+  'finished',
+  'locked',
+]
+const STATE_TONES: Record<AllergenState, ChipTone> = {
+  not_started: 'neutral',
+  introducing: 'okay',
+  maintenance: 'good',
+  finished: 'neutral',
+  locked: 'bad',
+}
 
 interface FoodGroup {
   category: FoodCategory
@@ -79,6 +96,33 @@ export class FoodsPage {
     })).filter((g) => g.foods.length > 0)
   })
 
+  private readonly progressService = inject(ProgressService)
+  protected readonly progressT = HE.progress
+  protected readonly progress_ = this.progressService.progress
+  protected readonly triedText_ = computed(() => {
+    const p = this.progress_()
+    return p
+      ? this.progressT.tried.replace('{tried}', String(p.tried)).replace('{total}', String(p.total))
+      : ''
+  })
+  protected readonly categoryRows_ = computed(() =>
+    (this.progress_()?.byCategory ?? []).map((row) => ({
+      category: row.category,
+      label: categoryLabel(row.category as FoodCategory),
+      tried: row.tried,
+      total: row.total,
+      percent: row.total === 0 ? 0 : Math.round((row.tried / row.total) * 100),
+    })),
+  )
+  protected readonly allergenChips_ = computed(() => {
+    const counts = this.progress_()?.allergensByState ?? {}
+    return ALLERGEN_STATE_ORDER.filter((state) => (counts[state] ?? 0) > 0).map((state) => ({
+      state,
+      tone: STATE_TONES[state],
+      label: `${HE.allergens.states[state]}: ${counts[state]}`,
+    }))
+  })
+
   constructor() {
     void this.load()
   }
@@ -87,6 +131,8 @@ export class FoodsPage {
     this.loading_.set(true)
     this.failed_.set(false)
     try {
+      // the summary is a bonus: a failure never blocks the list
+      void this.progressService.load().catch(() => undefined)
       await this.catalog.load()
     } catch {
       this.failed_.set(true)

@@ -19,8 +19,9 @@ export class ReactionsService {
   private readonly allergenStatus = inject(AllergenStatusService)
   private readonly catalog = inject(CatalogService)
 
-  async list(): Promise<Reaction[]> {
-    return (await firstValueFrom(this.api.get<ListResponse>('/reactions'))).reactions
+  async list(foodId?: string): Promise<Reaction[]> {
+    const query = foodId ? `?foodId=${encodeURIComponent(foodId)}` : ''
+    return (await firstValueFrom(this.api.get<ListResponse>('/reactions' + query))).reactions
   }
 
   /** Given items of a date range, for the "related to" choice (does not touch the calendar's own items). */

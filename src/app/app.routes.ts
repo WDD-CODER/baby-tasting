@@ -37,6 +37,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/foods/food-form/food-form').then((m) => m.FoodForm),
       },
       {
+        path: 'foods/:id',
+        pathMatch: 'full',
+        loadComponent: () => import('./pages/foods/food-detail/food-detail').then((m) => m.FoodDetail),
+      },
+      {
         path: 'allergens',
         pathMatch: 'full',
         loadComponent: () =>

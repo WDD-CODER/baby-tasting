@@ -1,0 +1,73 @@
+<section class="detail">
+  <a class="detail__back" routerLink="/foods">{{ t.back }}</a>
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_() || !food()) {
+    <app-error-state [message]="t.notFound" (retry)="load()" />
+  } @else {
+    @if (food(); as f) {
+      <header class="detail__head">
+        <span class="detail__emoji" aria-hidden="true">{{ f.emoji }}</span>
+        <h2 class="detail__name">{{ f.name }}</h2>
+        @if (allergenName()) {
+          <app-chip tone="accent">{{ allergenName() }}</app-chip>
+        }
+        @if (f.locked) {
+          <app-chip tone="bad">{{ lockT.badge }} {{ t.locked }}</app-chip>
+        }
+        @if (f.foodLocked) {
+          <app-button variant="ghost" (pressed)="release()">{{ lockT.release }}</app-button>
+        }
+      </header>
+
+      <p class="detail__status">
+        {{ statusLine() }}
+        @if (f.status.liked === true) {
+          <span aria-hidden="true"> ❤️</span>
+        }
+      </p>
+
+      <div class="detail__actions">
+        <app-button (pressed)="addToCalendar()">{{ t.addToCalendar }}</app-button>
+        <app-chip [selected]="f.queuePosition !== null" (pressed)="toggleQueue()">{{
+          t.queue
+        }}</app-chip>
+        <a class="detail__edit" [routerLink]="['/foods', f.id, 'edit']">{{ t.edit }}</a>
+      </div>
+
+      <h3 class="detail__title">{{ t.historyTitle }}</h3>
+      <ul class="detail__list">
+        @for (item of history_(); track item.id) {
+          <li class="entry">
+            <span class="entry__date">{{ date(item.date) }}</span>
+            @if (item.amount) {
+              <span class="entry__meta">· {{ amounts[item.amount] }}</span>
+            }
+            @if (item.liked === true) {
+              <span aria-hidden="true">❤️</span>
+            }
+            @if (item.note) {
+              <span class="entry__meta">· {{ item.note }}</span>
+            }
+          </li>
+        } @empty {
+          <li class="detail__none">{{ t.noHistory }}</li>
+        }
+      </ul>
+
+      <h3 class="detail__title">{{ t.reactionsTitle }}</h3>
+      <ul class="detail__list">
+        @for (reaction of reactions_(); track reaction.id) {
+          <li class="entry">
+            <a class="entry__link" [routerLink]="['/reactions', reaction.id]">
+              <span class="entry__date">{{ date(reaction.date) }}</span>
+              <span class="entry__meta">· {{ symptomText(reaction) }}</span>
+            </a>
+          </li>
+        } @empty {
+          <li class="detail__none">{{ t.noReactions }}</li>
+        }
+      </ul>
+    }
+  }
+</section>
