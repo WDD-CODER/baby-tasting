@@ -1,0 +1,63 @@
+<section class="foods">
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state (retry)="load()" />
+  } @else if (!hasAny_()) {
+    <app-empty-state [title]="empty" [actionLabel]="t.add" (action)="add()" />
+  } @else {
+    <div class="foods__filters">
+      <input
+        class="foods__search"
+        type="search"
+        [attr.aria-label]="t.search"
+        [placeholder]="t.search"
+        [value]="query_()"
+        (input)="onQuery($event)"
+      />
+      <div class="foods__categories">
+        <app-chip [selected]="category_() === 'all'" (pressed)="category_.set('all')">{{
+          t.all
+        }}</app-chip>
+        @for (c of categories; track c.key) {
+          <app-chip [selected]="category_() === c.key" (pressed)="category_.set(c.key)">{{
+            c.label
+          }}</app-chip>
+        }
+      </div>
+      <div>
+        <app-chip tone="accent" [selected]="allergensOnly_()" (pressed)="toggleAllergensOnly()">
+          {{ t.allergensOnly }}
+        </app-chip>
+      </div>
+    </div>
+
+    @for (group of groups_(); track group.category) {
+      <h3 class="foods__group">{{ group.label }}</h3>
+      <ul class="foods__list">
+        @for (food of group.foods; track food.id) {
+          <li>
+            <a class="food" [routerLink]="['/foods', food.id, 'edit']">
+              <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+              <span class="food__name">{{ food.name }}</span>
+              @if (allergenName(food); as name) {
+                <app-chip tone="accent">{{ name }}</app-chip>
+              }
+              @if (food.warning) {
+                <span class="food__warning" aria-hidden="true">{{ t.warningIcon }}</span>
+              }
+              <span class="food__status">{{ t.notTried }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    } @empty {
+      <p class="foods__none">{{ t.noMatch }}</p>
+    }
+
+    <div class="foods__actions">
+      <app-button [fullWidth]="true" (pressed)="add()">{{ t.add }}</app-button>
+      <a class="foods__link" routerLink="/foods/allergens">{{ t.manageAllergens }}</a>
+    </div>
+  }
+</section>

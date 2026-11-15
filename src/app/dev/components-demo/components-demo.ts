@@ -8,6 +8,7 @@ import { BottomSheet } from '../../shared/ui/bottom-sheet/bottom-sheet'
 import { Button } from '../../shared/ui/button/button'
 import { Card } from '../../shared/ui/card/card'
 import { Chip } from '../../shared/ui/chip/chip'
+import { EmojiPicker } from '../../shared/ui/emoji-picker/emoji-picker'
 import { EmptyState } from '../../shared/ui/empty-state/empty-state'
 import { ErrorState } from '../../shared/ui/error-state/error-state'
 import { IconButton } from '../../shared/ui/icon-button/icon-button'
@@ -24,6 +25,7 @@ import { TextField } from '../../shared/ui/text-field/text-field'
     Button,
     Card,
     Chip,
+    EmojiPicker,
     EmptyState,
     ErrorState,
     IconButton,
@@ -41,6 +43,7 @@ export class ComponentsDemo {
 
   protected readonly t = HE
   protected readonly isSheetOpen_ = signal(false)
+  protected readonly emoji_ = signal('🍌')
   protected readonly textControl = new FormControl('')
   protected readonly selectControl = new FormControl('a')
   protected readonly options: SelectOption[] = [

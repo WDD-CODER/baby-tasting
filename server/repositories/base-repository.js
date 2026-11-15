@@ -10,6 +10,11 @@ export class BaseRepository {
     this.collection = db.collection(name)
   }
 
+  // An id the driver cannot parse becomes an id that matches nothing, never an exception.
+  toObjectId(id) {
+    return typeof id === 'string' && !ObjectId.isValid(id) ? new ObjectId('000000000000000000000000') : toId(id)
+  }
+
   findMany(householdId, filter = {}, opts = {}) {
     return this.collection.find({ ...filter, householdId }, opts).toArray()
   }
