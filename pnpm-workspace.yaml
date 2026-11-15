@@ -1,0 +1,11 @@
+packages:
+  - '.'
+  - 'server'
+
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: false
+  lmdb: false
+  msgpackr-extract: false
+
+ignoreWorkspaceRootCheck: true
