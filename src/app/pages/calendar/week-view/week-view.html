@@ -38,24 +38,14 @@
             </div>
           }
           @for (s of suggestionsOf(day, meal); track s.id) {
-            <span class="suggested">
-              <button
-                type="button"
-                class="suggested__accept"
-                [attr.aria-label]="t.suggestedAccept"
-                (click)="suggestionAccepted.emit(s)"
-              >
-                {{ foodById().get(s.foodId)?.emoji }}
-              </button>
-              <button
-                type="button"
-                class="suggested__dismiss"
-                [attr.aria-label]="t.suggestedDismiss"
-                (click)="suggestionDismissed.emit(s)"
-              >
-                ✕
-              </button>
-            </span>
+            <button
+              type="button"
+              class="suggested"
+              [attr.aria-label]="foodById().get(s.foodId)?.name"
+              (click)="suggestionOpened.emit(s)"
+            >
+              <span aria-hidden="true">{{ foodById().get(s.foodId)?.emoji }}</span>
+            </button>
           }
           <button
             type="button"

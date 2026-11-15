@@ -26,8 +26,7 @@ export class WeekView {
   readonly itemOpened = output<CalendarItem>()
   readonly addRequested = output<Cell>()
   readonly moveRequested = output<MoveRequest>()
-  readonly suggestionAccepted = output<SuggestedItem>()
-  readonly suggestionDismissed = output<SuggestedItem>()
+  readonly suggestionOpened = output<SuggestedItem>()
 
   protected readonly t = HE.calendar
   protected readonly meals = MEALS

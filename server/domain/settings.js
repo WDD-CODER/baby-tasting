@@ -4,6 +4,8 @@ export const DEFAULT_SETTINGS = Object.freeze({
   maintenancePerWeek: 2,
   maintenanceGapDays: 5,
   maintenanceUntilMonths: 24,
+  maxAllergensPerMeal: 2,
+  newFoodsPerWeek: 3,
 })
 
 export const SETTING_RANGES = Object.freeze({
@@ -11,6 +13,8 @@ export const SETTING_RANGES = Object.freeze({
   maintenancePerWeek: { min: 1, max: 7 },
   maintenanceGapDays: { min: 2, max: 14 },
   maintenanceUntilMonths: { min: 6, max: 36 },
+  maxAllergensPerMeal: { min: 1, max: 5 },
+  newFoodsPerWeek: { min: 0, max: 7 },
 })
 
 // Checks a partial set of values: every given key must be a known integer inside its range.

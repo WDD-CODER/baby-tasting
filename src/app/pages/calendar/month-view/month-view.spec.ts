@@ -13,6 +13,7 @@ function food(id: string, emoji: string, allergenId: string | null): Food {
     warning: null,
     builtIn: false,
     archived: false,
+    queuePosition: null,
     status: { tried: false, firstDate: null, timesGiven: 0, liked: null },
   }
 }

@@ -14,6 +14,7 @@ export function toFoodDto(doc, status = null) {
     warning: doc.warning ?? null,
     builtIn: doc.builtIn === true,
     archived: doc.archived === true,
+    queuePosition: typeof doc.queuePosition === 'number' ? doc.queuePosition : null,
     status: status ?? { tried: false, firstDate: null, timesGiven: 0, liked: null },
   }
 }
@@ -38,6 +39,32 @@ export function createFoodsRouter({ repos }) {
         : await repos.foods.listActive(req.householdId)
       const statuses = deriveFoodStatus(await repos.calendarItems.listGiven(req.householdId))
       res.json({ foods: docs.map((d) => toFoodDto(d, statuses[String(d._id)])) })
+    }),
+  )
+
+  router.put(
+    '/queue',
+    handle(async (req, res) => {
+      const ids = req.body?.foodIds
+      if (!Array.isArray(ids) || ids.some((id) => typeof id !== 'string')) {
+        throw new HttpError(400, 'invalid', 'foodIds must be a list of food ids')
+      }
+      const current = (await repos.foods.listQueue(req.householdId)).map((d) => String(d._id))
+      const same = ids.length === current.length && new Set(ids).size === ids.length && ids.every((id) => current.includes(id))
+      if (!same) throw new HttpError(400, 'invalid', 'foodIds must list every queued food once')
+      const docs = await repos.foods.reorderQueue(req.householdId, ids, req.user.username)
+      res.json({ queue: docs.map((d) => toFoodDto(d)) })
+    }),
+  )
+
+  router.post(
+    '/:id/queue',
+    handle(async (req, res) => {
+      if (typeof req.body?.queued !== 'boolean') throw new HttpError(400, 'invalid', 'queued must be true or false')
+      const doc = await load(req)
+      if (doc.archived && req.body.queued) throw new HttpError(400, 'invalid', 'An archived food cannot be queued')
+      const saved = await repos.foods.setQueued(req.householdId, req.params.id, req.body.queued, req.user.username)
+      res.json({ food: toFoodDto(saved) })
     }),
   )
 

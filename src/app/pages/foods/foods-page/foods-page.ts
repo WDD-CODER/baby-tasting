@@ -1,9 +1,17 @@
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragHandle,
+  CdkDropList,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop'
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core'
 import { Router, RouterLink } from '@angular/router'
 import { HE } from '../../../core/i18n/he'
 import { Food } from '../../../core/models/food'
 import { FOOD_CATEGORIES, FoodCategory, categoryLabel } from '../../../core/models/food-category'
 import { CatalogService } from '../../../core/services/catalog.service'
+import { ToastService } from '../../../core/services/toast.service'
 import { Button } from '../../../shared/ui/button/button'
 import { Chip } from '../../../shared/ui/chip/chip'
 import { EmptyState } from '../../../shared/ui/empty-state/empty-state'
@@ -18,7 +26,17 @@ interface FoodGroup {
 
 @Component({
   selector: 'app-foods-page',
-  imports: [RouterLink, Button, Chip, EmptyState, ErrorState, LoadingState],
+  imports: [
+    CdkDrag,
+    CdkDragHandle,
+    CdkDropList,
+    RouterLink,
+    Button,
+    Chip,
+    EmptyState,
+    ErrorState,
+    LoadingState,
+  ],
   templateUrl: './foods-page.html',
   styleUrl: './foods-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +44,7 @@ interface FoodGroup {
 export class FoodsPage {
   private readonly catalog = inject(CatalogService)
   private readonly router = inject(Router)
+  private readonly toast = inject(ToastService)
 
   protected readonly t = HE.foods
   protected readonly empty = HE.common.empty
@@ -86,6 +105,27 @@ export class FoodsPage {
     const status = food.status
     if (!status?.tried) return this.t.notTried
     return `${this.t.tried} · ${status.timesGiven}${status.liked === true ? ' ❤️' : ''}`
+  }
+
+  protected readonly queue_ = this.catalog.queue
+
+  protected async toggleQueue(food: Food): Promise<void> {
+    try {
+      await this.catalog.toggleQueue(food.id)
+    } catch {
+      this.toast.show(HE.calendar.errors.notSaved, 'bad')
+    }
+  }
+
+  protected async reorder(event: CdkDragDrop<Food[]>): Promise<void> {
+    if (event.previousIndex === event.currentIndex) return
+    const ids = this.queue_().map((f) => f.id)
+    moveItemInArray(ids, event.previousIndex, event.currentIndex)
+    try {
+      await this.catalog.reorderQueue(ids)
+    } catch {
+      this.toast.show(HE.calendar.errors.notSaved, 'bad')
+    }
   }
 
   protected add(): void {

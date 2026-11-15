@@ -16,6 +16,7 @@ const banana: Food = {
   warning: null,
   builtIn: true,
   archived: false,
+  queuePosition: null,
   status: { tried: false, firstDate: null, timesGiven: 0, liked: null },
 }
 const tahini: Food = { ...banana, id: 'f2', name: 'טחינה', allergenId: 'a1' }
