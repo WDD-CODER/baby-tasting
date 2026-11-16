@@ -14,8 +14,11 @@ test('003-3: unsaved changes ask before leaving; archive asks for confirmation',
   await page.screenshot({ path: 'e2e/screens/003-3.png' })
   await page.getByRole('button', { name: 'להישאר' }).click()
 
+  // since plan 008 a food opens its detail page; archiving lives on its edit page
   await page.goto('/tasting/foods')
   await page.getByRole('link', { name: /בננה/ }).click()
+  await page.getByRole('link', { name: 'עריכה' }).click()
+  await expect(page).toHaveURL(/\/edit$/)
   await page.getByRole('button', { name: 'העברה לארכיון' }).click()
   await expect(page.getByText('להעביר את בננה לארכיון?')).toBeVisible()
 })

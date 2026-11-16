@@ -63,17 +63,19 @@ test('create, list a range, move and delete', async () => {
   assert.equal((await agent.delete(`/api/v1/calendar/${id}`)).status, 404)
 })
 
-test('an allergen food in meal 2 is refused on create and on move', async () => {
+test('D-015-4: an allergen food in meal 2 or 3 is accepted on create and on move (no allergen_meal_1)', async () => {
   const { agent, allergen } = await setup()
   const date = today()
-  const bad = await agent.post('/api/v1/calendar').send({ date, meal: 2, foodId: allergen.id })
-  assert.equal(bad.status, 422)
-  assert.equal(bad.body.error.code, 'allergen_meal_1')
+  const two = await agent.post('/api/v1/calendar').send({ date, meal: 2, foodId: allergen.id })
+  assert.equal(two.status, 201)
+  assert.equal(two.body.item.meal, 2)
   const ok = await agent.post('/api/v1/calendar').send({ date, meal: 1, foodId: allergen.id })
   assert.equal(ok.status, 201)
-  const move = await agent.post(`/api/v1/calendar/${ok.body.item.id}/move`).send({ date, meal: 2 })
-  assert.equal(move.status, 422)
-  assert.equal(move.body.error.code, 'allergen_meal_1')
+  const move = await agent.post(`/api/v1/calendar/${ok.body.item.id}/move`).send({ date, meal: 3 })
+  assert.equal(move.status, 200)
+  assert.equal(move.body.item.meal, 3)
+  const back = await agent.get(`/api/v1/calendar?from=${date}&to=${date}`)
+  assert.ok(back.body.items.some((it) => it.id === ok.body.item.id && it.meal === 3))
 })
 
 test('the same food twice in one meal is 409 duplicate_in_meal, also on move', async () => {

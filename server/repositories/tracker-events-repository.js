@@ -14,6 +14,15 @@ export class TrackerEventsRepository extends BaseRepository {
     return this.collection.find(filter).sort({ timestamp: -1, _id: -1 }).limit(limit).toArray()
   }
 
+  // The timestamp (ISO) of the oldest event of any type with `from` <= timestamp < `to`, or null (D-015-2).
+  async firstTimestamp(householdId, { from, to }) {
+    const doc = await this.collection.findOne(
+      { householdId, deletedAt: { $exists: false }, timestamp: { $gte: from, $lt: to } },
+      { sort: { timestamp: 1, _id: 1 }, projection: { timestamp: 1 } },
+    )
+    return doc ? doc.timestamp : null
+  }
+
   get(householdId, id) {
     return this.collection.findOne({ _id: this.toObjectId(id), householdId, deletedAt: { $exists: false } })
   }

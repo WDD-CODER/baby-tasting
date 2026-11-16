@@ -25,6 +25,16 @@ export function checkOverlap(sleeps, candidate) {
   return { overlaps: false }
 }
 
+// D-015-1 mode 1: moves the open sleep's start. The sleep stays open; the start must not be after `now`.
+// `others`: the sleeps that could overlap (the open one itself is skipped by id). Returns { sleep } or { error }.
+export function moveOpenSleepStart({ open, startAt, now, others = [] }) {
+  if (!open || !isOpen(open.sleep)) return { error: 'no_open_sleep' }
+  if (Date.parse(startAt) > Date.parse(now)) return { error: 'start_in_future' }
+  const id = open.id ?? (open._id ? String(open._id) : undefined)
+  if (checkOverlap(others, { startAt, endAt: null, id }).overlaps) return { error: 'sleep_overlap' }
+  return { sleep: { ...open.sleep, startAt, endAt: null } }
+}
+
 // Decides what a toggle does. `open` is the open sleep event (or null), `at` an ISO moment (the caller passes
 // "now" when the user gave none). Returns { action: 'end', patch } or { action: 'start', event } or { error }.
 export function toggleSleep({ open, at, parentType, location }) {

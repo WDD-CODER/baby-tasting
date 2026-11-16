@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { checkDuplicate, checkPlacement, checkStatus } from '../domain/calendar-rules.js'
+import { checkDuplicate, checkStatus } from '../domain/calendar-rules.js'
 import { isoDiffDays, isRealDate } from '../domain/dates.js'
 import { isPlacementLocked } from '../domain/locks.js'
 import {
@@ -131,8 +131,6 @@ export function createCalendarRouter({ repos }) {
       const meal = parseMeal(req.body?.meal)
       const food = await repos.foods.findById(req.householdId, doc.foodId)
       if (food && (await isFoodLocked(repos, req.householdId, food))) throw refusal('food_locked')
-      const placement = checkPlacement({ food, meal })
-      if (placement) throw refusal(placement)
       const future = checkStatus({ status: doc.status, date, today: todayIso() })
       if (future) throw refusal(future)
       const day = await repos.calendarItems.listForDay(req.householdId, date)

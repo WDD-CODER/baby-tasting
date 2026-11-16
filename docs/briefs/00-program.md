@@ -55,8 +55,10 @@ default the parents can see and change in Settings.
   on the calendar and on the status page: "חסר יום ברצף — כדאי לתת היום {allergen}". The alert clears when it is given.
 - R3 **One at a time — warning only.** Starting a second allergen while another is `introducing` shows a
   confirmation ("{allergen} עדיין בחשיפה. להתחיל גם {new}?"). The parent may continue.
-- R4 **Meal 1 (fixed).** An allergen food is always in meal 1. The calendar refuses to drop or add an allergen food in
-  meal 2 or 3 and says why ("אלרגן ניתן בארוחה הראשונה"). Moving it to meal 1 of another day is allowed.
+- R4 **Any meal, with a note (changed by plan 015, D-015-4, ADR 0016).** An allergen food may be placed, dropped or
+  moved into any meal of a day. When it ends up in meal 2 or 3 the calendar shows a soft note (a toast, not a refusal):
+  "שימו לב: אלרגן מחוץ לארוחה הראשונה". The limits across days (introduction days, how many allergens, the 3-day
+  windows) stay as they are. Suggestions keep placing allergens in meal 1.
 - R5 **Mixing is fine.** A regular food may be given on introduction days, in any meal, including meal 1 next to the
   allergen. New regular foods are allowed on those days too.
 - R6 **Maintenance.** After introduction the allergen is in `maintenance` until the baby is 24 months old

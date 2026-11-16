@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { isDateString, jerusalemMidnight } from '../domain/tracker/baby-day.js'
 import { toApiEvent } from '../domain/tracker/events.js'
-import { STAT_KINDS, datesInRange } from '../domain/tracker/stats.js'
+import { STAT_KINDS, datesInRange, rangeBounds } from '../domain/tracker/stats.js'
 import { HttpError } from '../lib/http-error.js'
 import { handle, notFound } from './catalog-helpers.js'
 
@@ -34,8 +34,10 @@ export function createTrackerStatsRouter({ repos }) {
         to: jerusalemMidnight(to, 2),
         limit: EVENT_LIMIT,
       })
-      const now = new Date().toISOString()
-      res.json(compute(docs.map(toApiEvent), { from, to, dayStartHour: DAY_START_HOUR, now }))
+      const opts = { from, to, dayStartHour: DAY_START_HOUR, now: new Date().toISOString() }
+      // D-015-2: the first event of any type inside the exact range; the averages count the days from there.
+      const firstEventAt = await repos.trackerEvents.firstTimestamp(req.householdId, rangeBounds(opts))
+      res.json(compute(docs.map(toApiEvent), { ...opts, firstEventAt }))
     }),
   )
 

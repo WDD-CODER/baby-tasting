@@ -50,9 +50,13 @@ Delete this file to switch the gate off.
 - Users lose if broken: screens drift from the dark Baby Tracker look and a later merge needs manual colour fixes
 - Test: tools/check-no-hex.mjs "INV-5 …"
 
-## INV-6 — Allergen foods only in meal 1
-- Rule: an allergen food is only ever in meal 1 (R4), enforced on the server and mirrored in the UI
-- Source: docs/briefs/00-program.md §4 R4
-- Touches: `server/domain/**`, `server/routes/calendar*`, `src/app/pages/calendar/**`
-- Users lose if broken: a baby could be planned an allergen at a meal where a reaction is harder to watch
-- Test: none until plan 004
+## INV-6 — Allergen foods may be in any meal, with a soft note outside meal 1
+- Rule: an allergen food may be placed, dropped or moved into any meal of a day (R4); nothing refuses it. When it ends up
+  in meal 2 or 3 the calendar shows a toast (`שימו לב: אלרגן מחוץ לארוחה הראשונה`), never a refusal. The limits across
+  days (introduction days, how many allergens, the 3-day windows) are unchanged, and suggestions keep allergens in meal 1.
+  The server and the UI mirror (`server/domain/calendar-rules.js`, `src/app/core/utils/calendar-rules.ts`) agree.
+- Source: docs/briefs/00-program.md §4 R4; ADR docs/brain/decisions/0016-allergen-any-meal.md (D-015-4, plan 015)
+- Touches: `server/domain/**`, `server/routes/calendar*`, `server/lib/calendar-create.js`, `src/app/pages/calendar/**`
+- Users lose if broken: the parents cannot move an allergen food to the meal that suits the day, or lose the note that
+  reminds them it is outside meal 1
+- Test: server/domain/calendar-rules.test.js, server/test/calendar.test.js, e2e/015-4-allergen-any-meal.spec.ts

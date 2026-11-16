@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { isIso, SLEEP_LOCATIONS, toApiEvent } from '../domain/tracker/events.js'
-import { toggleSleep } from '../domain/tracker/sleep.js'
+import { moveOpenSleepStart, toggleSleep } from '../domain/tracker/sleep.js'
 import { HttpError } from '../lib/http-error.js'
 import { handle } from './catalog-helpers.js'
 import { assertSleepFits } from './tracker-events.js'
@@ -25,6 +25,32 @@ export function createTrackerSleepRouter({ repos }) {
     handle(async (req, res) => {
       const open = await repos.trackerEvents.findOpenSleep(req.householdId)
       res.json(open ? toApiEvent(open) : null)
+    }),
+  )
+
+  // D-015-1 mode 1: fix the open sleep's start. Body { startAt } (ISO). The sleep stays open.
+  router.post(
+    '/open/start',
+    handle(async (req, res) => {
+      const b = req.body ?? {}
+      for (const k of Object.keys(b)) {
+        if (k !== 'startAt') throw new HttpError(400, 'invalid', `${k} is not a field of a sleep start fix`)
+      }
+      if (!isIso(b.startAt)) throw new HttpError(400, 'invalid', 'startAt must be an ISO date-time')
+      const startAt = new Date(b.startAt).toISOString()
+      const open = await repos.trackerEvents.findOpenSleep(req.householdId)
+      if (!open) throw new HttpError(404, 'not_found', 'No sleep is open')
+      const others = await repos.trackerEvents.findSleepsNear(req.householdId, startAt, null)
+      const result = moveOpenSleepStart({ open, startAt, now: new Date().toISOString(), others })
+      if (result.error === 'start_in_future') throw new HttpError(400, 'start_in_future', 'The start is in the future')
+      if (result.error === 'sleep_overlap') throw new HttpError(409, 'sleep_overlap', 'This sleep overlaps another sleep')
+      const updated = await repos.trackerEvents.update(
+        req.householdId,
+        open._id,
+        { set: { sleep: result.sleep, timestamp: startAt } },
+        req.user.username,
+      )
+      res.json({ event: toApiEvent(updated) })
     }),
   )
 

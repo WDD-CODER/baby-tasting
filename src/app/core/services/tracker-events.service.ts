@@ -116,6 +116,15 @@ export class TrackerEventsService {
     return res
   }
 
+  /** D-015-1 mode 1: moves the open sleep's start to `startAt` (ISO); the sleep stays open. */
+  async moveOpenSleepStart(startAt: string): Promise<TrackerEvent> {
+    const res = await firstValueFrom(
+      this.api.post<{ event: TrackerEvent }>('/tracker/sleep/open/start', { startAt }),
+    )
+    await this.refresh(true)
+    return res.event
+  }
+
   /** A success toast with an undo button that deletes the event. */
   showUndo(id: string, text: string): void {
     const t = HE.tracker.log

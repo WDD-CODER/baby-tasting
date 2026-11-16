@@ -36,8 +36,41 @@ function rangeOf({ from, to, dayStartHour = 6 }) {
     fromMs: dayStartMs(from, dayStartHour),
     toMs: dayStartMs(addDays(to, 1), dayStartHour),
     hour: dayStartHour,
+    to,
     dates: datesInRange(from, to),
   }
+}
+
+// The exact instants of a range as ISO strings: [from 06:00, day after `to` 06:00).
+export function rangeBounds(opts) {
+  const range = rangeOf(opts)
+  return { from: new Date(range.fromMs).toISOString(), to: new Date(range.toMs).toISOString() }
+}
+
+// D-015-2: the averages divide by the baby days from the first day in the range that has any Tracker event (any type)
+// to the last day of the range, capped at the day of `opts.now`. Days without events in between still count; no event
+// in the range gives 0. `opts.firstEventAt` (ISO or null, from the repository) wins; without it the first event is
+// taken from `events` (any type, by `timestamp`).
+export function daysWithData(events, opts) {
+  const range = rangeOf(opts)
+  let firstMs = null
+  if (opts.firstEventAt !== undefined) {
+    const ms = opts.firstEventAt === null ? NaN : Date.parse(opts.firstEventAt)
+    if (Number.isFinite(ms) && ms >= range.fromMs && ms < range.toMs) firstMs = ms
+  } else {
+    for (const e of events) {
+      const ms = e ? Date.parse(e.timestamp) : NaN
+      if (Number.isFinite(ms) && ms >= range.fromMs && ms < range.toMs && (firstMs === null || ms < firstMs)) firstMs = ms
+    }
+  }
+  if (firstMs === null) return 0
+  const first = dayKey(firstMs, range.hour)
+  let last = range.to
+  if (opts.now) {
+    const today = dayKey(Date.parse(opts.now), range.hour)
+    if (today < last) last = today
+  }
+  return Math.max(1, datesInRange(first, last).length)
 }
 
 // Events of `type` whose `at(e)` falls in the range, each with its day key; oldest first.
@@ -60,13 +93,14 @@ function byDay(items, make, fold) {
 }
 
 const sum = (list, f) => list.reduce((s, x) => s + f(x), 0)
-const perDay = (n, days) => n / Math.max(1, days)
+const perDay = (n, days) => (days > 0 ? n / days : 0)
 
 // Breast duration of a feed without one counts as 15 minutes (spec-timeline-dashboards §3.3).
 const BREAST_DEFAULT_MINUTES = 15
 
 export function nutritionStats(events, opts) {
   const range = rangeOf(opts)
+  const withData = daysWithData(events, opts)
   const items = pick(events, 'NUTRITION', 'nutrition', range, (e) => e.timestamp)
   const days = byDay(
     items,
@@ -95,7 +129,8 @@ export function nutritionStats(events, opts) {
       breastMinutes: sum(days, (d) => d.breastMinutes),
       bottleMl: sum(days, (d) => d.consumed),
       rangeDays: range.dates.length,
-      feedsPerDay: perDay(feedsCount, range.dates.length),
+      daysWithData: withData,
+      feedsPerDay: perDay(feedsCount, withData),
     },
   }
 }
@@ -112,6 +147,7 @@ function sleepMinutes(sleep, nowMs) {
 // so the bar chart always shows one bar per day.
 export function sleepStats(events, opts) {
   const range = rangeOf(opts)
+  const withData = daysWithData(events, opts)
   const nowMs = Date.parse(opts.now ?? new Date(range.toMs).toISOString())
   const items = pick(events, 'SLEEP', 'sleep', range, (e) => e.sleep.startAt ?? e.timestamp)
   const sessions = byDay(
@@ -143,7 +179,8 @@ export function sleepStats(events, opts) {
       totalMinutes,
       sessionCount: sum(days, (d) => d.sessionCount),
       rangeDays: range.dates.length,
-      hoursPerDay: perDay(totalMinutes / 60, range.dates.length),
+      daysWithData: withData,
+      hoursPerDay: perDay(totalMinutes / 60, withData),
       locations,
     },
   }
@@ -151,6 +188,7 @@ export function sleepStats(events, opts) {
 
 export function diaperStats(events, opts) {
   const range = rangeOf(opts)
+  const withData = daysWithData(events, opts)
   const items = pick(events, 'DIAPER', 'diaper', range, (e) => e.timestamp)
   const days = byDay(
     items,
@@ -174,7 +212,8 @@ export function diaperStats(events, opts) {
       both: sum(days, (d) => d.both),
       total,
       rangeDays: range.dates.length,
-      perDay: perDay(total, range.dates.length),
+      daysWithData: withData,
+      perDay: perDay(total, withData),
     },
   }
 }
@@ -198,6 +237,8 @@ export function weightStats(events, opts) {
       latestPercentile: latest && latest.percentile !== undefined ? latest.percentile : null,
       latestDate: latest ? latest.date : null,
       changeGrams: latest && earliest && latest.id !== earliest.id ? latest.weightGrams - earliest.weightGrams : 0,
+      rangeDays: range.dates.length,
+      daysWithData: daysWithData(events, opts),
     },
   }
 }
@@ -205,6 +246,7 @@ export function weightStats(events, opts) {
 // `todayMl` ignores the range: the pumped total of the baby day that holds `opts.now` (spec §3.6).
 export function pumpingStats(events, opts) {
   const range = rangeOf(opts)
+  const withData = daysWithData(events, opts)
   const items = pick(events, 'PUMPING', 'pumping', range, (e) => e.timestamp)
   const days = byDay(
     items,
@@ -229,7 +271,8 @@ export function pumpingStats(events, opts) {
       totalMl,
       sessionCount: sum(days, (d) => d.sessionCount),
       rangeDays: range.dates.length,
-      avgMlPerDay: Math.round(perDay(totalMl, range.dates.length)),
+      daysWithData: withData,
+      avgMlPerDay: Math.round(perDay(totalMl, withData)),
       todayMl: todayRow ? todayRow.totalMl : 0,
     },
   }
@@ -237,6 +280,7 @@ export function pumpingStats(events, opts) {
 
 export function vomitingStats(events, opts) {
   const range = rangeOf(opts)
+  const withData = daysWithData(events, opts)
   const items = pick(events, 'VOMITING', 'vomiting', range, (e) => e.timestamp)
   const days = byDay(
     items,
@@ -258,7 +302,8 @@ export function vomitingStats(events, opts) {
       large: sum(days, (d) => d.large),
       total,
       rangeDays: range.dates.length,
-      perDay: perDay(total, range.dates.length),
+      daysWithData: withData,
+      perDay: perDay(total, withData),
     },
   }
 }

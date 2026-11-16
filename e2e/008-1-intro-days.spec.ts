@@ -12,8 +12,11 @@ test('008-1: changing introDays from 3 to 4 turns 3/3 into 3/4 and בחשיפה'
   await page.goto('/tasting/allergens')
   await expect(page.locator('li', { hasText: 'שומשום' }).first()).toContainText('3/3')
   await page.goto('/settings')
-  await page.getByLabel('ימי חשיפה').fill('4')
-  await page.getByRole('button', { name: 'שמירה', exact: true }).last().click()
+  // the rules form sits below the Tracker settings: save it and wait for the save before leaving the page
+  const rules = page.locator('app-rules-form')
+  await rules.getByLabel('ימי חשיפה').fill('4')
+  await rules.getByRole('button', { name: 'שמירה', exact: true }).click()
+  await expect(page.getByText('נשמר', { exact: true })).toBeVisible()
   await page.goto('/tasting/allergens')
   const card = page.locator('li', { hasText: 'שומשום' }).first()
   await expect(card).toContainText('3/4')
