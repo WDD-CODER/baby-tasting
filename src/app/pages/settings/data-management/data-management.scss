@@ -1,0 +1,42 @@
+:host {
+  display: block;
+}
+
+.data {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+  }
+
+  &__subtitle {
+    margin: 0;
+
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+  }
+
+  &__text {
+    margin: 0;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
+  &__option,
+  &__confirm {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  &__option {
+    padding-block-start: var(--space-3);
+    border-block-start: 1px solid var(--color-border);
+  }
+}

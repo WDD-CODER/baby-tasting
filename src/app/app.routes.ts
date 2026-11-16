@@ -97,6 +97,10 @@ export const routes: Routes = [
         canDeactivate: [unsavedChangesGuard],
         loadComponent: () => import('./pages/settings/settings').then((m) => m.SettingsPage),
       },
+      {
+        path: 'settings/icons',
+        loadComponent: () => import('./pages/settings/icons-page/icons-page').then((m) => m.IconsPage),
+      },
       ...(environment.production
         ? []
         : [

@@ -1,0 +1,37 @@
+<app-card>
+  <div class="export">
+    <h3 class="export__title">{{ t.title }}</h3>
+    <p class="export__text">{{ t.text }}</p>
+    <div class="export__dates">
+      <app-text-field
+        name="exportFrom"
+        type="date"
+        [label]="t.from"
+        [ngModel]="from_()"
+        (ngModelChange)="from_.set($event)"
+      />
+      <app-text-field
+        name="exportTo"
+        type="date"
+        [label]="t.to"
+        [error]="error_()"
+        [ngModel]="to_()"
+        (ngModelChange)="to_.set($event)"
+      />
+    </div>
+    <div class="export__presets">
+      <span class="export__text">{{ t.presets }}</span>
+      @for (p of presets; track p.days) {
+        <app-chip (pressed)="preset(p.days)">{{ p.label }}</app-chip>
+      }
+    </div>
+    <app-button
+      [fullWidth]="true"
+      [loading]="busy_()"
+      [disabled]="!!error_()"
+      (pressed)="download()"
+    >
+      {{ t.button }}
+    </app-button>
+  </div>
+</app-card>

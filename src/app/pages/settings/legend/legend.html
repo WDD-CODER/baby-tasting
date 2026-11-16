@@ -1,0 +1,24 @@
+<div class="legend">
+  <app-button variant="ghost" (pressed)="back.emit()">‹ {{ backLabel }}</app-button>
+  <app-card>
+    <div class="legend__body">
+      <h2 class="legend__title">{{ t.title }}</h2>
+      <p class="legend__text">{{ t.intro }}</p>
+      <h3 class="legend__subtitle">{{ t.tiers }}</h3>
+      <ul class="legend__grid">
+        @for (tier of tiers; track tier.tone) {
+          <li class="legend__item legend__item--{{ tier.tone }}">{{ tier.label }}</li>
+        }
+      </ul>
+      <h3 class="legend__subtitle">{{ t.types }}</h3>
+      <ul class="legend__grid">
+        @for (s of symbols; track s.label) {
+          <li class="legend__item">
+            <span class="legend__symbol">{{ s.symbol }}</span>
+            <span>{{ s.label }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </app-card>
+</div>
