@@ -1,0 +1,15 @@
+<div class="bars" data-testid="bar-chart">
+  @for (b of bars(); track $index) {
+    <div class="bars__row" data-testid="bar-chart-row">
+      <span class="bars__label">{{ b.label }}</span>
+      <div class="bars__track">
+        <span
+          class="bars__fill"
+          [style.inline-size.%]="b.percent"
+          [style.background]="color()"
+        ></span>
+        <span class="bars__caption">{{ b.caption }}</span>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,68 @@
+:host {
+  display: block;
+}
+
+.seq {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &__sleep {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-inline-start: 4px solid var(--color-event-sleep);
+    border-radius: var(--radius-card);
+
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  &__icon {
+    font-size: var(--fs-md);
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    font-size: var(--fs-xs);
+
+    small {
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__range {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+  }
+
+  &__awake {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+
+    padding: var(--space-2) var(--space-3);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-card);
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+  }
+
+  &__gap {
+    color: var(--color-event-supplement);
+  }
+}

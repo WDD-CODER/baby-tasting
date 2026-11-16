@@ -87,10 +87,10 @@ line or file this plan names was removed, renamed or rewritten).
 
 ## Atomic Sub-tasks
 
-- [ ] O1: Compute every statistic in pure functions — `server/domain/tracker/stats.js` (`nutritionStats`, `sleepStats`, `diaperStats`, `weightStats`, `pumpingStats`, `vomitingStats`; input events + `{ from, to, dayStartHour }`, days in Asia/Jerusalem) with tests — server/domain/tracker/**
-- [ ] O2: Serve them — `server/routes/tracker-stats.js` `GET /api/v1/tracker/stats/:kind?from&to` (400 `invalid` unless both are `YYYY-MM-DD`) with tests — server/routes/**, server/app.js, server/test/**
-- [ ] O3: Build the statistics page — `src/app/pages/tracker/stats-page/` (replaces the empty state of plan 009) with the six sections and the range control, the three bar components in `src/app/shared/ui/` (on the demo page), cards open the edit sheet via `EditSheetService` — src/app/pages/tracker/**, src/app/shared/ui/**, src/app/dev/**, src/app/core/**
-- [ ] O4: Write the UI checks — `e2e/013-1-nutrition.spec.ts`, `e2e/013-2-range.spec.ts`, screenshots; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
+- [x] O1: Compute every statistic in pure functions — `server/domain/tracker/stats.js` (`nutritionStats`, `sleepStats`, `diaperStats`, `weightStats`, `pumpingStats`, `vomitingStats`; input events + `{ from, to, dayStartHour }`, days in Asia/Jerusalem) with tests — server/domain/tracker/**
+- [x] O2: Serve them — `server/routes/tracker-stats.js` `GET /api/v1/tracker/stats/:kind?from&to` (400 `invalid` unless both are `YYYY-MM-DD`) with tests — server/routes/**, server/app.js, server/test/**
+- [x] O3: Build the statistics page — `src/app/pages/tracker/stats-page/` (replaces the empty state of plan 009) with the six sections and the range control, the three bar components in `src/app/shared/ui/` (on the demo page), cards open the edit sheet via `EditSheetService` — src/app/pages/tracker/**, src/app/shared/ui/**, src/app/dev/**, src/app/core/**
+- [x] O4: Write the UI checks — `e2e/013-1-nutrition.spec.ts`, `e2e/013-2-range.spec.ts`, screenshots; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
 
 ## Technical Considerations
 - Backend / API: 6 read-only routes.
@@ -102,4 +102,8 @@ Export (plan 014), charts library.
 - none
 
 ## Execution Notes
-- none yet
+- pnpm run build -> exit 0 (stats-page.scss over the 4 kB style budget by 1.71 kB, a warning only)
+- pnpm run lint -> exit 0; pnpm run test -> exit 0 (Karma 69 SUCCESS, server 192 pass, 0 fail)
+- node --test server/domain/tracker/stats.test.js server/test/tracker-stats.test.js -> exit 0, 14 pass
+- node scripts/override-check.mjs -> ok; scope-check --diff=origin/orch/tracker-1 -> SCOPE: ok
+- [ui] items written, not run: e2e/013-1-nutrition.spec.ts, e2e/013-2-range.spec.ts
