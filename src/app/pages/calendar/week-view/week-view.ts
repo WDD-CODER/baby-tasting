@@ -6,11 +6,12 @@ import { Food } from '../../../core/models/food'
 import { dayLetter, dayOfMonth, weekDays } from '../../../core/utils/dates'
 import { ItemBadge, SuggestedItem } from '../calendar-extensions.service'
 import { Cell, DRAG_START_DELAY, MoveRequest, isPendingItem } from '../calendar-types'
+import { FoodIconPipe } from '../../../shared/ui/food-icon/food-icon.pipe'
 import { ItemTile } from '../item-tile/item-tile'
 
 @Component({
   selector: 'app-week-view',
-  imports: [CdkDrag, CdkDropList, CdkDropListGroup, ItemTile],
+  imports: [CdkDrag, CdkDropList, CdkDropListGroup, FoodIconPipe, ItemTile],
   templateUrl: './week-view.html',
   styleUrl: './week-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

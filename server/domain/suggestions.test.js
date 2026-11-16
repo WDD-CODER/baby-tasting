@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { DEFAULT_SETTINGS } from './settings.js'
-import { suggestWeek } from './suggestions.js'
+import { noSuggestionsReason, suggestWeek } from './suggestions.js'
 
 // 2026-11-15 is a Sunday.
 const WEEK = '2026-11-15'
@@ -40,7 +40,7 @@ function run(over = {}) {
     engine: engineOf(entry('a-sesame', 'not_started'), entry('a-egg', 'not_started')),
     foods: baseFoods,
     allergens,
-    queue: [],
+    queue: ['none'], // a non-empty queue that matches no food (an empty queue falls back to untried foods)
     weekItems: [],
     settings: { ...DEFAULT_SETTINGS },
     weekStart: WEEK,
@@ -200,4 +200,18 @@ test('the same input twice gives deep-equal output', () => {
   const res = run(input)
   const sorted = [...res].sort((a, b) => (a.date + a.meal + a.foodId < b.date + b.meal + b.foodId ? -1 : 1))
   assert.deepEqual(res, sorted)
+})
+
+test('an empty queue falls back to untried foods in catalog order (D-017-6)', () => {
+  const res = run({ queue: [] })
+  const fresh = res.filter((s) => s.reason.kind === 'new_food')
+  assert.ok(fresh.length > 0)
+  assert.equal(fresh[0].foodId, 'f-pear')
+})
+
+test('nothing untried and nothing to introduce gives the reason code (D-017-6)', () => {
+  const tried = baseFoods.map((f) => ({ ...f, tried: true }))
+  assert.deepEqual(run({ foods: tried, queue: [] }), [])
+  assert.equal(noSuggestionsReason({ weekStart: WEEK, today: WEEK }), 'nothing_to_suggest')
+  assert.equal(noSuggestionsReason({ weekStart: WEEK, today: day(9) }), 'no_open_days')
 })

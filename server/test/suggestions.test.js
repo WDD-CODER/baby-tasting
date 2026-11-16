@@ -88,3 +88,11 @@ test('accept saves exactly the chosen items as planned; an allergen food outside
   assert.equal(await calendarCount(agent), before + 3)
   assert.equal((await agent.post('/api/v1/suggestions/accept').send({ items: 'x' })).status, 400)
 })
+
+test('preview with an empty queue offers untried foods', async () => {
+  const { agent, plains } = await setup()
+  const res = await agent.post('/api/v1/suggestions/preview').send({ weekStart: nextSunday() })
+  assert.equal(res.status, 200)
+  assert.ok(res.body.suggestions.some((s) => s.reason.kind === 'new_food' && plains.some((p) => p.id === s.foodId)))
+  assert.equal(res.body.reason, undefined)
+})

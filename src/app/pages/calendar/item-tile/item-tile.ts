@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { HE } from '../../../core/i18n/he'
 import { CalendarItem } from '../../../core/models/calendar-item'
 import { Food } from '../../../core/models/food'
+import { FoodIconPipe } from '../../../shared/ui/food-icon/food-icon.pipe'
 import { ItemBadge } from '../calendar-extensions.service'
 
 @Component({
   selector: 'app-item-tile',
+  imports: [FoodIconPipe],
   templateUrl: './item-tile.html',
   styleUrl: './item-tile.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

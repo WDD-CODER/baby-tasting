@@ -19,6 +19,7 @@ import { Button } from '../../../shared/ui/button/button'
 import { Chip, ChipTone } from '../../../shared/ui/chip/chip'
 import { EmptyState } from '../../../shared/ui/empty-state/empty-state'
 import { ErrorState } from '../../../shared/ui/error-state/error-state'
+import { FoodIconPipe } from '../../../shared/ui/food-icon/food-icon.pipe'
 import { IconButton } from '../../../shared/ui/icon-button/icon-button'
 import { LoadingState } from '../../../shared/ui/loading-state/loading-state'
 
@@ -54,6 +55,7 @@ interface FoodGroup {
     Chip,
     EmptyState,
     ErrorState,
+    FoodIconPipe,
     IconButton,
     LoadingState,
   ],

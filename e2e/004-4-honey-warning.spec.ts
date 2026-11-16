@@ -14,6 +14,7 @@ test('004-4: adding דבש to an 8-month-old shows the warning before the item i
   await cell(page, today, 2).locator('.cell__add').click()
   await page.getByLabel('חיפוש מזון').fill('דבש')
   await page.getByRole('button', { name: /דבש/ }).first().click()
+  await page.getByRole('button', { name: 'הוספה (1)' }).click()
   await expect(page.getByText('אסור לפני גיל שנה')).toBeVisible()
   await expect(cell(page, today, 2).locator('.tile')).toHaveCount(0)
   await page.screenshot({ path: 'e2e/screens/004-4.png' })

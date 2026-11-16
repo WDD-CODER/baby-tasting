@@ -7,7 +7,7 @@
   [class.tile--allergen]="isAllergen()"
   [attr.aria-label]="label()"
 >
-  <span class="tile__emoji" aria-hidden="true">{{ food()?.emoji }}</span>
+  <span class="tile__emoji" aria-hidden="true">{{ food()?.emoji | foodIcon }}</span>
   @if (item().status === 'given') {
     <span class="tile__check" aria-hidden="true">✓</span>
   }

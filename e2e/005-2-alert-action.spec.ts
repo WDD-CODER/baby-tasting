@@ -19,5 +19,6 @@ test('005-2: tapping the alert opens the add-food sheet with טחינה preselec
   await expect(suggested).toContainText('טחינה')
   await page.screenshot({ path: 'e2e/screens/005-2.png' })
   await suggested.click()
+  await page.getByRole('button', { name: 'הוספה (1)' }).click()
   await expect(cell(page, today, 1).locator('.tile')).toBeVisible()
 })

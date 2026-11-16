@@ -75,7 +75,6 @@ test('food validation: name, emoji, category, allergen, warning', async () => {
   const bad = [
     { ...good, name: '   ' },
     { ...good, name: 'x'.repeat(41) },
-    { ...good, emoji: '' },
     { ...good, emoji: '🍚'.repeat(9) },
     { ...good, category: 'sweets' },
     { ...good, allergenId: '64b000000000000000000000' },
@@ -182,4 +181,11 @@ test('GET /foods/:id/history lists the given days newest first', async () => {
   assert.deepEqual(res.body.items.map((i) => i.date), ['2026-01-05', '2026-01-03'])
   assert.deepEqual(Object.keys(res.body.items[0]).sort(), ['amount', 'date', 'id', 'liked', 'meal', 'note'])
   assert.equal((await agent.get('/api/v1/foods/64b000000000000000000000/history')).status, 404)
+})
+
+test('a food can be saved with an empty emoji (no icon)', async () => {
+  const agent = await agentWithBaby()
+  const res = await agent.post('/api/v1/foods').send({ name: 'ללא אייקון', category: 'other', emoji: '' })
+  assert.equal(res.status, 201)
+  assert.equal(res.body.food.emoji, '')
 })

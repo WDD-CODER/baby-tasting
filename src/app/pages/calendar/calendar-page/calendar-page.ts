@@ -178,7 +178,15 @@ export class CalendarPage {
 
   /** `/?add=<foodId>` (from the food page) opens the add-food sheet for today with that food preselected. */
   private openAddFromQuery(): void {
-    const foodId = this.route.snapshot.queryParamMap.get('add')
+    const q = this.route.snapshot.queryParamMap
+    const added = q.get('added')
+    const addDate = q.get('date')
+    if (added && addDate) {
+      this.anchor_.set(addDate)
+      void this.addSavedFood(added, addDate, Number(q.get('meal')))
+      return
+    }
+    const foodId = q.get('add')
     if (!foodId) return
     const food = this.foodById(foodId)
     void this.router.navigate([], {
@@ -261,11 +269,15 @@ export class CalendarPage {
     if (this.suggesting_()) return
     this.suggesting_.set(true)
     try {
-      const list = await this.suggestions.preview(this.weekStart())
+      const { suggestions: list, reason } = await this.suggestions.preview(this.weekStart())
       this.extensions.suggested.set(
         list.map((s) => ({ ...s, id: `${s.date}|${s.meal}|${s.foodId}` })),
       )
-      if (list.length === 0) this.toast.show(this.suggestT.nothing)
+      if (list.length === 0) {
+        this.toast.show(
+          reason === 'nothing_to_suggest' ? this.suggestT.nothingWhy : this.suggestT.nothing,
+        )
+      }
     } catch {
       this.toast.show(this.suggestT.failed, 'bad')
     } finally {
@@ -329,32 +341,84 @@ export class CalendarPage {
     this.preselect_.set(null)
   }
 
-  protected async pickFood(food: Food): Promise<void> {
+  /** D-017-2: the ticked foods go into the meal one by one; a refused one shows its reason, the rest are kept. */
+  protected async pickFoods(foods: Food[]): Promise<void> {
     const cell = this.addFor_()
     if (!cell) return
-    const refusal = refusalFor({ food, items: this.items(), date: cell.date, meal: cell.meal })
-    if (refusal) {
-      this.toast.show(refusalMessage(refusal, food.name), 'bad')
-      return
-    }
-    if (this.needsWarning(food)) {
-      const ok = await this.confirmDialog.confirm({
-        title: food.name,
-        body: food.warning?.text ?? '',
-        confirmLabel: this.t.warningAddAnyway,
-        cancelLabel: this.t.warningCancel,
+    const accepted: Food[] = []
+    for (const food of foods) {
+      const refusal = refusalFor({
+        food,
+        items: [...this.items(), ...accepted.map((f) => this.pendingItem(f, cell))],
+        date: cell.date,
+        meal: cell.meal,
       })
-      if (!ok) return
+      if (refusal) {
+        this.toast.show(refusalMessage(refusal, food.name), 'bad')
+        continue
+      }
+      if (this.needsWarning(food)) {
+        const ok = await this.confirmDialog.confirm({
+          title: food.name,
+          body: food.warning?.text ?? '',
+          confirmLabel: this.t.warningAddAnyway,
+          cancelLabel: this.t.warningCancel,
+        })
+        if (!ok) continue
+      }
+      if (!(await this.confirmStartAnother(food))) continue
+      accepted.push(food)
     }
-    if (!(await this.confirmStartAnother(food))) return
     this.closeAdd()
-    const saved = await this.calendar.add(cell.date, cell.meal, food.id)
-    if (saved) this.noteAllergenMeal(food, cell.meal)
+    let allergenOutside = false
+    for (const food of accepted) {
+      const saved = await this.calendar.add(cell.date, cell.meal, food.id)
+      if (saved && isAllergenOutsideMeal1(food, cell.meal)) allergenOutside = true
+    }
+    // the allergen note shows once, however many allergen foods were added
+    if (allergenOutside) this.toast.show(HE.calendar.errors.allergenOutsideMeal1)
   }
 
-  protected newFood(): void {
+  /** A stand-in for a food already accepted in this batch, so the duplicate rule sees it. */
+  private pendingItem(food: Food, cell: Cell): CalendarItem {
+    return {
+      id: `batch-${food.id}`,
+      date: cell.date,
+      meal: cell.meal,
+      foodId: food.id,
+      status: 'planned',
+      amount: null,
+      note: '',
+      liked: null,
+      givenBy: null,
+      givenAt: null,
+    }
+  }
+
+  /** D-017-1: the new-food form opens with the typed name; after saving it adds the food to this meal. */
+  protected newFood(name = ''): void {
+    const cell = this.addFor_()
     this.addFor_.set(null)
-    void this.router.navigate(['/tasting/foods/new'], { queryParams: { returnTo: '/tasting' } })
+    const queryParams: Record<string, string> = { returnTo: '/tasting' }
+    if (name !== '') queryParams['name'] = name
+    if (cell) {
+      queryParams['addDate'] = cell.date
+      queryParams['addMeal'] = String(cell.meal)
+    }
+    void this.router.navigate(['/tasting/foods/new'], { queryParams })
+  }
+
+  /** Back from the new-food form: the food it saved is added to the meal the sheet was opened for. */
+  private async addSavedFood(foodId: string, date: string, meal: number): Promise<void> {
+    const food = this.foodById(foodId)
+    void this.router.navigate([], {
+      queryParams: { added: null, date: null, meal: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    })
+    if (!food || (meal !== 1 && meal !== 2 && meal !== 3)) return
+    const saved = await this.calendar.add(date, meal, food.id)
+    if (saved) this.noteAllergenMeal(food, meal)
   }
 
   protected openItem(item: CalendarItem): void {

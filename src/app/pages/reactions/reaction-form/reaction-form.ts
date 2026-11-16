@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { HasUnsavedChanges, warnBeforeUnload } from '../../../core/guards/unsaved-changes.guard'
 import { HE } from '../../../core/i18n/he'
+import { foodIcon } from '../../../core/utils/food-icon'
 import { CalendarItem } from '../../../core/models/calendar-item'
 import {
   Reaction,
@@ -100,7 +101,7 @@ export class ReactionForm implements HasUnsavedChanges {
       .sort((a, b) => (a.date === b.date ? a.meal - b.meal : a.date < b.date ? -1 : 1))
       .map((it) => {
         const food = this.catalog.foodById(it.foodId)
-        const name = `${food?.emoji ?? ''} ${food?.name ?? ''}`.trim()
+        const name = `${food ? foodIcon(food.emoji) : ''} ${food?.name ?? ''}`.trim()
         return {
           id: it.id,
           label: `${name} · ${it.date.slice(5)} · ${HE.calendar.meal} ${it.meal}`,

@@ -31,6 +31,8 @@ export function suggestWeek({
   lockedFoodIds = [],
   lockedAllergenIds = [],
 }) {
+  // D-017-6: with an empty tasting queue, untried non-archived foods in catalog order stand in for it.
+  if (queue.length === 0) queue = foods.filter((f) => !f.archived && !f.tried).map((f) => f.id)
   const weekDays = []
   for (let i = 0; i < 7; i++) weekDays.push(isoAddDays(weekStart, i))
   const weekEnd = weekDays[6]
@@ -189,4 +191,10 @@ export function suggestWeek({
   }
 
   return out.sort((a, b) => byText(a.date, b.date) || a.meal - b.meal || byText(a.foodId, b.foodId))
+}
+
+// Why a week got no suggestions (the route sends it as `reason`): 'no_open_days' when the whole week is already
+// past, otherwise 'nothing_to_suggest' (no untried food and no allergen to start or keep up).
+export function noSuggestionsReason({ weekStart, today }) {
+  return isoAddDays(weekStart, 6) < today ? 'no_open_days' : 'nothing_to_suggest'
 }

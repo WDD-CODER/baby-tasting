@@ -2,18 +2,27 @@
   display: block;
 }
 
+// D-017-5: at phone width the whole week (7 days x 3 meals) fits without scrolling; sizes are set here once.
 .week {
-  overflow-x: auto;
+  --week-label: 20px;
+  --week-cell-min: 52px;
+  --week-tile: 36px;
+  --week-tile-emoji: 20px;
+}
+
+@media (min-width: 600px) {
+  .week {
+    --week-label: 56px;
+    --week-cell-min: calc(var(--touch-target) + var(--space-2));
+    --week-tile: var(--touch-target);
+    --week-tile-emoji: 32px;
+  }
 }
 
 .grid {
-  --week-label: 56px;
-
   display: grid;
-  grid-template-columns: var(--week-label) repeat(7, minmax(56px, 1fr));
+  grid-template-columns: var(--week-label) repeat(7, minmax(0, 1fr));
   gap: var(--space-1);
-
-  min-inline-size: calc(var(--week-label) + 7 * 56px);
 }
 
 .head {
@@ -21,11 +30,11 @@
   flex-direction: column;
   align-items: center;
 
-  padding-block: var(--space-2);
+  padding-block: var(--space-1);
   border-radius: var(--radius-card);
 
   color: var(--color-text-secondary);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
 
   &--today {
     background: var(--color-accent-border);
@@ -38,22 +47,49 @@
 }
 
 .label {
+  position: relative;
+
   display: flex;
   align-items: center;
+  justify-content: center;
 
   color: var(--color-text-secondary);
   font-size: var(--fs-xs);
+
+  // the word stays for screen readers; on the phone only the number shows
+  &__word {
+    position: absolute;
+
+    inline-size: 1px;
+    block-size: 1px;
+
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+@media (min-width: 600px) {
+  .label__word {
+    position: static;
+
+    inline-size: auto;
+    block-size: auto;
+
+    margin-inline-end: var(--space-1);
+
+    clip-path: none;
+  }
 }
 
 .cell {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: var(--space-1);
 
-  min-block-size: calc(var(--touch-target) + var(--space-2));
+  min-block-size: var(--week-cell-min);
 
-  padding: var(--space-1);
+  padding: 2px;
   border-radius: var(--radius-card);
 
   background: var(--color-surface);
@@ -62,30 +98,44 @@
     background: var(--color-accent-border);
   }
 
+  &__item {
+    display: block;
+  }
+
+  // fills the empty cell (a full-size touch target); a thin strip under a tile
   &__add {
-    min-inline-size: var(--touch-target);
-    min-block-size: var(--touch-target);
+    flex: 1;
+    min-block-size: var(--space-5);
 
     border: 0;
 
     background: transparent;
     color: var(--color-text-secondary);
-    font-size: var(--fs-lg);
+    font-size: var(--fs-md);
     opacity: 0.4;
   }
 }
 
 // Suggested tile (DESIGN.md): dashed accent outline, 70% opacity, never draggable.
 .suggested {
-  inline-size: var(--touch-target);
-  block-size: var(--touch-target);
+  inline-size: 100%;
+  block-size: var(--week-tile);
 
   padding: 0;
   border: 2px dashed var(--color-accent);
   border-radius: var(--radius-card);
 
   background: transparent;
-  font-size: 32px;
+  font-size: var(--week-tile-emoji);
   line-height: 1;
   opacity: 0.7;
+}
+
+// the tile fills its cell on the phone
+app-item-tile {
+  --tile-inline: 100%;
+  --tile-block: var(--week-tile);
+  --tile-emoji: var(--week-tile-emoji);
+
+  display: block;
 }

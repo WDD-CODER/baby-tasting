@@ -18,7 +18,7 @@
           <ul class="day__items">
             @for (item of day.items; track item.itemId) {
               <li>
-                <span aria-hidden="true">{{ item.emoji }}</span>
+                <span aria-hidden="true">{{ item.emoji | foodIcon }}</span>
                 {{ item.foodName }}
                 @if (item.amount) {
                   <span class="day__amount">· {{ amounts[item.amount] }}</span>
