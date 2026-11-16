@@ -88,12 +88,12 @@ line or file this plan names was removed, renamed or rewritten).
 
 ## Atomic Sub-tasks
 
-- [ ] M1: Load and refresh the Tracker data in one service — `src/app/core/services/tracker-events.service.ts` (`events` signal for the last 400, `openSleep`, refresh every 5 s while visible and on focus, `create`, `update`, `remove` with undo, `toggleSleep`), toast-with-undo support in `ToastService` (action label + callback) — src/app/core/**
-- [ ] M2: Add the per-event colours and icon slots — tokens in `src/styles/tokens.scss`, slots in `src/app/core/icons/icon-slots.ts` per UI notes; DESIGN.md table — src/styles/**, src/app/core/icons/**, DESIGN.md
-- [ ] M3: Build the shared 24-hour date-time picker — `src/app/shared/ui/datetime24/` per spec §7 in Asia/Jerusalem (P4), on the demo page — src/app/shared/ui/datetime24/**, src/app/dev/**
-- [ ] M4: Build the log page — `src/app/pages/tracker/log-page/` with `today-carousel/`, `quick-grid/` (fixed rows + CDK drag-drop reorder saved to `quickActionOrder`), `awake-widget/`, `diaper-tracker/`, `pumping-tracker/`, `bio-gaya-card/`, floating pills and banners per spec §3–§4 — src/app/pages/tracker/**, src/app/layout/**
-- [ ] M5: Build the entry sheets and the sleep flow — `src/app/pages/tracker/entry-sheet/` (one sheet, a form per type of spec §6.5–6.8, shared footer §6.3, double-submit guard after validation, default bottle from settings), `sleep-timer/` and the short/long press flow of §5 with F9 (one open sleep; "end current sleep" uses the chosen time); browser notifications of §1.7 — src/app/pages/tracker/**
-- [ ] M6: Write the UI checks — `e2e/011-1-diaper.spec.ts` … `e2e/011-4-reorder.spec.ts`, screenshots `e2e/screens/011-<n>.png`; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
+- [x] M1: Load and refresh the Tracker data in one service — `src/app/core/services/tracker-events.service.ts` (`events` signal for the last 400, `openSleep`, refresh every 5 s while visible and on focus, `create`, `update`, `remove` with undo, `toggleSleep`), toast-with-undo support in `ToastService` (action label + callback) — src/app/core/**
+- [x] M2: Add the per-event colours and icon slots — tokens in `src/styles/tokens.scss`, slots in `src/app/core/icons/icon-slots.ts` per UI notes; DESIGN.md table — src/styles/**, src/app/core/icons/**, DESIGN.md
+- [x] M3: Build the shared 24-hour date-time picker — `src/app/shared/ui/datetime24/` per spec §7 in Asia/Jerusalem (P4), on the demo page — src/app/shared/ui/datetime24/**, src/app/dev/**
+- [x] M4: Build the log page — `src/app/pages/tracker/log-page/` with `today-carousel/`, `quick-grid/` (fixed rows + CDK drag-drop reorder saved to `quickActionOrder`), `awake-widget/`, `diaper-tracker/`, `pumping-tracker/`, `bio-gaya-card/`, floating pills and banners per spec §3–§4 — src/app/pages/tracker/**, src/app/layout/**
+- [x] M5: Build the entry sheets and the sleep flow — `src/app/pages/tracker/entry-sheet/` (one sheet, a form per type of spec §6.5–6.8, shared footer §6.3, double-submit guard after validation, default bottle from settings), `sleep-timer/` and the short/long press flow of §5 with F9 (one open sleep; "end current sleep" uses the chosen time); browser notifications of §1.7 — src/app/pages/tracker/**
+- [x] M6: Write the UI checks — `e2e/011-1-diaper.spec.ts` … `e2e/011-4-reorder.spec.ts`, screenshots `e2e/screens/011-<n>.png`; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
 
 ## Technical Considerations
 - Dependencies: none new (`@angular/cdk` drag-drop already present).
@@ -107,4 +107,11 @@ Editing existing events (plan 012), timeline, statistics, settings screens, expo
 - none
 
 ## Execution Notes
-- none yet
+- build: `pnpm run build` -> exit 0.
+- lint: `pnpm run lint` -> exit 0 ("All files pass linting", no colour literals).
+- test: `pnpm run test` -> exit 0; Karma `TOTAL: 53 SUCCESS`; server `# pass 178, # fail 0` (the MongoClientClosedError lines are the existing teardown noise of the server tests).
+- Component tests: `entry-sheet.spec.ts` (F3 default bottle type FORMULA / EXPRESSED_MILK; F4 a refused save does not start the guard and the fixed retry saves at once; an empty amount shows `יש להזין כמות`; the guard still blocks a second valid save), `awake-widget.spec.ts` (thresholds 35/45/60/60 and 45/60/75/90, bath state 76-89), `datetime24.spec.ts` (Asia/Jerusalem wall-clock values in summer and winter, the nudge rolls the day, the 24-hour list).
+- [ui] items: `e2e/011-1-diaper.spec.ts`, `011-2-sleep.spec.ts`, `011-3-bottle.spec.ts`, `011-4-reorder.spec.ts` written, not run (no running app or QA login here); screenshots `e2e/screens/011-<n>.png`.
+- scope extended: none. `node server/lib/gen-icon-names.mjs` also rewrites `server/domain/tracker/icon-names.js` (outside the scope): that file was reverted, so the server does not yet accept icon overrides for the new slots; run the generator in the icon-settings plan, or approve `server/domain/tracker/icon-names.js`.
+- `e2e/001-2-components.spec.ts` section count 14 -> 15 (the DateTime24 section on `/dev/components`).
+- Decisions: the quick meal sends `nutrition: { feedType: 'BOTTLE' }` because the server requires a feed type (the carousel still shows `האכלה 🍼`; the bottle count ignores quick meals); activity intensity 0 is sent without `cryingIntensity` (the server accepts 1-10); the long-open-sleep banner button `סיום השינה` opens the sleep sheet (the edit sheet is plan 012); banners, pills and notifications live on the log page only; the quick sleep toggle cannot send `quickRecorded` (the server toggle accepts only `location` and `at`); carousel cards and chips are not tappable until plan 012.

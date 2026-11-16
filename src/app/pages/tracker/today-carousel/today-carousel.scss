@@ -1,0 +1,225 @@
+:host {
+  display: block;
+}
+
+.car {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+
+  &--empty {
+    align-items: center;
+
+    text-align: center;
+
+    p {
+      margin: 0;
+
+      color: var(--color-text-secondary);
+      font-size: var(--fs-sm);
+    }
+  }
+
+  &__emoji {
+    font-size: var(--fs-xl);
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-xs);
+  }
+
+  &__date {
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-pill);
+
+    background: var(--color-surface-raised);
+  }
+
+  &__row {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  &__peek {
+    display: flex;
+    flex: 0 0 12%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-block-size: 110px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-family: inherit;
+    opacity: 0.4;
+    cursor: pointer;
+
+    &--empty {
+      border-style: dashed;
+      opacity: 0.2;
+    }
+  }
+
+  &__card {
+    --ev-color: var(--color-event-nutrition);
+
+    display: flex;
+    flex: 1;
+    align-items: flex-start;
+    gap: var(--space-3);
+    touch-action: pan-y;
+
+    min-block-size: 110px;
+    padding: var(--space-3);
+    border: 1px solid var(--ev-color);
+    border-radius: var(--radius-card);
+
+    background: var(--color-surface-raised);
+
+    &--breast {
+      --ev-color: var(--color-event-breast);
+    }
+
+    &--diaper {
+      --ev-color: var(--color-event-diaper);
+    }
+
+    &--sleep {
+      --ev-color: var(--color-event-sleep);
+    }
+
+    &--sleep-bad {
+      --ev-color: var(--color-tier-bad);
+    }
+
+    &--sleep-good {
+      --ev-color: var(--color-tier-good);
+    }
+
+    &--sleep-great {
+      --ev-color: var(--color-event-sleep-great);
+    }
+
+    &--activity {
+      --ev-color: var(--color-event-activity);
+    }
+
+    &--weight {
+      --ev-color: var(--color-event-weight);
+    }
+
+    &--pumping {
+      --ev-color: var(--color-event-pumping);
+    }
+
+    &--vomiting {
+      --ev-color: var(--color-event-vomiting);
+    }
+
+    &--supplement {
+      --ev-color: var(--color-event-supplement);
+    }
+
+    &--pulse {
+      animation: car-pulse 2s ease-in-out infinite;
+    }
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    inline-size: 44px;
+    block-size: 44px;
+    border-radius: var(--radius-card);
+
+    background: var(--ev-color);
+    font-size: var(--fs-lg);
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-1);
+
+    min-inline-size: 0;
+  }
+
+  &__titleRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  &__title {
+    font-size: var(--fs-md);
+  }
+
+  &__ago {
+    padding-inline: var(--space-2);
+    border-radius: var(--radius-pill);
+
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-size: var(--fs-xs);
+  }
+
+  &__details,
+  &__note {
+    font-size: var(--fs-sm);
+  }
+
+  &__by {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-xs);
+  }
+
+  &__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+
+    color: var(--color-text-secondary);
+  }
+
+  &__dot {
+    inline-size: 4px;
+    block-size: 4px;
+    border-radius: var(--radius-pill);
+
+    background: var(--color-border);
+
+    &--on {
+      inline-size: 16px;
+
+      background: var(--color-accent);
+    }
+  }
+}
+
+@keyframes car-pulse {
+  50% {
+    opacity: 0.7;
+  }
+}

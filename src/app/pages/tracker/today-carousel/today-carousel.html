@@ -1,0 +1,67 @@
+@if (active(); as event) {
+  <section class="car" data-testid="today-carousel">
+    <header class="car__head">
+      <span class="car__pos">{{ position() }}</span>
+      <span class="car__date">{{ datePill() }}</span>
+    </header>
+
+    <div class="car__row">
+      @if (newer(); as n) {
+        <button type="button" class="car__peek" (click)="go(-1)">
+          <span aria-hidden="true">{{ glyph(n) }}</span>
+          <small>{{ clock(n) }}</small>
+        </button>
+      } @else {
+        <span class="car__peek car__peek--empty"></span>
+      }
+
+      <div
+        class="car__card"
+        [class]="'car__card car__card--' + view()?.tone"
+        [class.car__card--pulse]="view()?.pulse"
+        (pointerdown)="onDown($event)"
+        (pointerup)="onUp($event)"
+        (pointercancel)="onCancel()"
+      >
+        <span class="car__badge" aria-hidden="true">{{ view()?.emoji }}</span>
+        <div class="car__body">
+          <div class="car__titleRow">
+            <strong class="car__title">{{ view()?.title }}</strong>
+            <span class="car__ago">{{ ago() }}</span>
+          </div>
+          @if (view()?.details) {
+            <span class="car__details">{{ view()?.details }}</span>
+          }
+          @if (note()) {
+            <span class="car__note">{{ note() }}</span>
+          }
+          <small class="car__by">{{ loggedBy() }}</small>
+        </div>
+      </div>
+
+      @if (older(); as o) {
+        <button type="button" class="car__peek" (click)="go(1)">
+          <span aria-hidden="true">{{ glyph(o) }}</span>
+          <small>{{ clock(o) }}</small>
+        </button>
+      } @else {
+        <span class="car__peek car__peek--empty"></span>
+      }
+    </div>
+
+    <div class="car__dots" aria-hidden="true">
+      @for (i of dots(); track i) {
+        <span class="car__dot" [class.car__dot--on]="i === safeIndex()"></span>
+      }
+      @if (extra() > 0) {
+        <small>+{{ extra() }}</small>
+      }
+    </div>
+  </section>
+} @else {
+  <section class="car car--empty" data-testid="today-empty">
+    <span class="car__emoji" aria-hidden="true">☀️🌱</span>
+    <strong>{{ t.emptyTitle }}</strong>
+    <p>{{ t.emptyBody }}</p>
+  </section>
+}

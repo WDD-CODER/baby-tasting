@@ -1,0 +1,109 @@
+<div class="dt">
+  <div class="dt__presets">
+    <button type="button" class="dt__chip" [class.dt__chip--on]="isNow()" (click)="setNow()">
+      {{ t.now }}
+    </button>
+    <button type="button" class="dt__chip" (click)="setAgo(15)">{{ t.ago15 }}</button>
+    <button type="button" class="dt__chip" (click)="setAgo(60)">{{ t.ago60 }}</button>
+  </div>
+
+  <div class="dt__fine">
+    <div class="dt__date">
+      <button type="button" class="dt__chip" [class.dt__chip--on]="isToday()" (click)="setDay(0)">
+        {{ t.today }}
+      </button>
+      <button
+        type="button"
+        class="dt__chip"
+        [class.dt__chip--on]="isYesterday()"
+        (click)="setDay(-1)"
+      >
+        {{ t.yesterday }}
+      </button>
+      <button
+        type="button"
+        class="dt__chip dt__chip--icon"
+        [class.dt__chip--on]="customDate()"
+        [attr.aria-label]="t.pickDate"
+        (click)="toggleDateInput()"
+      >
+        <app-icon name="calendar_month" [size]="20" />
+      </button>
+    </div>
+
+    <div class="dt__time" dir="ltr">
+      <button type="button" class="dt__nudge" [attr.aria-label]="t.minus5" (click)="nudge(-5)">
+        <app-icon name="chevron_left" [size]="20" />
+      </button>
+      <span class="dt__slot">
+        <button type="button" class="dt__num" [attr.aria-label]="t.hour" (click)="toggle('hour')">
+          {{ hh() }}
+        </button>
+        @if (popover() === 'hour') {
+          <div class="dt__list" role="listbox">
+            @for (h of hours; track h) {
+              <button
+                type="button"
+                role="option"
+                class="dt__opt"
+                [attr.aria-selected]="h === hh()"
+                [class.dt__opt--on]="h === hh()"
+                (click)="setHour(h)"
+              >
+                {{ h }}
+              </button>
+            }
+          </div>
+        }
+      </span>
+      <span>:</span>
+      <span class="dt__slot">
+        <button
+          type="button"
+          class="dt__num"
+          [attr.aria-label]="t.minute"
+          (click)="toggle('minute')"
+        >
+          {{ mm() }}
+        </button>
+        @if (popover() === 'minute') {
+          <div class="dt__list" role="listbox">
+            @for (m of minutes; track m) {
+              <button
+                type="button"
+                role="option"
+                class="dt__opt"
+                [attr.aria-selected]="m === mm()"
+                [class.dt__opt--on]="m === mm()"
+                (click)="setMinute(m)"
+              >
+                {{ m }}
+              </button>
+            }
+          </div>
+        }
+      </span>
+      <button type="button" class="dt__nudge" [attr.aria-label]="t.plus5" (click)="nudge(5)">
+        <app-icon name="chevron_right" [size]="20" />
+      </button>
+    </div>
+  </div>
+
+  @if (popover()) {
+    <div class="dt__backdrop" (click)="closePopover()"></div>
+  }
+
+  @if (dateOpen()) {
+    <input
+      type="date"
+      class="dt__native"
+      [value]="date()"
+      [attr.aria-label]="t.pickDate"
+      (change)="onDateInput($event)"
+    />
+  }
+
+  @if (preview()) {
+    <p class="dt__preview"><app-icon name="check" [size]="20" /> {{ preview() }}</p>
+  }
+</div>
