@@ -109,11 +109,11 @@ line or file this plan names was removed, renamed or rewritten).
 
 ## Atomic Sub-tasks
 
-- [ ] O1: Pure conflict rules — `server/domain/tracker/conflicts.js` + `server/domain/tracker/conflicts.test.js` (`findConflict(candidate, events, { now })` → `{ id, eventType, startAt, endAt } | null`, D-016-1 intervals); sleep rules in `sleep.js` use it — server/domain/**
-- [ ] O2: Routes return `event_conflict` with the blocker and accept `endOpenSleep` on event create — `server/routes/tracker-events.js`, `server/routes/tracker-sleep.js`, repository window query, tests — server/**
-- [ ] O3: Client message formatter + `הצג` + end-and-log question — `src/app/pages/tracker/**` (entry sheet, edit sheet, quick grid), `src/app/core/**` (formatter, Hebrew texts in `he.ts`), Karma spec — src/app/**
-- [ ] O4: Calendar drag during refresh — the calendar page / store under `src/app/pages/calendar/**` and `src/app/core/**` per D-016-4, with a Karma test where possible — src/app/**
-- [ ] O5: UI checks — `e2e/016-1-sleep-conflict-named.spec.ts`, `e2e/016-2-feed-in-sleep.spec.ts`, `e2e/016-3-end-and-log.spec.ts`, `e2e/016-4-drag-after-add.spec.ts`; update 003-2 and 008-1 and any spec that expected `sleep_overlap` / `השינה חופפת לשינה אחרת`; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
+- [x] O1: Pure conflict rules — `server/domain/tracker/conflicts.js` + `server/domain/tracker/conflicts.test.js` (`findConflict(candidate, events, { now })` → `{ id, eventType, startAt, endAt } | null`, D-016-1 intervals); sleep rules in `sleep.js` use it — server/domain/**
+- [x] O2: Routes return `event_conflict` with the blocker and accept `endOpenSleep` on event create — `server/routes/tracker-events.js`, `server/routes/tracker-sleep.js`, repository window query, tests — server/**
+- [x] O3: Client message formatter + `הצג` + end-and-log question — `src/app/pages/tracker/**` (entry sheet, edit sheet, quick grid), `src/app/core/**` (formatter, Hebrew texts in `he.ts`), Karma spec — src/app/**
+- [x] O4: Calendar drag during refresh — the calendar page / store under `src/app/pages/calendar/**` and `src/app/core/**` per D-016-4, with a Karma test where possible — src/app/**
+- [x] O5: UI checks — `e2e/016-1-sleep-conflict-named.spec.ts`, `e2e/016-2-feed-in-sleep.spec.ts`, `e2e/016-3-end-and-log.spec.ts`, `e2e/016-4-drag-after-add.spec.ts`; update 003-2 and 008-1 and any spec that expected `sleep_overlap` / `השינה חופפת לשינה אחרת`; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
 
 ## Technical Considerations
 - e2e: one spec file at a time (login rate limit). `addFood` in `e2e/support/calendar.ts` already waits for the create and a quiet page; 016-4 must NOT use that wait (it tests the drag right after the add) — call the add-food sheet directly in the spec.
@@ -126,4 +126,8 @@ Deploy, the Firestore copy (T7), overlap rules between two feeds.
 - none
 
 ## Execution Notes
-- none yet
+- pnpm run build -> exit 0; pnpm run lint -> exit 0; pnpm run test -> exit 0 (Karma TOTAL: 83 SUCCESS, server # pass 215 # fail 0)
+- node --test conflicts.test.js sleep.test.js tracker-events.test.js tracker-sleep.test.js -> exit 0, # pass 36 # fail 0; node scripts/override-check.mjs -> ok
+- e2e 016-1..016-4, 003-2, 008-1: written, not run (no running app, no QA login). 003-2 and 008-1 only got stricter locators (exact label, first match) because I could not run them to see what fails.
+- scope extended: none. server/routes/catalog-helpers.js carries the 409 conflict body (server/middleware is outside the scope).
+- behaviour: tapping הצג closes the open sheet first (unsaved input is lost) — reverse: drop the beforeShow callback in SaveErrorService.show callers.

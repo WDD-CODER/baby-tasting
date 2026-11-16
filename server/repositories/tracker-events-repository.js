@@ -63,15 +63,21 @@ export class TrackerEventsRepository extends BaseRepository {
     )
   }
 
-  // Sleeps that could overlap [startAt, endAt) (endAt null = open); the domain makes the final call.
-  findSleepsNear(householdId, startAt, endAt) {
-    const filter = {
-      householdId,
+  // Sleeps and awake-only events that could conflict with [startAt, endAt) (endAt null = open); the domain makes
+  // the final call. Awake events start up to `lookbackMs` before the window (a breastfeed that runs into it).
+  findConflictCandidates(householdId, startAt, endAt, lookbackMs = 0) {
+    const from = new Date(Date.parse(startAt) - lookbackMs).toISOString()
+    const timestamp = endAt ? { $gte: from, $lt: endAt } : { $gte: from }
+    const sleepFilter = {
       eventType: 'SLEEP',
-      deletedAt: { $exists: false },
       $or: [{ 'sleep.endAt': null }, { 'sleep.endAt': { $gt: startAt } }],
     }
-    if (endAt) filter['sleep.startAt'] = { $lt: endAt }
+    if (endAt) sleepFilter['sleep.startAt'] = { $lt: endAt }
+    const filter = {
+      householdId,
+      deletedAt: { $exists: false },
+      $or: [sleepFilter, { eventType: { $in: ['NUTRITION', 'ACTIVITY', 'WEIGHT'] }, timestamp }],
+    }
     return this.collection.find(filter).toArray()
   }
 }

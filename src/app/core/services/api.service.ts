@@ -3,10 +3,10 @@ import { Injectable, inject } from '@angular/core'
 import { Observable, catchError, throwError } from 'rxjs'
 import { environment } from '../../../environments/environment'
 import { HE } from '../i18n/he'
-import { ApiError } from '../models/api-error'
+import { ApiError, ConflictInfo } from '../models/api-error'
 
 interface ServerErrorBody {
-  error?: { code?: string; message?: string }
+  error?: { code?: string; message?: string; conflict?: ConflictInfo }
 }
 
 function toApiError(err: HttpErrorResponse): ApiError {
@@ -14,11 +14,13 @@ function toApiError(err: HttpErrorResponse): ApiError {
     return { status: 0, code: 'network', message: HE.common.errorNetwork }
   }
   const body = err.error as ServerErrorBody | null
-  return {
+  const apiError: ApiError = {
     status: err.status,
     code: body?.error?.code ?? 'unknown',
     message: body?.error?.message ?? HE.common.errorGeneric,
   }
+  if (body?.error?.conflict) apiError.conflict = body.error.conflict
+  return apiError
 }
 
 @Injectable({ providedIn: 'root' })

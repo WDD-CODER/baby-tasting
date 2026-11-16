@@ -10,6 +10,7 @@ import { TrackerEventsService } from '../../../core/services/tracker-events.serv
 import { babyDayEvents } from '../../../core/utils/tracker-rules'
 import { BioGayaCard } from '../bio-gaya-card/bio-gaya-card'
 import { DiaperTracker } from '../diaper-tracker/diaper-tracker'
+import { EditSheet } from '../edit-sheet/edit-sheet'
 import { EntrySheet } from '../entry-sheet/entry-sheet'
 import { LogBanners } from '../log-banners/log-banners'
 import { LogReminderService } from '../log-reminder.service'
@@ -28,6 +29,7 @@ import { TodayCarousel } from '../today-carousel/today-carousel'
     PumpingTracker,
     BioGayaCard,
     EntrySheet,
+    EditSheet,
     LogBanners,
   ],
   templateUrl: './log-page.html',
