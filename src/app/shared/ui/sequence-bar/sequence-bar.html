@@ -1,0 +1,25 @@
+<div class="seq" data-testid="sequence-bar">
+  @for (item of items(); track $index) {
+    @if (item.kind === 'sleep') {
+      <button
+        type="button"
+        class="seq__sleep"
+        data-testid="sequence-sleep"
+        (click)="pressed.emit(item.id)"
+      >
+        <span class="seq__icon" aria-hidden="true">{{ item.icon }}</span>
+        <span class="seq__body">
+          <strong>{{ item.title }}</strong>
+          <small>{{ item.detail }}</small>
+        </span>
+        <span class="seq__range">{{ item.range }}</span>
+      </button>
+    } @else {
+      <div class="seq__awake">
+        <span aria-hidden="true">🌱</span>
+        <span>{{ item.title }}</span>
+        <span class="seq__gap">{{ item.range }}</span>
+      </div>
+    }
+  }
+</div>

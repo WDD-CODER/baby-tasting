@@ -1,0 +1,18 @@
+<div class="split" data-testid="split-bar">
+  <div class="split__labels">
+    @for (s of segments(); track $index) {
+      <span>{{ s.label }}</span>
+    }
+  </div>
+  <div class="split__track">
+    @for (s of segments(); track $index) {
+      @if (s.percent > 0) {
+        <span
+          class="split__seg"
+          [style.inline-size.%]="s.percent"
+          [style.background]="s.color"
+        ></span>
+      }
+    }
+  </div>
+</div>

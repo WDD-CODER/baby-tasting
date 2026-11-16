@@ -5,6 +5,7 @@ import { ConfirmDialogService } from '../../core/services/confirm-dialog.service
 import { ToastService } from '../../core/services/toast.service'
 import { AlertItem, AlertStrip } from '../../shared/ui/alert-strip/alert-strip'
 import { BottomSheet } from '../../shared/ui/bottom-sheet/bottom-sheet'
+import { BarChart, BarRow } from '../../shared/ui/bar-chart/bar-chart'
 import { Button } from '../../shared/ui/button/button'
 import { Card } from '../../shared/ui/card/card'
 import { Chip } from '../../shared/ui/chip/chip'
@@ -15,6 +16,8 @@ import { ErrorState } from '../../shared/ui/error-state/error-state'
 import { IconButton } from '../../shared/ui/icon-button/icon-button'
 import { LoadingState } from '../../shared/ui/loading-state/loading-state'
 import { Select, SelectOption } from '../../shared/ui/select/select'
+import { SequenceBar, SequenceItem } from '../../shared/ui/sequence-bar/sequence-bar'
+import { SplitBar, SplitSegment } from '../../shared/ui/split-bar/split-bar'
 import { TextField } from '../../shared/ui/text-field/text-field'
 
 @Component({
@@ -22,6 +25,7 @@ import { TextField } from '../../shared/ui/text-field/text-field'
   imports: [
     ReactiveFormsModule,
     AlertStrip,
+    BarChart,
     BottomSheet,
     Button,
     Card,
@@ -33,6 +37,8 @@ import { TextField } from '../../shared/ui/text-field/text-field'
     IconButton,
     LoadingState,
     Select,
+    SequenceBar,
+    SplitBar,
     TextField,
   ],
   templateUrl: './components-demo.html',
@@ -44,6 +50,32 @@ export class ComponentsDemo {
   private readonly toasts = inject(ToastService)
 
   protected readonly t = HE
+  protected readonly splitSegments: SplitSegment[] = [
+    { label: 'א (60%)', percent: 60, color: 'var(--color-event-breast)' },
+    { label: 'ב (40%)', percent: 40, color: 'var(--color-event-nutrition)' },
+  ]
+  protected readonly barRows: BarRow[] = [
+    { label: '2026-11-15', value: 600, caption: '10.0' },
+    { label: '2026-11-16', value: 900, caption: '15.0' },
+  ]
+  protected readonly sequenceItems: SequenceItem[] = [
+    {
+      kind: 'sleep',
+      id: 'a',
+      icon: '🌟',
+      title: 'שינה • 50 דקות',
+      detail: 'מיקום: עריסה',
+      range: '09:00 - 09:50',
+    },
+    {
+      kind: 'awake',
+      id: 'gap',
+      icon: '🌱',
+      title: 'חלון עירות בין שינות:',
+      detail: '',
+      range: '40 דק׳',
+    },
+  ]
   protected readonly isSheetOpen_ = signal(false)
   protected readonly emoji_ = signal('🍌')
   protected readonly dateTime_ = signal('')
