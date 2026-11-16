@@ -14,6 +14,7 @@ test('016-4: dragging a tile right after adding it keeps it (no disappearing til
   await page.getByLabel('חיפוש מזון').fill('בננה')
   // no wait for the server here: the drag starts while the add is still being confirmed
   await page.getByRole('button', { name: /בננה/ }).first().click()
+  await page.getByRole('button', { name: 'הוספה (1)' }).click()
   await expect(cell(page, today, 2).locator('.tile')).toBeVisible()
   await page.evaluate(() => window.scrollBy(0, 300))
   await dragTo(page, cell(page, today, 2).locator('.tile'), cell(page, tomorrow, 3))

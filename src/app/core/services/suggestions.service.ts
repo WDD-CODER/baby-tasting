@@ -3,8 +3,12 @@ import { firstValueFrom } from 'rxjs'
 import { AcceptRejection, Suggestion } from '../models/suggestion'
 import { ApiService } from './api.service'
 
+export type NoSuggestionsReason = 'no_open_days' | 'nothing_to_suggest'
+
 interface PreviewResponse {
   suggestions: Suggestion[]
+  /** Set when the list is empty: why. */
+  reason?: NoSuggestionsReason
 }
 interface AcceptResponse {
   created: unknown[]
@@ -16,11 +20,11 @@ interface AcceptResponse {
 export class SuggestionsService {
   private readonly api = inject(ApiService)
 
-  async preview(weekStart: string): Promise<Suggestion[]> {
+  async preview(weekStart: string): Promise<PreviewResponse> {
     const res = await firstValueFrom(
       this.api.post<PreviewResponse>('/suggestions/preview', { weekStart }),
     )
-    return res.suggestions
+    return res
   }
 
   async accept(items: { date: string; meal: number; foodId: string }[]): Promise<AcceptResponse> {

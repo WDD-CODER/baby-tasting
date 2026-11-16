@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core'
 import { HE } from '../../../core/i18n/he'
+import { foodIcon } from '../../../core/utils/food-icon'
 import { CalendarItem } from '../../../core/models/calendar-item'
 import { Food } from '../../../core/models/food'
 import { dayOfMonth, monthGrid } from '../../../core/utils/dates'
@@ -46,7 +47,7 @@ export class MonthView {
       return {
         date,
         inMonth: date.startsWith(prefix),
-        emoji: sorted.slice(0, MAX_EMOJI).map((it) => foodById.get(it.foodId)?.emoji ?? ''),
+        emoji: sorted.slice(0, MAX_EMOJI).map((it) => foodIcon(foodById.get(it.foodId)?.emoji)),
         more: Math.max(0, sorted.length - MAX_EMOJI),
       }
     })

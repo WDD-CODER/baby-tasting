@@ -7,6 +7,7 @@ import { CatalogService } from '../../../core/services/catalog.service'
 import { shortDate } from '../../../core/utils/dates'
 import { Chip, ChipTone } from '../../../shared/ui/chip/chip'
 import { ErrorState } from '../../../shared/ui/error-state/error-state'
+import { FoodIconPipe } from '../../../shared/ui/food-icon/food-icon.pipe'
 import { LoadingState } from '../../../shared/ui/loading-state/loading-state'
 
 const TONES: Record<AllergenState, ChipTone> = {
@@ -19,7 +20,7 @@ const TONES: Record<AllergenState, ChipTone> = {
 
 @Component({
   selector: 'app-allergen-detail',
-  imports: [RouterLink, Chip, ErrorState, LoadingState],
+  imports: [RouterLink, Chip, ErrorState, FoodIconPipe, LoadingState],
   templateUrl: './allergen-detail.html',
   styleUrl: './allergen-detail.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -7,7 +7,7 @@
   } @else {
     @if (food(); as f) {
       <header class="detail__head">
-        <span class="detail__emoji" aria-hidden="true">{{ f.emoji }}</span>
+        <span class="detail__emoji" aria-hidden="true">{{ f.emoji | foodIcon }}</span>
         <h2 class="detail__name">{{ f.name }}</h2>
         @if (allergenName()) {
           <app-chip tone="accent">{{ allergenName() }}</app-chip>

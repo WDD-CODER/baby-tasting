@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { HE } from '../../../core/i18n/he'
+import { foodIcon } from '../../../core/utils/food-icon'
 import { Reaction, Severity } from '../../../core/models/reaction'
 import { CatalogService } from '../../../core/services/catalog.service'
 import { ReactionsService } from '../../../core/services/reactions.service'
@@ -44,7 +45,7 @@ export class ReactionsList {
       foods: r.foodIds
         .map((id) => {
           const food = this.catalog.foodById(id)
-          return food ? `${food.emoji} ${food.name}` : ''
+          return food ? `${foodIcon(food.emoji)} ${food.name}` : ''
         })
         .filter((s) => s !== '')
         .join(', '),

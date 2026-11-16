@@ -12,27 +12,7 @@
     font-size: var(--fs-sm);
   }
 
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--touch-target), 1fr));
-    gap: var(--space-1);
-  }
-
-  &__item {
-    min-block-size: var(--touch-target);
-
-    border: 1px solid transparent;
-    border-radius: var(--radius-card);
-
-    background: var(--color-surface);
-    font-size: 24px;
-
-    &--selected {
-      border-color: var(--color-accent);
-    }
-  }
-
-  &__free {
+  &__search {
     min-block-size: var(--touch-target);
 
     padding-inline: var(--space-3);
@@ -43,5 +23,48 @@
     color: var(--color-text);
     font-family: inherit;
     font-size: var(--fs-md);
+  }
+
+  &__none {
+    min-block-size: var(--touch-target);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: var(--fs-md);
+  }
+
+  &__note {
+    margin: 0;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
+  // a scrollable grid: the full emoji set can give many results
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--touch-target), 1fr));
+    gap: var(--space-1);
+
+    max-block-size: 40vh;
+    overflow-y: auto;
+  }
+
+  &__item {
+    min-block-size: var(--touch-target);
+
+    border: 1px solid transparent;
+    border-radius: var(--radius-card);
+
+    background: var(--color-surface);
+    font-size: 24px;
+  }
+
+  &__item--selected {
+    border-color: var(--color-accent);
   }
 }

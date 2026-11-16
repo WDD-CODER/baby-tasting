@@ -29,6 +29,7 @@ export async function addFood(page: Page, date: string, meal: number, name: stri
   // wait for the server to confirm: acting on the tile before that hits its temporary id
   const created = page.waitForResponse((r) => r.request().method() === 'POST' && /\/api\/v1\/calendar$/.test(r.url()))
   await page.getByRole('button', { name: new RegExp(name) }).first().click()
+  await page.getByRole('button', { name: 'הוספה (1)' }).click()
   await created
   await page.waitForLoadState('networkidle')
 }

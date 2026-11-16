@@ -25,6 +25,7 @@ test('004-5: an item given on a date last month shows its emoji on that day afte
   await page.getByRole('button', { name: 'הוספת מזון' }).nth(1).click()
   await page.getByLabel('חיפוש מזון').fill('בננה')
   await page.getByRole('button', { name: /בננה/ }).first().click()
+  await page.getByRole('button', { name: 'הוספה (1)' }).click()
   await page.getByRole('button', { name: 'בננה', exact: true }).click()
   await page.getByRole('button', { name: 'ניתן', exact: true }).click()
   await page.getByRole('button', { name: 'סגירה' }).last().click()

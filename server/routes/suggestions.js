@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { computeAllergens } from '../domain/allergen-engine.js'
 import { dayOfWeek, isoAddDays, isRealDate } from '../domain/dates.js'
 import { withDefaults } from '../domain/settings.js'
-import { suggestWeek } from '../domain/suggestions.js'
+import { noSuggestionsReason, suggestWeek } from '../domain/suggestions.js'
 import { createCalendarItem } from '../lib/calendar-create.js'
 import { todayIso } from '../lib/dates.js'
 import { HttpError } from '../lib/http-error.js'
@@ -76,7 +76,11 @@ export function createSuggestionsRouter({ repos }) {
         today,
         ...locks,
       })
-      res.json({ suggestions })
+      res.json(
+        suggestions.length === 0
+          ? { suggestions, reason: noSuggestionsReason({ weekStart, today }) }
+          : { suggestions },
+      )
     }),
   )
 

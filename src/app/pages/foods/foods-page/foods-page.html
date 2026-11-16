@@ -67,7 +67,7 @@
             >
               <span aria-hidden="true">⠿</span>
             </button>
-            <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+            <span class="food__emoji" aria-hidden="true">{{ food.emoji | foodIcon }}</span>
             <span class="food__name">{{ food.name }}</span>
             <button
               type="button"
@@ -88,7 +88,7 @@
         @for (food of group.foods; track food.id) {
           <li class="row">
             <a class="food" [routerLink]="['/tasting/foods', food.id]">
-              <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+              <span class="food__emoji" aria-hidden="true">{{ food.emoji | foodIcon }}</span>
               <span class="food__name">{{ food.name }}</span>
               @if (allergenName(food); as name) {
                 <app-chip tone="accent">{{ name }}</app-chip>
