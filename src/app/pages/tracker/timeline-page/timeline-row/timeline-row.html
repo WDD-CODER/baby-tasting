@@ -1,0 +1,37 @@
+@let v = view();
+<button
+  type="button"
+  [class]="'row row--' + v.tone"
+  [style.--tier-color]="v.tier ? 'var(--color-tier-' + v.tier + ')' : null"
+  data-testid="timeline-row"
+  (click)="edit.emit(event())"
+>
+  <span class="row__icon">
+    <span aria-hidden="true">{{ v.icon }}</span>
+    @if (v.memo) {
+      <span class="row__memo" [attr.title]="t.memoTitle" [attr.aria-label]="t.memoLabel">!</span>
+    }
+  </span>
+  <span class="row__body">
+    <span class="row__head">
+      <strong class="row__title">{{ v.title }}</strong>
+      <span class="row__time">{{ v.time }}</span>
+    </span>
+    <span class="row__details">{{ v.details }}</span>
+    @if (v.bigNap) {
+      <span class="row__chip row__chip--nap">{{ t.bigNap }}</span>
+    }
+    @if (v.topUp) {
+      <span class="row__chip">{{ v.topUp }}</span>
+    }
+    @if (v.note) {
+      <span class="row__note">{{ t.note.replace('{note}', v.note) }}</span>
+    }
+    <span class="row__foot">
+      <small>{{ v.attribution }}</small>
+      @if (v.quick) {
+        <small class="row__quick">{{ t.quick }}</small>
+      }
+    </span>
+  </span>
+</button>
