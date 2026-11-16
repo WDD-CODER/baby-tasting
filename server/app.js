@@ -26,7 +26,9 @@ import { createUsersRouter } from './routes/users.js'
 import { createSettingsRouter } from './routes/settings.js'
 import { createSuggestionsRouter } from './routes/suggestions.js'
 import { createTestResetRouter } from './routes/test-reset.js'
+import { createTrackerEventsRouter } from './routes/tracker-events.js'
 import { createTrackerSettingsRouter } from './routes/tracker-settings.js'
+import { createTrackerSleepRouter } from './routes/tracker-sleep.js'
 
 export function createApp({ config, db, photoStore = createPhotoStore(config.cloudinary ?? null) }) {
   const app = express()
@@ -76,6 +78,8 @@ export function createApp({ config, db, photoStore = createPhotoStore(config.clo
   app.use('/api/v1/users', requireAuth, createUsersRouter({ repos }))
   app.use('/api/v1/settings', requireAuth, createSettingsRouter({ repos }))
   app.use('/api/v1/tracker/settings', requireAuth, createTrackerSettingsRouter({ repos }))
+  app.use('/api/v1/tracker/events', requireAuth, createTrackerEventsRouter({ repos }))
+  app.use('/api/v1/tracker/sleep', requireAuth, createTrackerSleepRouter({ repos }))
   app.use('/api/v1/allergens', requireAuth, catalogContext, createAllergensRouter({ repos }))
   app.use('/api/v1/foods', requireAuth, catalogContext, createFoodsRouter({ repos }))
   app.use('/api/v1/calendar', requireAuth, catalogContext, createCalendarRouter({ repos }))
