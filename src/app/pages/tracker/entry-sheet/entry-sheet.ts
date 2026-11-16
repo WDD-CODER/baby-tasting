@@ -44,6 +44,7 @@ import { BottomSheet } from '../../../shared/ui/bottom-sheet/bottom-sheet'
 import { DateTime24 } from '../../../shared/ui/datetime24/datetime24'
 import { QuickLogService } from '../quick-log.service'
 import { SheetType } from '../sheet-type'
+import { SaveErrorService } from '../save-error.service'
 import { saveErrorText } from '../tracker-errors'
 
 interface Option<T> {
@@ -96,6 +97,7 @@ export class EntrySheet {
   private readonly guard = inject(DoubleSubmitService)
   private readonly toast = inject(ToastService)
   private readonly quick = inject(QuickLogService)
+  private readonly saveError = inject(SaveErrorService)
   private readonly confirmDialog = inject(ConfirmDialogService)
 
   /** The sheet to show; null keeps it closed. */
@@ -377,12 +379,14 @@ export class EntrySheet {
     this.submitting.set(true)
     let saved = false
     try {
-      const created = await this.events.create(built.body)
-      this.events.showUndo(created.id, this.t.saved)
-      this.closed.emit()
-      saved = true
+      const created = await this.saveError.createOrAskEnd(built.body)
+      if (created) {
+        this.events.showUndo(created.id, this.t.saved)
+        this.closed.emit()
+        saved = true
+      }
     } catch (err) {
-      this.toast.show(saveErrorText(err, this.t.saveFailed), 'bad')
+      this.saveError.show(err, this.t.saveFailed, built.body.eventType, () => this.closed.emit())
     } finally {
       this.submitting.set(false)
     }
@@ -401,7 +405,7 @@ export class EntrySheet {
       const res = await this.events.toggleSleep({})
       if (res.action === 'end') this.quick.showSleepEnded(res.event)
     } catch (err) {
-      this.toast.show(saveErrorText(err, this.t.sleepFailed), 'bad')
+      this.saveError.show(err, this.t.sleepFailed, 'SLEEP')
     }
   }
 
@@ -417,11 +421,8 @@ export class EntrySheet {
       this.closed.emit()
     } catch (err) {
       const code = (err as { code?: string }).code
-      const text =
-        code === 'start_in_future'
-          ? this.t.sleepStartInFuture
-          : saveErrorText(err, this.t.sleepFailed)
-      this.toast.show(text, 'bad')
+      if (code === 'start_in_future') this.toast.show(this.t.sleepStartInFuture, 'bad')
+      else this.saveError.show(err, this.t.sleepFailed, 'SLEEP', () => this.closed.emit())
     } finally {
       this.submitting.set(false)
     }
@@ -453,7 +454,7 @@ export class EntrySheet {
       this.toast.show(this.e.updated, 'good')
       this.closed.emit()
     } catch (err) {
-      this.toast.show(saveErrorText(err, this.e.updateFailed), 'bad')
+      this.saveError.show(err, this.e.updateFailed, event.eventType, () => this.closed.emit())
     } finally {
       this.submitting.set(false)
     }
@@ -503,7 +504,7 @@ export class EntrySheet {
       await this.events.create(body as unknown as NewTrackerEvent)
       this.toast.show(this.e.restored, 'good')
     } catch (err) {
-      this.toast.show(saveErrorText(err, this.e.restoreFailed), 'bad')
+      this.saveError.show(err, this.e.restoreFailed, event.eventType)
     }
   }
 
@@ -584,11 +585,8 @@ export class EntrySheet {
       this.closed.emit()
     } catch (err) {
       const status = (err as { status?: number }).status
-      const text =
-        ending && status === 400
-          ? this.t.sleepEndBeforeStart
-          : saveErrorText(err, this.t.sleepFailed)
-      this.toast.show(text, 'bad')
+      if (ending && status === 400) this.toast.show(this.t.sleepEndBeforeStart, 'bad')
+      else this.saveError.show(err, this.t.sleepFailed, 'SLEEP', () => this.closed.emit())
     } finally {
       this.submitting.set(false)
     }

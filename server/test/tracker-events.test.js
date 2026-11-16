@@ -160,43 +160,148 @@ test('loggedBy always comes from the session', async () => {
 test('a manual sleep that overlaps another is refused, an open one while one is open too', async () => {
   const a = await signedInAgent(ctx.newApp(), 'parent-a')
   const sleep = (startAt, endAt) => a.post('/api/v1/tracker/events').send({ eventType: 'SLEEP', sleep: { startAt, endAt } })
-  const first = await sleep('2023-01-02T10:00:00.000Z', '2023-01-02T11:00:00.000Z')
+  const first = await sleep('2100-01-02T10:00:00.000Z', '2100-01-02T11:00:00.000Z')
   assert.equal(first.status, 201)
   assert.equal(first.body.event.sleep.durationMinutes, 60)
   assert.equal(first.body.event.sleep.startedBy, 'PARENT_A')
-  const overlap = await sleep('2023-01-02T10:30:00.000Z', '2023-01-02T11:30:00.000Z')
+  const overlap = await sleep('2100-01-02T10:30:00.000Z', '2100-01-02T11:30:00.000Z')
   assert.equal(overlap.status, 409)
-  assert.equal(overlap.body.error.code, 'sleep_overlap')
-  assert.equal((await sleep('2023-01-02T11:00:00.000Z', '2023-01-02T11:20:00.000Z')).status, 201)
-  const open = await sleep('2023-01-03T10:00:00.000Z', null)
+  assert.equal(overlap.body.error.code, 'event_conflict')
+  const touching = await sleep('2100-01-02T11:00:00.000Z', '2100-01-02T11:20:00.000Z')
+  assert.equal(touching.status, 201)
+  const open = await sleep('2100-01-03T10:00:00.000Z', null)
   assert.equal(open.status, 201)
   assert.equal('durationMinutes' in open.body.event.sleep, false)
-  const second = await sleep('2023-01-03T12:00:00.000Z', null)
+  const second = await sleep('2100-01-03T12:00:00.000Z', null)
   assert.equal(second.status, 409)
   assert.equal(second.body.error.code, 'sleep_already_open')
-  await a.delete(`/api/v1/tracker/events/${open.body.event.id}`)
+  // an open sleep runs on: remove everything this test made so later tests are not blocked
+  for (const e of [open, first, touching]) await a.delete(`/api/v1/tracker/events/${e.body.event.id}`)
 })
 
 test('editing an open sleep works (F12) and keeps who started and ended it (F10)', async () => {
   const app = ctx.newApp()
   const a = await signedInAgent(app, 'parent-a')
   const b = await signedInAgent(app, 'parent-b')
-  const start = (await a.post('/api/v1/tracker/sleep/toggle').send({ at: '2025-02-01T10:00:00.000Z', location: 'CRIB' })).body.event
+  // an open sleep runs on, so it starts after every other test event: now (events of earlier tests are all before it)
+  const base = Date.now()
+  const M = (min) => new Date(base + min * 60000).toISOString()
+  const start = (await a.post('/api/v1/tracker/sleep/toggle').send({ at: M(0), location: 'CRIB' })).body.event
   assert.equal(start.sleep.endAt, null)
   // F12: edit while open
-  const open = await b.put(`/api/v1/tracker/events/${start.id}`).send({ sleep: { startAt: '2025-02-01T09:50:00.000Z', endAt: null, startLocation: 'HANDS' } })
+  const open = await b.put(`/api/v1/tracker/events/${start.id}`).send({ sleep: { startAt: M(0), endAt: null, startLocation: 'HANDS' } })
   assert.equal(open.status, 200, JSON.stringify(open.body))
-  assert.equal(open.body.event.sleep.startAt, '2025-02-01T09:50:00.000Z')
+  assert.equal(open.body.event.sleep.startAt, M(0))
   assert.equal(open.body.event.sleep.endAt, null)
   assert.equal(open.body.event.sleep.startedBy, 'PARENT_A')
-  assert.equal(open.body.event.timestamp, '2025-02-01T09:50:00.000Z')
+  assert.equal(open.body.event.timestamp, M(0))
   // close by B, then edit by A: both keep their roles (F10)
-  const ended = (await b.post('/api/v1/tracker/sleep/toggle').send({ at: '2025-02-01T10:40:00.000Z' })).body.event
+  const ended = (await b.post('/api/v1/tracker/sleep/toggle').send({ at: M(40) })).body.event
   assert.equal(ended.sleep.endedBy, 'PARENT_B')
-  const edit = await a.put(`/api/v1/tracker/events/${start.id}`).send({ sleep: { startAt: '2025-02-01T09:50:00.000Z', endAt: '2025-02-01T10:50:00.000Z' } })
+  const edit = await a.put(`/api/v1/tracker/events/${start.id}`).send({ sleep: { startAt: M(0), endAt: M(60) } })
   assert.equal(edit.status, 200)
   assert.equal(edit.body.event.sleep.startedBy, 'PARENT_A')
   assert.equal(edit.body.event.sleep.endedBy, 'PARENT_B')
   assert.equal(edit.body.event.sleep.durationMinutes, 60)
   assert.equal('startLocation' in edit.body.event.sleep, false)
+})
+
+// Plan 016: conflicts name their blocker; awake-only events are refused during a sleep.
+test('plan 016: a sleep over a sleep, and a feed inside a sleep, are 409 event_conflict naming the sleep', async () => {
+  const a = await signedInAgent(ctx.newApp(), 'parent-a')
+  const post = (body) => a.post('/api/v1/tracker/events').send(body)
+  const sleep = await post({ eventType: 'SLEEP', sleep: { startAt: '2021-05-01T10:00:00.000Z', endAt: '2021-05-01T11:00:00.000Z' } })
+  assert.equal(sleep.status, 201)
+  const over = await post({ eventType: 'SLEEP', sleep: { startAt: '2021-05-01T10:30:00.000Z', endAt: '2021-05-01T11:30:00.000Z' } })
+  assert.equal(over.status, 409)
+  assert.equal(over.body.error.code, 'event_conflict')
+  assert.deepEqual(over.body.error.conflict, {
+    id: sleep.body.event.id,
+    eventType: 'SLEEP',
+    startAt: '2021-05-01T10:00:00.000Z',
+    endAt: '2021-05-01T11:00:00.000Z',
+  })
+  const bottle = await post({
+    eventType: 'NUTRITION',
+    timestamp: '2021-05-01T10:20:00.000Z',
+    nutrition: { feedType: 'BOTTLE', bottleLiquidType: 'FORMULA', amountOfferedMl: 90 },
+  })
+  assert.equal(bottle.status, 409)
+  assert.equal(bottle.body.error.conflict.id, sleep.body.event.id)
+  const breast = await post({
+    eventType: 'NUTRITION',
+    timestamp: '2021-05-01T09:50:00.000Z',
+    nutrition: { feedType: 'BREAST', breastSide: 'LEFT', durationMinutes: 20 },
+  })
+  assert.equal(breast.status, 409)
+  assert.equal((await post({ eventType: 'ACTIVITY', timestamp: '2021-05-01T10:20:00.000Z', activity: { activityName: 'שירים' } })).status, 409)
+  assert.equal((await post({ eventType: 'WEIGHT', timestamp: '2021-05-01T10:20:00.000Z', weight: { weightGrams: 5200 } })).status, 409)
+  // allowed during a sleep
+  const t = '2021-05-01T10:20:00.000Z'
+  assert.equal((await post({ eventType: 'DIAPER', timestamp: t, diaper: { contains: 'PEE', peeVolume: 'LIGHT' } })).status, 201)
+  assert.equal((await post({ eventType: 'PUMPING', timestamp: t, pumping: { leftAmountMl: 60, rightAmountMl: 50 } })).status, 201)
+  assert.equal((await post({ eventType: 'VOMITING', timestamp: t, vomiting: { size: 'SMALL' } })).status, 201)
+  assert.equal((await post({ eventType: 'SUPPLEMENT', timestamp: t, supplement: { name: 'ויטמין D' } })).status, 201)
+})
+
+test('plan 016: a sleep recorded over an existing feed names the feed; editing a feed into a sleep is refused', async () => {
+  const a = await signedInAgent(ctx.newApp(), 'parent-a')
+  const feed = await a.post('/api/v1/tracker/events').send({
+    eventType: 'NUTRITION',
+    timestamp: '2021-06-01T10:30:00.000Z',
+    nutrition: { feedType: 'BOTTLE', bottleLiquidType: 'FORMULA', amountOfferedMl: 90 },
+  })
+  assert.equal(feed.status, 201)
+  const sleep = await a.post('/api/v1/tracker/events').send({
+    eventType: 'SLEEP',
+    sleep: { startAt: '2021-06-01T10:00:00.000Z', endAt: '2021-06-01T11:00:00.000Z' },
+  })
+  assert.equal(sleep.status, 409)
+  assert.equal(sleep.body.error.code, 'event_conflict')
+  assert.deepEqual(sleep.body.error.conflict, {
+    id: feed.body.event.id,
+    eventType: 'NUTRITION',
+    startAt: '2021-06-01T10:30:00.000Z',
+    endAt: null,
+  })
+  const ok = await a.post('/api/v1/tracker/events').send({
+    eventType: 'SLEEP',
+    sleep: { startAt: '2021-06-01T11:00:00.000Z', endAt: '2021-06-01T12:00:00.000Z' },
+  })
+  assert.equal(ok.status, 201)
+  const moved = await a.put(`/api/v1/tracker/events/${feed.body.event.id}`).send({ timestamp: '2021-06-01T11:30:00.000Z' })
+  assert.equal(moved.status, 409)
+  assert.equal(moved.body.error.conflict.id, ok.body.event.id)
+})
+
+test('plan 016: a feed after the open sleep start needs endOpenSleep; with it the sleep ends at the feed time', async () => {
+  const a = await signedInAgent(ctx.newApp(), 'parent-a')
+  const base = Date.now() + 3 * 3600000 // after the sleep the F10 test leaves
+  const M = (min) => new Date(base + min * 60000).toISOString()
+  const open = await a.post('/api/v1/tracker/events').send({ eventType: 'SLEEP', sleep: { startAt: M(0), endAt: null } })
+  assert.equal(open.status, 201)
+  const feed = {
+    eventType: 'NUTRITION',
+    timestamp: M(45),
+    nutrition: { feedType: 'BOTTLE', bottleLiquidType: 'FORMULA', amountOfferedMl: 90 },
+  }
+  const refused = await a.post('/api/v1/tracker/events').send(feed)
+  assert.equal(refused.status, 409)
+  assert.deepEqual(refused.body.error.conflict, {
+    id: open.body.event.id,
+    eventType: 'SLEEP',
+    startAt: M(0),
+    endAt: null,
+  })
+  assert.equal((await a.get('/api/v1/tracker/sleep/open')).body.id, open.body.event.id)
+  const bad = await a.post('/api/v1/tracker/events').send({ ...feed, endOpenSleep: 'yes' })
+  assert.equal(bad.status, 400)
+  const done = await a.post('/api/v1/tracker/events').send({ ...feed, endOpenSleep: true })
+  assert.equal(done.status, 201, JSON.stringify(done.body))
+  assert.equal((await a.get('/api/v1/tracker/sleep/open')).body, null)
+  const list = (await a.get('/api/v1/tracker/events?limit=50')).body.events
+  const ended = list.find((e) => e.id === open.body.event.id)
+  assert.equal(ended.sleep.endAt, M(45))
+  assert.equal(ended.sleep.durationMinutes, 45)
+  assert.ok(list.find((e) => e.eventType === 'NUTRITION'))
 })

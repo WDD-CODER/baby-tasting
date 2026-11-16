@@ -65,4 +65,6 @@ export interface TrackerEvent {
 /** The body of POST /tracker/events (the server decides id and who logged it). */
 export type NewTrackerEvent = Omit<TrackerEvent, 'id' | 'loggedBy' | 'timestamp'> & {
   timestamp?: string
+  /** D-016-3: end the open sleep at this event's time, then save the event. */
+  endOpenSleep?: boolean
 }

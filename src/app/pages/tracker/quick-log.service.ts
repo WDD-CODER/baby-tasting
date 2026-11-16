@@ -5,7 +5,7 @@ import { DoubleSubmitService } from '../../core/services/double-submit.service'
 import { ToastService } from '../../core/services/toast.service'
 import { TrackerEventsService } from '../../core/services/tracker-events.service'
 import { sleepCycle } from '../../core/utils/tracker-rules'
-import { saveErrorText } from './tracker-errors'
+import { SaveErrorService } from './save-error.service'
 
 /** The one-tap logging handlers of the log tab (spec §4.6, §5.1, §3.5). Each returns true when it saved. */
 @Injectable({ providedIn: 'root' })
@@ -13,6 +13,7 @@ export class QuickLogService {
   private readonly events = inject(TrackerEventsService)
   private readonly guard = inject(DoubleSubmitService)
   private readonly toast = inject(ToastService)
+  private readonly saveError = inject(SaveErrorService)
 
   private readonly t = HE.tracker.log
 
@@ -20,15 +21,16 @@ export class QuickLogService {
     if (this.guard.isDuplicate('NUTRITION')) return this.refuse(this.t.duplicateMeal)
     try {
       // The server needs a feed type; a quick meal is a bottle without amounts.
-      const saved = await this.events.create({
+      const saved = await this.saveError.createOrAskEnd({
         eventType: 'NUTRITION',
         quickRecorded: true,
         nutrition: { feedType: 'BOTTLE' },
       })
+      if (!saved) return false // the user chose `ביטול` on the end-and-log question
       this.events.showUndo(saved.id, this.t.quickMealSaved)
       return true
     } catch (err) {
-      return this.fail(err, this.t.quickMealFailed)
+      return this.fail(err, this.t.quickMealFailed, 'NUTRITION')
     }
   }
 
@@ -71,7 +73,7 @@ export class QuickLogService {
       else this.toast.show(this.t.sleepStarted, 'good')
       return true
     } catch (err) {
-      return this.fail(err, this.t.sleepFailed)
+      return this.fail(err, this.t.sleepFailed, 'SLEEP')
     }
   }
 
@@ -107,8 +109,8 @@ export class QuickLogService {
     return false
   }
 
-  private fail(err: unknown, fallback: string): boolean {
-    this.toast.show(saveErrorText(err, fallback), 'bad')
+  private fail(err: unknown, fallback: string, candidate = 'SUPPLEMENT'): boolean {
+    this.saveError.show(err, fallback, candidate)
     return false
   }
 }

@@ -1,3 +1,5 @@
+import { findConflict } from './conflicts.js'
+
 // Sleep rules: one open sleep at a time, no overlaps, duration in whole minutes (min 1). Pure; "now" is passed in.
 
 export function durationMinutes(startIso, endIso) {
@@ -31,7 +33,8 @@ export function moveOpenSleepStart({ open, startAt, now, others = [] }) {
   if (!open || !isOpen(open.sleep)) return { error: 'no_open_sleep' }
   if (Date.parse(startAt) > Date.parse(now)) return { error: 'start_in_future' }
   const id = open.id ?? (open._id ? String(open._id) : undefined)
-  if (checkOverlap(others, { startAt, endAt: null, id }).overlaps) return { error: 'sleep_overlap' }
+  const conflict = findConflict({ id, eventType: 'SLEEP', timestamp: startAt, sleep: { startAt, endAt: null } }, others)
+  if (conflict) return { error: 'event_conflict', conflict }
   return { sleep: { ...open.sleep, startAt, endAt: null } }
 }
 

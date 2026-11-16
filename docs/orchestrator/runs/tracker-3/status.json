@@ -1,0 +1,205 @@
+{
+  "run": "tracker-3",
+  "branch": "orch/tracker-3",
+  "base": "main",
+  "startedAt": "2026-11-16T15:48:23.243Z",
+  "mainShaAtStart": "2e5509029036498a9038f6f04f8391b08954bdec",
+  "plans": {
+    "016": {
+      "nnn": "016",
+      "title": "Event conflicts that name what blocks them, awake-only events refused during sleep, calendar drag during a refresh",
+      "branch": "feat/016-tracker-conflicts-named-blockers",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T15:50:00.267Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-16T16:13:44.877Z"
+        }
+      },
+      "humanItems": [
+        "The conflict messages read clearly and the `הצג` button helps fix the wrong entry."
+      ],
+      "history": [
+        {
+          "at": "2026-11-16T15:49:59.880Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T15:50:00.271Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T16:10:55.134Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T16:13:39.947Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T16:13:44.879Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T16:14:21.755Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T16:14:59.719Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 24.1,
+      "sha": "17b060b18a0162c7fe93201897ed3f7774075961",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 1251.3,
+          "tokens": {
+            "input": 7698522,
+            "output": 67379
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 36.1,
+          "tokens": {
+            "input": 217224,
+            "output": 3317
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "08d480c34c4a7b58a1dadf7893a85c81f93abbb7"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-16T15:49:59.544Z",
+      "plan": "016",
+      "text": "the folder baby-tasting-orch-tracker-3-016 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T16:10:51.768Z",
+      "plan": "016",
+      "text": "builder left undone (round 0): e2e 016-1: written, not run; e2e 016-2: written, not run; e2e 016-3: written, not run; e2e 016-4: written, not run; 003-2 / 008-1: not run, so I could not see what failed against the current app. I only made the locators stricter (exact label, first match) and kept every assertion. Please run them."
+    },
+    {
+      "at": "2026-11-16T16:14:32.560Z",
+      "plan": "016",
+      "text": "the folder baby-tasting-orch-merge-tracker-3 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 24.1,
+  "updatedAt": "2026-11-16T16:17:15.563Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "016",
+      "type": "behaviour",
+      "text": "behaviour: tapping הצג closes the open entry or edit sheet first, so any unsaved input is lost, then opens the blocking event in the edit sheet — reverse: drop the beforeShow callback passed to SaveErrorService.show in entry-sheet.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "016",
+      "type": "behaviour",
+      "text": "behaviour: the conflict line is a toast with a הצג action in sheets as well as quick actions, because the sheets show save errors as toasts today — reverse: render it inline in the sheet instead",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "016",
+      "type": "behaviour",
+      "text": "behaviour: an awake event at exactly a sleep's start counts as inside it; at exactly its end it does not — reverse: change the comparison in server/domain/tracker/conflicts.js clash()",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "016",
+      "type": "behaviour",
+      "text": "behaviour: the log page now hosts <app-edit-sheet /> so הצג works from quick actions there — reverse: remove it from log-page.html and log-page.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D5",
+      "plan": "016",
+      "type": "behaviour",
+      "text": "behaviour: an open sleep covers every later awake event, so starting or moving a sleep to a time before existing feeds is refused naming the feed (D-016-2) — reverse: skip awake events when the candidate sleep is open",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D6",
+      "plan": "016",
+      "type": "seen",
+      "text": "seen: server/test/tracker-events.test.js — the server tests share one database, so an open sleep in the past conflicts with later fixture events; I changed those tests to use fresh timestamps and to delete what they create",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-16T16:17:15.560Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-16T16:17:15.562Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}
