@@ -22,6 +22,14 @@ Tasting from the navigation; both areas use the same baby profile and settings.
   `ציר זמן` and `סטטיסטיקה` routes with empty states; settings page grows a `מעקב תינוק` section (parents names,
   default bottle, baby profile with birth weight) above the Tasting section.
 
+- Stay signed in (P1): the session cookie is renewed on every authenticated request (rolling, 1-year idle limit);
+  `יציאה` ends it; opening the app on a signed-in phone goes straight to `/` with no sign-in screen flash.
+- Icons (P7): self-host Material Symbols Rounded (`material-symbols` package, the rounded font only); the slot
+  registry `src/app/core/icons/icon-slots.ts` (slot key → default icon name + Hebrew label + keywords); `app-icon`
+  (`slot` input, or `name` for a fixed icon) reading `iconOverrides` from settings; the navigation uses slots.
+  `iconOverrides` is stored in the Tracker settings and accepted by `PUT /api/v1/tracker/settings` (only known slot
+  keys, only names that exist in the library's name list shipped with the package).
+
 ## Out of scope
 Events, log tab content, timeline, dashboards, export (T2–T6).
 
@@ -31,4 +39,6 @@ Events, log tab content, timeline, dashboards, export (T2–T6).
 - [ui] Sign-in with name and password opens `/` and shows `יום חדש ורענן!`; the five tabs are visible at 360px.
 - [ui] `טעימות` opens the tasting calendar; its `מזונות` top tab opens the foods page; every Tasting e2e check still passes under `/tasting`.
 - [ui] Settings shows the baby's birth weight field and saving parent names updates the name shown in the top bar.
+- [ui] After signing in, closing the browser and opening `/` again shows the Tracker home without the sign-in page.
+- [auto] Server test: an authenticated request renews the session expiry; after `logout` the same cookie gets 401.
 - [human] Navigation feels natural with Tracker first and Tasting one tap away.
