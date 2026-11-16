@@ -9,6 +9,7 @@ import { ReactionsRepository } from './reactions-repository.js'
 import { SettingsRepository } from './settings-repository.js'
 import { SessionsRepository } from './sessions-repository.js'
 import { TestResetRepository } from './test-reset-repository.js'
+import { TrackerEventsRepository } from './tracker-events-repository.js'
 import { UserPrefsRepository } from './user-prefs-repository.js'
 
 export function createRepos(db) {
@@ -23,6 +24,7 @@ export function createRepos(db) {
     locks: new LocksRepository(db),
     settings: new SettingsRepository(db),
     userPrefs: new UserPrefsRepository(db),
+    trackerEvents: new TrackerEventsRepository(db),
     activity: new ActivityRepository(db),
     testReset: new TestResetRepository(db),
   }

@@ -79,10 +79,10 @@ line or file this plan names was removed, renamed or rewritten).
 
 ## Atomic Sub-tasks
 
-- [ ] L1: Write the Tracker event and sleep rules as pure functions — `server/domain/tracker/events.js` (`EVENT_TYPES` and every enum of spec-server-data §1.1, `validateEvent(type, body)` per type with the fields of §1.3, `normalizeEvent`), `sleep.js` (`toggleSleep({ open, at, parentType, location })`, `checkOverlap(sleeps, candidate)`, `durationMinutes(start, end)` rounded, min 1), `baby-day.js` (`babyDayStart(nowIso)` 06:00 Asia/Jerusalem), `quality.js` (the tier helpers of §1.4); tests beside each — server/domain/tracker/**
-- [ ] L2: Store events through one repository — `server/repositories/tracker-events-repository.js` (`list(householdId, { from, to, limit })` newest first without `deletedAt`, `get`, `create`, `update`, `softDelete`, `clearBefore(householdId, dateInclusive)`, `findOpenSleep`), indexes `{ householdId, timestamp: -1 }` and `{ householdId, type, endAt }` in `server/repositories/indexes.js` — server/repositories/**
-- [ ] L3: Offer the events and sleep API — `server/routes/tracker-events.js`: `GET /api/v1/tracker/events?from&to&limit` (default limit 400 like spec §3.7), `POST`, `PUT /:id` (any field; `note: ''` or `null` clears it; sleep `startedBy`/`endedBy` kept), `DELETE /:id` (soft), `POST /clear` `{ before: 'YYYY-MM-DD' }` inclusive; `server/routes/tracker-sleep.js`: `GET /api/v1/tracker/sleep/open`, `POST /api/v1/tracker/sleep/toggle` `{ location, at? }` (ends the open sleep at `at` or now, else starts one at `at` or now; 409 `sleep_overlap` when a manual time overlaps); `loggedBy`/`startedBy`/`endedBy` from `req.user`; tests `server/test/tracker-events.test.js`, `server/test/tracker-sleep.test.js` — server/routes/**, server/app.js, server/test/**
-- [ ] L4: Note what now exists — `docs/project/current-state.md` — docs/project/current-state.md
+- [x] L1: Write the Tracker event and sleep rules as pure functions — `server/domain/tracker/events.js` (`EVENT_TYPES` and every enum of spec-server-data §1.1, `validateEvent(type, body)` per type with the fields of §1.3, `normalizeEvent`), `sleep.js` (`toggleSleep({ open, at, parentType, location })`, `checkOverlap(sleeps, candidate)`, `durationMinutes(start, end)` rounded, min 1), `baby-day.js` (`babyDayStart(nowIso)` 06:00 Asia/Jerusalem), `quality.js` (the tier helpers of §1.4); tests beside each — server/domain/tracker/**
+- [x] L2: Store events through one repository — `server/repositories/tracker-events-repository.js` (`list(householdId, { from, to, limit })` newest first without `deletedAt`, `get`, `create`, `update`, `softDelete`, `clearBefore(householdId, dateInclusive)`, `findOpenSleep`), indexes `{ householdId, timestamp: -1 }` and `{ householdId, type, endAt }` in `server/repositories/indexes.js` — server/repositories/**
+- [x] L3: Offer the events and sleep API — `server/routes/tracker-events.js`: `GET /api/v1/tracker/events?from&to&limit` (default limit 400 like spec §3.7), `POST`, `PUT /:id` (any field; `note: ''` or `null` clears it; sleep `startedBy`/`endedBy` kept), `DELETE /:id` (soft), `POST /clear` `{ before: 'YYYY-MM-DD' }` inclusive; `server/routes/tracker-sleep.js`: `GET /api/v1/tracker/sleep/open`, `POST /api/v1/tracker/sleep/toggle` `{ location, at? }` (ends the open sleep at `at` or now, else starts one at `at` or now; 409 `sleep_overlap` when a manual time overlaps); `loggedBy`/`startedBy`/`endedBy` from `req.user`; tests `server/test/tracker-events.test.js`, `server/test/tracker-sleep.test.js` — server/routes/**, server/app.js, server/test/**
+- [x] L4: Note what now exists — `docs/project/current-state.md` — docs/project/current-state.md
 
 ## Technical Considerations
 - Backend / API: 7 routes under `/api/v1/tracker/`.
@@ -96,4 +96,6 @@ Screens, stats, export, the Firestore import.
 - none
 
 ## Execution Notes
-- none yet
+- Domain tests 22 pass, route tests 17 pass.
+- behaviour: POST and PUT accept and ignore id and loggedBy in the body (the session decides); any other unknown field is 400. Reverse: reject them too.
+- behaviour: POST /clear requires before (YYYY-MM-DD); there is no clear-all. Reverse: allow an empty body.
