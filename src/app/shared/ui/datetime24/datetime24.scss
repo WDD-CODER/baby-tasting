@@ -16,17 +16,56 @@
     gap: var(--space-2);
   }
 
-  &__fine {
+  &__typed-row {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2);
+    justify-content: flex-start;
+  }
 
-    padding: var(--space-2);
+  &__typed {
+    inline-size: 100%;
+    max-inline-size: 12rem;
+    min-block-size: var(--touch-target);
+
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.1em;
+    text-align: center;
+
+    padding-block: var(--space-2);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-card);
 
-    background: var(--color-canvas);
+    background: var(--color-surface-raised);
+
+    &--bad {
+      border-color: var(--color-tier-bad);
+    }
+  }
+
+  &__error {
+    margin: 0;
+
+    color: var(--color-tier-bad);
+    font-size: var(--fs-sm);
+  }
+
+  &__link {
+    align-self: flex-start;
+
+    color: var(--color-accent);
+    font-family: inherit;
+    font-size: var(--fs-sm);
+    text-decoration: underline;
+    cursor: pointer;
+
+    min-block-size: var(--touch-target);
+    padding: 0;
+    border: 0;
+
+    background: transparent;
   }
 
   &__chip {
@@ -72,7 +111,6 @@
     z-index: 43;
   }
 
-  &__nudge,
   &__num {
     display: inline-flex;
     align-items: center;

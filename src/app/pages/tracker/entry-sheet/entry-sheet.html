@@ -420,7 +420,7 @@
                 [class.es__opt--on]="sleepMode() === 'TIMER'"
                 (click)="sleepMode.set('TIMER')"
               >
-                {{ s.sleepTimerMode }}
+                {{ openSleep() ? s.sleepFixMode : s.sleepTimerMode }}
               </button>
               <button
                 type="button"
@@ -433,48 +433,64 @@
             </div>
           }
 
-          @if (sleepMode() === 'TIMER') {
-            <p class="es__info">{{ openSleep() ? s.sleepOpenInfo : s.sleepTimerInfo }}</p>
+          @if (sleepMode() === 'TIMER' && openSleep()) {
+            <p class="es__info">{{ s.sleepFixInfo }}</p>
+            <div class="es__field">
+              <span class="es__label">{{ s.sleepStartTime }}</span>
+              <app-datetime24 [(value)]="fixStart" dateMode="none" />
+            </div>
+            <button
+              type="button"
+              class="es__submit"
+              [disabled]="submitting()"
+              (click)="saveFixStart()"
+            >
+              {{ s.sleepFixSave }}
+            </button>
+            <button
+              type="button"
+              class="es__opt"
+              [disabled]="submitting()"
+              (click)="endCurrentSleep()"
+            >
+              {{ s.sleepEndCurrent }}
+            </button>
+          } @else if (sleepMode() === 'TIMER') {
+            <p class="es__info">{{ s.sleepTimerInfo }}</p>
             <div class="es__field">
               <span class="es__label">{{ s.sleepStartTime }}</span>
               <app-datetime24 [(value)]="timestamp" />
             </div>
-            @if (openSleep()) {
-              <button
-                type="button"
-                class="es__submit"
-                [disabled]="submitting()"
-                (click)="endCurrentSleep()"
-              >
-                {{ s.sleepEndCurrent }}
-              </button>
-            } @else {
-              <div class="es__field">
-                <span class="es__label">{{ s.sleepLocationStart }}</span>
-                <div class="es__grid">
-                  @for (o of timerLocations; track o.value) {
-                    <button
-                      type="button"
-                      class="es__opt"
-                      [disabled]="submitting()"
-                      (click)="startSleep(o.value)"
-                    >
-                      {{ o.label }}
-                    </button>
-                  }
-                </div>
+            <div class="es__field">
+              <span class="es__label">{{ s.sleepLocationStart }}</span>
+              <div class="es__grid">
+                @for (o of timerLocations; track o.value) {
+                  <button
+                    type="button"
+                    class="es__opt"
+                    [disabled]="submitting()"
+                    (click)="startSleep(o.value)"
+                  >
+                    {{ o.label }}
+                  </button>
+                }
               </div>
-            }
+            </div>
           } @else {
             <p class="es__info">{{ s.sleepManualInfo }}</p>
             <div class="es__field">
               <span class="es__label">{{ s.sleepStartManual }}</span>
-              <app-datetime24 [(value)]="sleepStart" />
+              <app-datetime24
+                [(value)]="sleepStart"
+                [dateMode]="editingOpenSleep() ? 'none' : 'date'"
+              />
             </div>
-            <div class="es__field">
-              <span class="es__label">{{ s.sleepEndManual }}</span>
-              <app-datetime24 [(value)]="sleepEnd" />
-            </div>
+            @if (!editingOpenSleep()) {
+              <div class="es__field">
+                <span class="es__label">{{ s.sleepEndManual }}</span>
+                <app-datetime24 [(value)]="sleepEnd" />
+              </div>
+            }
             <div class="es__field">
               <span class="es__label">{{ s.sleepLocation }}</span>
               <div class="es__grid">

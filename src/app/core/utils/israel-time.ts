@@ -86,6 +86,18 @@ export function addWallMinutes(value: string, minutes: number): string {
   return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}T${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`
 }
 
+/**
+ * A time-only value (D-015-1): the latest moment with the value's HH:mm that is not after `now` — today, or yesterday
+ * when today's would be in the future. Returns `YYYY-MM-DDTHH:mm`; the value as given when it has no time.
+ */
+export function latestPastWall(value: string, now: number = Date.now()): string {
+  const time = /T(\d{2}:\d{2})$/.exec(value)?.[1]
+  if (!time) return value
+  const today = nowInIsrael(now)
+  const candidate = `${today.slice(0, 10)}T${time}`
+  return candidate > today ? addWallMinutes(candidate, -1440) : candidate
+}
+
 export function israelHour(ms: number): number {
   return israelParts(ms).hour
 }

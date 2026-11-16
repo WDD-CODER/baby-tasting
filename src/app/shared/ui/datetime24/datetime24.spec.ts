@@ -5,12 +5,13 @@ import {
   nowInIsrael,
   toIsraelString,
 } from '../../../core/utils/israel-time'
-import { DateTime24 } from './datetime24'
+import { DateTime24, DateMode, formatTyped, parseTyped } from './datetime24'
 
 describe('DateTime24', () => {
-  function setup(value = '') {
+  function setup(value = '', dateMode: DateMode = 'date') {
     const fixture = TestBed.createComponent(DateTime24)
     fixture.componentRef.setInput('value', value)
+    fixture.componentRef.setInput('dateMode', dateMode)
     fixture.detectChanges()
     const root = fixture.nativeElement as HTMLElement
     const byText = (label: string): HTMLButtonElement => {
@@ -25,7 +26,18 @@ describe('DateTime24', () => {
       if (!button) throw new Error(`no button labelled ${label}`)
       return button
     }
-    return { fixture, root, byText, byLabel }
+    const typedField = (): HTMLInputElement => {
+      const field = root.querySelector<HTMLInputElement>('input.dt__typed')
+      if (!field) throw new Error('no typed field')
+      return field
+    }
+    const type = (text: string): void => {
+      const field = typedField()
+      field.value = text
+      field.dispatchEvent(new Event('input'))
+      fixture.detectChanges()
+    }
+    return { fixture, root, byText, byLabel, typedField, type }
   }
 
   it('toIsraelString gives Asia/Jerusalem wall-clock time, summer and winter', () => {
@@ -40,23 +52,81 @@ describe('DateTime24', () => {
     expect(israelToIso('2026-07-05')).toBeNull()
   })
 
+  it('the typed field is numeric and comes first', () => {
+    const { root, typedField } = setup('2026-07-05T14:30')
+    expect(typedField().getAttribute('inputmode')).toBe('numeric')
+    expect(root.querySelector('input')).toBe(typedField())
+    expect(typedField().value).toBe('14:30')
+  })
+
+  it('typing 0730 gives 07:30 and keeps the date', () => {
+    const { fixture, typedField, type } = setup('2026-07-05T14:30')
+    type('0730')
+    expect(typedField().value).toBe('07:30')
+    expect(fixture.componentInstance.value()).toBe('2026-07-05T07:30')
+  })
+
+  it('typing 25:10 shows the error and keeps the value', () => {
+    const { fixture, root, type } = setup('2026-07-05T14:30')
+    type('25:10')
+    expect(root.querySelector('.dt__error')?.textContent).toContain('00:00')
+    expect(root.querySelector('input.dt__typed')?.getAttribute('aria-invalid')).toBe('true')
+    expect(fixture.componentInstance.value()).toBe('2026-07-05T14:30')
+    type('2359')
+    expect(root.querySelector('.dt__error')).toBeNull()
+    expect(fixture.componentInstance.value()).toBe('2026-07-05T23:59')
+  })
+
+  it('formatTyped inserts the colon; parseTyped accepts 00:00-23:59 only', () => {
+    expect(formatTyped('7')).toBe('7')
+    expect(formatTyped('073')).toBe('07:3')
+    expect(formatTyped('07:305')).toBe('07:30')
+    expect(parseTyped('0000')).toBe('00:00')
+    expect(parseTyped('23:59')).toBe('23:59')
+    expect(parseTyped('2400')).toBeNull()
+    expect(parseTyped('1260')).toBeNull()
+    expect(parseTyped('730')).toBeNull()
+  })
+
+  it('−15 from 10:05 gives 09:50, and the chips cross midnight', () => {
+    const { fixture, byText, byLabel } = setup('2026-07-05T10:05')
+    byText('−15').click()
+    expect(fixture.componentInstance.value()).toBe('2026-07-05T09:50')
+    byLabel('הפחת 30 דקות').click()
+    expect(fixture.componentInstance.value()).toBe('2026-07-05T09:20')
+    fixture.componentRef.setInput('value', '2026-07-06T00:03')
+    byText('−5').click()
+    expect(fixture.componentInstance.value()).toBe('2026-07-05T23:58')
+    expect(addWallMinutes('2026-07-05T23:58', 5)).toBe('2026-07-06T00:03')
+  })
+
   it('the Now chip sets the Israel wall-clock now', () => {
     const { fixture, byText } = setup('2020-01-01T00:00')
     byText('עכשיו').click()
     expect(fixture.componentInstance.value()).toBe(nowInIsrael())
   })
 
-  it('the nudge rolls the day over and "an hour ago" uses Israel now', () => {
-    const { fixture, byLabel, byText } = setup('2026-07-05T23:58')
-    expect(addWallMinutes('2026-07-05T23:58', 5)).toBe('2026-07-06T00:03')
-    byLabel('הוסף 5 דקות').click()
-    expect(fixture.componentInstance.value()).toBe('2026-07-06T00:03')
-    byText('לפני שעה').click()
-    expect(fixture.componentInstance.value()).toBe(addWallMinutes(nowInIsrael(), -60))
+  it("dateMode 'none' renders no date chips and no calendar", () => {
+    const { root } = setup('2026-07-05T14:30', 'none')
+    const labels = Array.from(root.querySelectorAll('button')).map((b) => b.textContent?.trim())
+    expect(labels).not.toContain('היום')
+    expect(labels).not.toContain('אתמול')
+    expect(root.querySelector('button[aria-label="בחר תאריך"]')).toBeNull()
+    expect(root.querySelector('.dt__preview')).toBeNull()
   })
 
-  it('picking an hour from the 24-hour list keeps the minutes', () => {
-    const { fixture, root, byLabel } = setup('2026-07-05T14:30')
+  it("dateMode 'date' shows the date chips", () => {
+    const { byText, byLabel } = setup('2026-07-05T14:30')
+    expect(byText('היום')).toBeTruthy()
+    expect(byText('אתמול')).toBeTruthy()
+    expect(byLabel('בחר תאריך')).toBeTruthy()
+  })
+
+  it('the list opens from בחירה מרשימה; picking an hour keeps the minutes', () => {
+    const { fixture, root, byText, byLabel } = setup('2026-07-05T14:30')
+    expect(root.querySelector('button[aria-label="שעה"]')).toBeNull()
+    byText('בחירה מרשימה').click()
+    fixture.detectChanges()
     byLabel('שעה').click()
     fixture.detectChanges()
     const options = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="option"]'))

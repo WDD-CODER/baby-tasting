@@ -32,8 +32,10 @@ import { DoubleSubmitService } from '../../../core/services/double-submit.servic
 import { ToastService } from '../../../core/services/toast.service'
 import { TrackerEventsService } from '../../../core/services/tracker-events.service'
 import { TrackerSettingsService } from '../../../core/services/tracker-settings.service'
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service'
 import {
   israelToIso,
+  latestPastWall,
   nowInIsrael,
   addWallMinutes,
   toIsraelString,
@@ -94,6 +96,7 @@ export class EntrySheet {
   private readonly guard = inject(DoubleSubmitService)
   private readonly toast = inject(ToastService)
   private readonly quick = inject(QuickLogService)
+  private readonly confirmDialog = inject(ConfirmDialogService)
 
   /** The sheet to show; null keeps it closed. */
   readonly type = input<SheetType | null>(null)
@@ -206,9 +209,16 @@ export class EntrySheet {
   protected readonly sleepStart = signal('')
   protected readonly sleepEnd = signal('')
   protected readonly sleepLocation = signal<SleepLocation>('CRIB')
+  /** D-015-1 mode 1: the new start of the open sleep (time only; the day is resolved on save). */
+  protected readonly fixStart = signal('')
 
   protected readonly activities = computed(() => this.settings.settings()?.customActivities ?? [])
   protected readonly openSleep = this.events.openSleep
+  /** Editing the sleep that is still running: its start is time only, like mode 1 (D-015-1). */
+  protected readonly editingOpenSleep = computed(() => {
+    const sleep = this.editing()?.sleep
+    return !!sleep && sleep.endAt === null
+  })
   protected readonly activeKind = computed<Kind | null>(() => {
     const event = this.editing()
     return event ? KIND_OF[event.eventType] : this.type()
@@ -283,6 +293,8 @@ export class EntrySheet {
     this.sleepStart.set(addWallMinutes(now, -60))
     this.sleepEnd.set(now)
     this.sleepLocation.set('CRIB')
+    const open = this.openSleep()?.sleep
+    this.fixStart.set(open ? toIsraelString(Date.parse(open.startAt)) : now)
   }
 
   /** Fills the form from an existing event: every field it has, with the form's defaults for the rest (spec-timeline-dashboards §4.1). */
@@ -360,13 +372,56 @@ export class EntrySheet {
       this.toast.show(this.t.duplicate, 'bad')
       return
     }
+    // D-015-1 mode 2: a past sleep recorded while another one runs asks whether to end the running one
+    const runningBefore = type === 'sleep' ? this.openSleep() : null
     this.submitting.set(true)
+    let saved = false
     try {
-      const saved = await this.events.create(built.body)
-      this.events.showUndo(saved.id, this.t.saved)
+      const created = await this.events.create(built.body)
+      this.events.showUndo(created.id, this.t.saved)
       this.closed.emit()
+      saved = true
     } catch (err) {
       this.toast.show(saveErrorText(err, this.t.saveFailed), 'bad')
+    } finally {
+      this.submitting.set(false)
+    }
+    if (saved && runningBefore) await this.askEndOrKeep()
+  }
+
+  /** `לסיים עכשיו` ends the running sleep now; `להשאיר פעילה` (the default focus) leaves it exactly as it was. */
+  private async askEndOrKeep(): Promise<void> {
+    const end = await this.confirmDialog.confirm({
+      title: this.t.sleepEndOrKeep,
+      confirmLabel: this.t.sleepEndNow,
+      cancelLabel: this.t.sleepKeepActive,
+    })
+    if (!end) return
+    try {
+      const res = await this.events.toggleSleep({})
+      if (res.action === 'end') this.quick.showSleepEnded(res.event)
+    } catch (err) {
+      this.toast.show(saveErrorText(err, this.t.sleepFailed), 'bad')
+    }
+  }
+
+  /** D-015-1 mode 1: moves the open sleep's start to the chosen time; the sleep stays open. */
+  async saveFixStart(): Promise<void> {
+    if (this.submitting()) return
+    const startAt = israelToIso(latestPastWall(this.fixStart()))
+    if (!startAt) return
+    this.submitting.set(true)
+    try {
+      await this.events.moveOpenSleepStart(startAt)
+      this.toast.show(this.t.sleepStartFixed, 'good')
+      this.closed.emit()
+    } catch (err) {
+      const code = (err as { code?: string }).code
+      const text =
+        code === 'start_in_future'
+          ? this.t.sleepStartInFuture
+          : saveErrorText(err, this.t.sleepFailed)
+      this.toast.show(text, 'bad')
     } finally {
       this.submitting.set(false)
     }
@@ -457,9 +512,9 @@ export class EntrySheet {
     await this.toggleSleep({ location, at: israelToIso(this.timestamp()) ?? undefined }, false)
   }
 
-  /** TIMER mode with a sleep already open: ends it at the chosen time (F9). */
+  /** Mode 1 with a sleep already open: ends it now (the time field there is the start, D-015-1). */
   async endCurrentSleep(): Promise<void> {
-    await this.toggleSleep({ at: israelToIso(this.timestamp()) ?? undefined }, true)
+    await this.toggleSleep({}, true)
   }
 
   protected setOffered(text: string): void {
@@ -598,9 +653,11 @@ export class EntrySheet {
           body: { eventType: 'VOMITING', timestamp, note, vomiting: { size: this.vomitSize() } },
         }
       case 'sleep': {
-        const startAt = israelToIso(this.sleepStart())
-        // an edited sleep that is still running keeps an empty end
+        // an edited sleep that is still running keeps an empty end; its start is time only (D-015-1)
         const running = this.editing() !== null && this.sleepEnd() === ''
+        const startAt = israelToIso(
+          this.editingOpenSleep() ? latestPastWall(this.sleepStart()) : this.sleepStart(),
+        )
         const endAt = running ? null : israelToIso(this.sleepEnd())
         if (!startAt || (!running && !endAt) || (endAt && Date.parse(endAt) < Date.parse(startAt)))
           return { error: this.t.sleepEndTimeBeforeStart }
