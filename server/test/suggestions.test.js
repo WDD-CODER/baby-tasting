@@ -68,7 +68,7 @@ test('preview proposes the introduction and queued foods and saves nothing', asy
   assert.equal(await calendarCount(agent), before)
 })
 
-test('accept saves exactly the chosen items as planned and refuses an allergen food outside meal 1', async () => {
+test('accept saves exactly the chosen items as planned; an allergen food outside meal 1 is accepted (D-015-4)', async () => {
   const { agent, plains, allergenFood } = await setup()
   const day = nextSunday()
   const before = await calendarCount(agent)
@@ -82,9 +82,9 @@ test('accept saves exactly the chosen items as planned and refuses an allergen f
     ],
   })
   assert.equal(res.status, 200)
-  assert.equal(res.body.created.length, 2)
+  assert.equal(res.body.created.length, 3)
   assert.ok(res.body.created.every((it) => it.status === 'planned'))
-  assert.deepEqual(res.body.rejected.map((r) => r.code), ['allergen_meal_1', 'duplicate_in_meal', 'invalid'])
-  assert.equal(await calendarCount(agent), before + 2)
+  assert.deepEqual(res.body.rejected.map((r) => r.code), ['duplicate_in_meal', 'invalid'])
+  assert.equal(await calendarCount(agent), before + 3)
   assert.equal((await agent.post('/api/v1/suggestions/accept').send({ items: 'x' })).status, 400)
 })

@@ -1,5 +1,5 @@
 // Creating a calendar item with every placement rule: shared by the calendar route and suggestion accept.
-import { checkDuplicate, checkPlacement, checkStatus } from '../domain/calendar-rules.js'
+import { checkDuplicate, checkStatus } from '../domain/calendar-rules.js'
 import { isRealDate } from '../domain/dates.js'
 import { isPlacementLocked } from '../domain/locks.js'
 import { HttpError } from './http-error.js'
@@ -21,7 +21,6 @@ export function parseDate(value) {
 
 export function refusal(code) {
   if (code === 'food_locked') return new HttpError(409, code, 'This food is locked after a reaction')
-  if (code === 'allergen_meal_1') return new HttpError(422, code, 'Allergen foods are given in meal 1')
   if (code === 'given_in_future') return new HttpError(422, code, 'A future date cannot be marked given')
   return new HttpError(409, code, 'This food is already in this meal')
 }
@@ -41,8 +40,6 @@ export async function createCalendarItem({ repos, householdId, babyId, user, inp
   const food = await repos.foods.findById(householdId, input.foodId)
   if (!food || food.archived) throw invalid('Unknown food')
   if (await isFoodLocked(repos, householdId, food)) throw refusal('food_locked')
-  const placement = checkPlacement({ food, meal })
-  if (placement) throw refusal(placement)
   const future = checkStatus({ status, date, today })
   if (future) throw refusal(future)
   const day = await repos.calendarItems.listForDay(householdId, date)

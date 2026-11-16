@@ -1,6 +1,33 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { checkOverlap, durationMinutes, isOpen, toggleSleep } from './sleep.js'
+import { checkOverlap, durationMinutes, isOpen, moveOpenSleepStart, toggleSleep } from './sleep.js'
+
+// D-015-1 mode 1: fix the open sleep's start.
+test('moving the open sleep start keeps it open and keeps its other fields', () => {
+  const open = { id: 'o', sleep: { startAt: '2026-07-04T10:00:00.000Z', endAt: null, startedBy: 'PARENT_A', startLocation: 'CRIB' } }
+  const r = moveOpenSleepStart({ open, startAt: '2026-07-04T09:40:00.000Z', now: '2026-07-04T10:30:00.000Z', others: [open] })
+  assert.deepEqual(r, { sleep: { startAt: '2026-07-04T09:40:00.000Z', endAt: null, startedBy: 'PARENT_A', startLocation: 'CRIB' } })
+})
+
+test('moving the open sleep start refuses a future start and an overlap with an earlier sleep', () => {
+  const open = { id: 'o', sleep: { startAt: '2026-07-04T10:00:00.000Z', endAt: null } }
+  const earlier = { id: 'e', sleep: { startAt: '2026-07-04T08:00:00.000Z', endAt: '2026-07-04T09:00:00.000Z' } }
+  const now = '2026-07-04T10:30:00.000Z'
+  assert.deepEqual(moveOpenSleepStart({ open, startAt: '2026-07-04T10:31:00.000Z', now, others: [open, earlier] }), {
+    error: 'start_in_future',
+  })
+  assert.deepEqual(moveOpenSleepStart({ open, startAt: '2026-07-04T08:30:00.000Z', now, others: [open, earlier] }), {
+    error: 'sleep_overlap',
+  })
+  assert.ok(moveOpenSleepStart({ open, startAt: '2026-07-04T09:00:00.000Z', now, others: [open, earlier] }).sleep)
+  assert.deepEqual(moveOpenSleepStart({ open: null, startAt: now, now }), { error: 'no_open_sleep' })
+})
+
+test('a recorded past sleep that overlaps the open sleep is refused; one that ends before its start is fine', () => {
+  const open = [{ id: 'o', sleep: { startAt: '2026-07-04T10:00:00.000Z', endAt: null } }]
+  assert.equal(checkOverlap(open, { startAt: '2026-07-04T09:00:00.000Z', endAt: '2026-07-04T10:10:00.000Z' }).overlaps, true)
+  assert.equal(checkOverlap(open, { startAt: '2026-07-04T08:00:00.000Z', endAt: '2026-07-04T09:00:00.000Z' }).overlaps, false)
+})
 
 test('durationMinutes rounds and is at least 1', () => {
   assert.equal(durationMinutes('2026-07-04T10:00:00.000Z', '2026-07-04T10:45:00.000Z'), 45)

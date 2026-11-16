@@ -22,6 +22,8 @@ export interface NutritionStats {
     breastMinutes: number
     bottleMl: number
     rangeDays: number
+    /** D-015-2: the days the averages divide by (first day with any event to the end of the range, capped at today). */
+    daysWithData: number
     feedsPerDay: number
   }
 }
@@ -48,6 +50,8 @@ export interface SleepStats {
     totalMinutes: number
     sessionCount: number
     rangeDays: number
+    /** D-015-2: the days the averages divide by (first day with any event to the end of the range, capped at today). */
+    daysWithData: number
     hoursPerDay: number
     locations: Record<SleepLocation, number>
   }
@@ -69,6 +73,8 @@ export interface DiaperStats {
     both: number
     total: number
     rangeDays: number
+    /** D-015-2: the days the averages divide by (first day with any event to the end of the range, capped at today). */
+    daysWithData: number
     perDay: number
   }
 }
@@ -87,6 +93,9 @@ export interface WeightStats {
     latestPercentile: number | null
     latestDate: string | null
     changeGrams: number
+    rangeDays: number
+    /** D-015-2: the days the averages divide by (first day with any event to the end of the range, capped at today). */
+    daysWithData: number
   }
 }
 
@@ -98,6 +107,8 @@ export interface PumpingStats {
     totalMl: number
     sessionCount: number
     rangeDays: number
+    /** D-015-2: the days the averages divide by (first day with any event to the end of the range, capped at today). */
+    daysWithData: number
     avgMlPerDay: number
     todayMl: number
   }
@@ -111,6 +122,8 @@ export interface VomitingStats {
     large: number
     total: number
     rangeDays: number
+    /** D-015-2: the days the averages divide by (first day with any event to the end of the range, capped at today). */
+    daysWithData: number
     perDay: number
   }
 }

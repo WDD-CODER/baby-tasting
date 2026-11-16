@@ -132,6 +132,9 @@ export function createTrackerEventsRouter({ repos }) {
       if (type === 'SLEEP') {
         if (body.sleep !== undefined) {
           const sleep = buildSleep(body.sleep, existing.sleep, req.user.parentType)
+          if (sleep.endAt === null && Date.parse(sleep.startAt) > Date.now()) {
+            throw new HttpError(400, 'start_in_future', 'The start of an open sleep cannot be in the future')
+          }
           await assertSleepFits(repos, req.householdId, sleep, String(existing._id))
           set.sleep = sleep
           set.timestamp = sleep.startAt

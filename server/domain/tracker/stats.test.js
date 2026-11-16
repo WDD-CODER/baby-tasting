@@ -34,7 +34,7 @@ test('nutrition: counts, sums and the 15-minute default for a breast feed withou
   })
   assert.equal(s.days[1].breastMinutes, 25)
   assert.deepEqual(s.totals, {
-    feedsCount: 4, breastCount: 2, bottleCount: 2, breastMinutes: 25, bottleMl: 150, rangeDays: 2, feedsPerDay: 2,
+    feedsCount: 4, breastCount: 2, bottleCount: 2, breastMinutes: 25, bottleMl: 150, rangeDays: 2, daysWithData: 2, feedsPerDay: 2,
   })
 })
 
@@ -69,7 +69,7 @@ test('diapers: exclusive counters and de-duplicated colours', () => {
   assert.deepEqual(s.days, [
     { date: '2026-06-10', pee: 1, poo: 1, both: 1, total: 3, pooColors: ['GREEN'], pooTextures: ['SEEDY', 'LIQUID'] },
   ])
-  assert.deepEqual(s.totals, { pee: 1, poo: 1, both: 1, total: 3, rangeDays: 2, perDay: 1.5 })
+  assert.deepEqual(s.totals, { pee: 1, poo: 1, both: 1, total: 3, rangeDays: 2, daysWithData: 2, perDay: 1.5 })
 })
 
 test('weight: one row per weigh-in, oldest first, with the change', () => {
@@ -82,7 +82,9 @@ test('weight: one row per weigh-in, oldest first, with the change', () => {
     ['w1', '2026-06-10', 5200, undefined],
     ['w2', '2026-06-11', 5300, 40],
   ])
-  assert.deepEqual(s.totals, { count: 2, latestGrams: 5300, latestPercentile: 40, latestDate: '2026-06-11', changeGrams: 100 })
+  assert.deepEqual(s.totals, {
+    count: 2, latestGrams: 5300, latestPercentile: 40, latestDate: '2026-06-11', changeGrams: 100, rangeDays: 2, daysWithData: 2,
+  })
 })
 
 test('pumping: per side, rounded average and the total of the day of now', () => {
@@ -92,7 +94,7 @@ test('pumping: per side, rounded average and the total of the day of now', () =>
   ]
   const s = pumpingStats(events, { ...R, now: '2026-06-11T12:00:00.000Z' })
   assert.deepEqual(s.totals, {
-    leftMl: 90, rightMl: 81, totalMl: 171, sessionCount: 2, rangeDays: 2, avgMlPerDay: 86, todayMl: 61,
+    leftMl: 90, rightMl: 81, totalMl: 171, sessionCount: 2, rangeDays: 2, daysWithData: 2, avgMlPerDay: 86, todayMl: 61,
   })
   assert.equal(s.days[0].totalMl, 110)
 })
@@ -104,7 +106,7 @@ test('vomiting: sizes, a missing size counts as medium', () => {
     ev('VOMITING', '2026-06-11T09:00:00.000Z', { vomiting: { size: 'LARGE' } }),
   ]
   const s = vomitingStats(events, R)
-  assert.deepEqual(s.totals, { small: 1, medium: 1, large: 1, total: 3, rangeDays: 2, perDay: 1.5 })
+  assert.deepEqual(s.totals, { small: 1, medium: 1, large: 1, total: 3, rangeDays: 2, daysWithData: 2, perDay: 1.5 })
   assert.deepEqual(s.days[0], { date: '2026-06-10', small: 1, medium: 1, large: 0, total: 2 })
 })
 
@@ -113,7 +115,9 @@ test('empty range: no events gives empty lists and zero totals', () => {
   assert.equal(nutritionStats([], R).totals.feedsCount, 0)
   assert.deepEqual(diaperStats([], R).days, [])
   assert.deepEqual(weightStats([], R).entries, [])
-  assert.deepEqual(weightStats([], R).totals, { count: 0, latestGrams: null, latestPercentile: null, latestDate: null, changeGrams: 0 })
+  assert.deepEqual(weightStats([], R).totals, {
+    count: 0, latestGrams: null, latestPercentile: null, latestDate: null, changeGrams: 0, rangeDays: 2, daysWithData: 0,
+  })
   assert.equal(pumpingStats([], R).totals.avgMlPerDay, 0)
   assert.equal(vomitingStats([], R).totals.total, 0)
   const sleep = sleepStats([], R)
@@ -148,4 +152,68 @@ test('a DST-switch day: Israel moves clocks on 2026-03-27, the baby days still c
   const s = diaperStats(events, { from: '2026-03-25', to: '2026-03-27', dayStartHour: 6 })
   assert.deepEqual(s.days.map((d) => [d.date, d.total]), [['2026-03-25', 1], ['2026-03-26', 2], ['2026-03-27', 2]])
   assert.equal(s.totals.rangeDays, 3)
+})
+
+// D-015-2: averages over the days with data, not over the length of the range.
+test('averages with data only today give the same value for ranges 1, 3, 7 and 14, with daysWithData 1', () => {
+  const now = '2026-06-20T12:00:00.000Z'
+  const events = [
+    ev('NUTRITION', '2026-06-20T05:00:00.000Z', { nutrition: { feedType: 'BREAST', durationMinutes: 10 } }),
+    ev('NUTRITION', '2026-06-20T08:00:00.000Z', { nutrition: { feedType: 'BREAST', durationMinutes: 10 } }),
+    ev('DIAPER', '2026-06-20T09:00:00.000Z', { diaper: { contains: 'PEE' } }),
+    ev('PUMPING', '2026-06-20T09:00:00.000Z', { pumping: { leftAmountMl: 40, rightAmountMl: 20 } }),
+    ev('VOMITING', '2026-06-20T09:00:00.000Z', { vomiting: { size: 'SMALL' } }),
+    ev('SLEEP', '2026-06-20T06:00:00.000Z', {
+      sleep: { startAt: '2026-06-20T06:00:00.000Z', endAt: '2026-06-20T08:00:00.000Z', durationMinutes: 120 },
+    }),
+  ]
+  const shift = (n) => new Date(Date.UTC(2026, 5, 20 - n)).toISOString().slice(0, 10)
+  for (const range of [1, 3, 7, 14]) {
+    const opts = { from: shift(range - 1), to: '2026-06-20', dayStartHour: 6, now }
+    const n = nutritionStats(events, opts).totals
+    assert.equal(n.rangeDays, range)
+    assert.equal(n.daysWithData, 1, 'range ' + range)
+    assert.equal(n.feedsPerDay, 2, 'range ' + range)
+    assert.equal(sleepStats(events, opts).totals.hoursPerDay, 2)
+    assert.equal(sleepStats(events, opts).days.length, range, 'one bar per day of the range')
+    assert.equal(diaperStats(events, opts).totals.perDay, 1)
+    assert.equal(pumpingStats(events, opts).totals.avgMlPerDay, 60)
+    assert.equal(vomitingStats(events, opts).totals.perDay, 1)
+    assert.equal(weightStats(events, opts).totals.daysWithData, 1)
+  }
+})
+
+test('the first event of any type starts the count, and a gap day inside the data counts', () => {
+  const now = '2026-06-20T12:00:00.000Z'
+  const opts = { from: '2026-06-14', to: '2026-06-20', dayStartHour: 6, now }
+  const events = [
+    ev('DIAPER', '2026-06-18T08:00:00.000Z', { diaper: { contains: 'PEE' } }),
+    // 06-19 has nothing: it still counts.
+    ev('NUTRITION', '2026-06-20T08:00:00.000Z', { nutrition: { feedType: 'BREAST' } }),
+    ev('NUTRITION', '2026-06-20T09:00:00.000Z', { nutrition: { feedType: 'BREAST' } }),
+    ev('NUTRITION', '2026-06-20T10:00:00.000Z', { nutrition: { feedType: 'BREAST' } }),
+  ]
+  const n = nutritionStats(events, opts).totals
+  assert.equal(n.daysWithData, 3)
+  assert.equal(n.feedsPerDay, 1)
+  // The repository value wins over the events passed in.
+  assert.equal(nutritionStats(events, { ...opts, firstEventAt: '2026-06-17T08:00:00.000Z' }).totals.daysWithData, 4)
+  assert.equal(nutritionStats(events, { ...opts, firstEventAt: null }).totals.daysWithData, 0)
+})
+
+test('the last day is capped at the day of now', () => {
+  const events = [ev('DIAPER', '2026-06-18T08:00:00.000Z', { diaper: { contains: 'PEE' } })]
+  const opts = { from: '2026-06-14', to: '2026-06-24', dayStartHour: 6, now: '2026-06-19T12:00:00.000Z' }
+  assert.equal(diaperStats(events, opts).totals.daysWithData, 2)
+  assert.equal(diaperStats(events, opts).totals.perDay, 0.5)
+})
+
+test('an empty range gives 0 averages and daysWithData 0', () => {
+  const opts = { from: '2026-06-14', to: '2026-06-20', dayStartHour: 6, now: '2026-06-20T12:00:00.000Z' }
+  for (const f of [nutritionStats, sleepStats, diaperStats, pumpingStats, vomitingStats]) {
+    const t = f([], opts).totals
+    assert.equal(t.daysWithData, 0)
+    assert.equal(t.rangeDays, 7)
+    for (const k of ['feedsPerDay', 'hoursPerDay', 'perDay', 'avgMlPerDay']) if (k in t) assert.equal(t[k], 0)
+  }
 })
