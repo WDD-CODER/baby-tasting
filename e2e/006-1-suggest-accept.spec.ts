@@ -12,7 +12,7 @@ test('006-1: suggest a week and accept all turns the dashed tiles into planned o
   await signIn(page)
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(8) })
   await seedSuggestionWeek(page)
-  await page.goto('/')
+  await page.goto('/tasting')
   await page.getByRole('button', { name: 'הצע לי שבוע' }).click()
   const today = todayIso()
   for (const offset of [1, 2]) {

@@ -1,5 +1,7 @@
 <div class="empty">
   <span class="empty__icon" aria-hidden="true">{{ icon() }}</span>
   <p class="empty__title">{{ title() }}</p>
-  <app-button variant="secondary" (pressed)="action.emit()">{{ actionLabel() }}</app-button>
+  @if (actionLabel()) {
+    <app-button variant="secondary" (pressed)="action.emit()">{{ actionLabel() }}</app-button>
+  }
 </div>

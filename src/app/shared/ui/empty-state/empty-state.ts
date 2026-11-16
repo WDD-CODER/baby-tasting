@@ -11,6 +11,7 @@ import { Button } from '../button/button'
 export class EmptyState {
   readonly icon = input('🌱')
   readonly title = input.required<string>()
-  readonly actionLabel = input.required<string>()
+  /** Empty: no button. */
+  readonly actionLabel = input('')
   readonly action = output<void>()
 }

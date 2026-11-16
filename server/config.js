@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url'
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
 export class ConfigError extends Error {
-  constructor(missing) {
-    super(`Missing environment variables: ${missing.join(', ')}`)
+  constructor(missing, message) {
+    super(message ?? `Missing environment variables: ${missing.join(', ')}`)
     this.name = 'ConfigError'
     this.missing = missing
   }
@@ -16,6 +16,23 @@ function list(value) {
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
+}
+
+// APP_USERS is "name:bcryptHash,name:bcryptHash" (a bcrypt hash holds no ':' or ',').
+// The first entry is PARENT_A, the second PARENT_B.
+export function parseAppUsers(value) {
+  return list(value).map((entry) => {
+    const at = entry.indexOf(':')
+    const username = (at === -1 ? entry : entry.slice(0, at)).trim()
+    const hash = at === -1 ? '' : entry.slice(at + 1).trim()
+    if (!username || !hash) {
+      throw new ConfigError(
+        ['APP_USERS'],
+        `APP_USERS entry "${username}" has no password hash: write it as name:bcryptHash (see server/.env.example)`,
+      )
+    }
+    return { username, hash }
+  })
 }
 
 export function loadConfig(env = process.env) {
@@ -39,7 +56,7 @@ export function loadConfig(env = process.env) {
     nodeEnv,
     mongodbUri: env.MONGODB_URI,
     sessionSecret: env.SESSION_SECRET ?? '',
-    appUsers: list(env.APP_USERS),
+    appUsers: parseAppUsers(env.APP_USERS),
     allowedOrigins: list(env.ALLOWED_ORIGIN),
     staticDir: env.STATIC_DIR || path.join(repoRoot, 'dist', 'baby-tasting', 'browser'),
     cloudinary,

@@ -33,7 +33,11 @@ export class BabyService {
     return this.baby_()
   }
 
-  async save(input: { name: string; birthDate: string }): Promise<Baby> {
+  async save(input: {
+    name: string
+    birthDate: string
+    birthWeightGrams?: number | null
+  }): Promise<Baby> {
     const res = await firstValueFrom(this.api.put<BabyResponse>('/baby', input))
     this.set(res.baby)
     this.loaded_ = true

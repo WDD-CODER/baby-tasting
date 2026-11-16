@@ -1,0 +1,9 @@
+<div class="log">
+  <app-log-banners (logPumping)="open('pumping')" (endSleep)="open('sleep')" />
+  <app-today-carousel [events]="day()" [now]="now()" />
+  <app-quick-grid [bathActive]="bathActive()" (openSheet)="open($event)" />
+  <app-diaper-tracker [events]="day()" />
+  <app-pumping-tracker [events]="day()" (add)="open('pumping')" />
+  <app-bio-gaya-card [events]="day()" />
+  <app-entry-sheet [type]="sheet()" (closed)="close()" />
+</div>

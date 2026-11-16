@@ -79,7 +79,7 @@ export class FoodDetail {
   }
 
   protected addToCalendar(): void {
-    void this.router.navigate(['/'], { queryParams: { add: this.id } })
+    void this.router.navigate(['/tasting'], { queryParams: { add: this.id } })
   }
 
   protected async toggleQueue(): Promise<void> {

@@ -1,0 +1,130 @@
+:host {
+  display: contents;
+}
+
+.banners {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.banner {
+  --banner-color: var(--color-border);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  padding: var(--space-3);
+  border: 1px solid var(--banner-color);
+  border-radius: var(--radius-card);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+
+  &--urgent {
+    --banner-color: var(--color-tier-bad);
+  }
+
+  &--asleep {
+    --banner-color: var(--color-event-supplement);
+  }
+
+  &--pump {
+    --banner-color: var(--color-event-pumping);
+  }
+
+  &--long {
+    --banner-color: var(--color-event-activity);
+  }
+
+  &--nap {
+    --banner-color: var(--color-nap-window);
+  }
+
+  &__text {
+    flex: 1;
+  }
+
+  &__btn,
+  &__x {
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-2);
+    border: 1px solid var(--banner-color);
+    border-radius: var(--radius-pill);
+
+    background: transparent;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: var(--fs-xs);
+    cursor: pointer;
+  }
+
+  &__x {
+    min-inline-size: var(--touch-target);
+    border: 0;
+  }
+}
+
+.pills {
+  position: fixed;
+  inset-inline: var(--space-4);
+  inset-block-end: calc(72px + var(--space-2) + env(safe-area-inset-bottom));
+  z-index: 30;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-2);
+
+  pointer-events: none;
+}
+
+.pill {
+  --pill-color: var(--color-event-supplement);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  min-block-size: var(--touch-target);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--pill-color);
+  border-radius: var(--radius-pill);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  pointer-events: auto;
+
+  &--sleep {
+    --pill-color: var(--color-event-sleep);
+  }
+
+  &--nap {
+    --pill-color: var(--color-event-sleep-great);
+
+    cursor: pointer;
+  }
+
+  &--bath {
+    --pill-color: var(--color-awake-bath);
+
+    cursor: pointer;
+  }
+
+  &__give {
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-3);
+    border: 0;
+    border-radius: var(--radius-pill);
+
+    background: var(--pill-color);
+    color: var(--color-on-accent);
+    font-family: inherit;
+    font-weight: var(--fw-bold);
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,26 @@
+<section class="icons">
+  <a class="icons__back" routerLink="/settings">‹ {{ backLabel }}</a>
+  <h2 class="icons__title">{{ t.title }}</h2>
+  <p class="icons__text">{{ t.intro }}</p>
+  @for (group of groups; track group.name) {
+    <app-card>
+      <h3 class="icons__group">{{ group.name }}</h3>
+      <ul class="icons__list">
+        @for (slot of group.slots; track slot.key) {
+          <li>
+            <button
+              type="button"
+              class="icons__row"
+              [attr.data-slot]="slot.key"
+              (click)="picking_.set(slot.key)"
+            >
+              <app-icon [slot]="slot.key" [size]="24" />
+              <span>{{ slot.label }}</span>
+            </button>
+          </li>
+        }
+      </ul>
+    </app-card>
+  }
+  <app-icon-picker-sheet [slot]="picking_()" (closed)="picking_.set(null)" />
+</section>

@@ -13,7 +13,7 @@ test('005-2: tapping the alert opens the add-food sheet with טחינה preselec
   const today = todayIso()
   await giveFood(page, 'טחינה', addDaysIso(today, -3))
   await giveFood(page, 'טחינה', addDaysIso(today, -1))
-  await page.goto('/')
+  await page.goto('/tasting')
   await page.getByText('חסר יום ברצף — כדאי לתת היום שומשום').click()
   const suggested = page.locator('.food--preselected')
   await expect(suggested).toContainText('טחינה')

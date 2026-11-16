@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+.export {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+  }
+
+  &__text {
+    margin: 0;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
+  &__dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  &__presets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+}

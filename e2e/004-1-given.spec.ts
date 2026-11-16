@@ -19,6 +19,6 @@ test('004-1: banana in meal 2 marked given with a taste shows ✓, and /foods sh
   await page.getByRole('button', { name: 'סגירה' }).click()
   await expect(cell(page, today, 2).locator('.tile--given')).toContainText('✓')
   await page.screenshot({ path: 'e2e/screens/004-1.png' })
-  await page.goto('/foods')
+  await page.goto('/tasting/foods')
   await expect(page.getByRole('link', { name: /בננה/ })).toContainText('נוסה · 1')
 })

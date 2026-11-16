@@ -1,0 +1,183 @@
+<section class="st">
+  <header class="st__head">
+    <h2 class="st__title">{{ t.title }}</h2>
+    <div class="st__filter" role="group" [attr.aria-label]="t.rangeLabel">
+      @for (d of ranges; track d) {
+        <button
+          type="button"
+          class="st__pill"
+          [class.st__pill--on]="days() === d"
+          [attr.aria-pressed]="days() === d"
+          (click)="days.set(d)"
+        >
+          {{ label(d) }}
+        </button>
+      }
+    </div>
+  </header>
+
+  @if (!loaded()) {
+    <p class="st__loading" role="status">{{ t.loading }}</p>
+  } @else {
+    @for (s of sections(); track s.key) {
+      <section class="st__card" [style.--st-color]="s.color" [attr.data-testid]="'stats-' + s.key">
+        <div class="st__cardHead">
+          <div class="st__cardTitle">
+            <h3>{{ s.title }}</h3>
+            <button type="button" class="st__toggle" (click)="toggle(s.key)">
+              {{ expanded()[s.key] ? t.collapse : t.expand }}
+            </button>
+          </div>
+          <span class="st__summary">{{ s.summary }}</span>
+        </div>
+
+        @if (!expanded()[s.key]) {
+          <div class="st__body">
+            <div
+              class="st__tiles"
+              [class.st__tiles--four]="s.tiles.length === 4"
+              [class.st__tiles--two]="s.tiles.length === 2"
+            >
+              @for (tile of s.tiles; track tile.label) {
+                <div class="st__tile">
+                  <span class="st__tileLabel">{{ tile.label }}</span>
+                  <strong class="st__tileValue">{{ tile.value }}</strong>
+                </div>
+              }
+            </div>
+            @if (s.split.length) {
+              <app-split-bar [segments]="s.split" />
+            }
+            @if (s.key === 'sleep' && s.chips.length) {
+              <span class="st__tileLabel">{{ s.note }}</span>
+              <div class="st__chips">
+                @for (c of s.chips; track c) {
+                  <span class="st__chip">{{ c }}</span>
+                }
+              </div>
+            } @else if (s.key === 'weight' && s.note) {
+              <div class="st__percentile">
+                <span>{{ t.weight.percentileNow }}</span>
+                <strong>{{ s.note }}</strong>
+              </div>
+            }
+            <div class="st__footer">
+              <span class="st__latest">
+                <span class="st__muted">{{ s.footerLabel }}</span>
+                @if (s.footer) {
+                  <strong>{{ s.footer }}</strong>
+                } @else {
+                  <span class="st__muted">
+                    {{
+                      s.key === 'sleep'
+                        ? t.sleep.noneBefore
+                        : s.key === 'vomiting'
+                          ? t.vomiting.none
+                          : t.noData
+                    }}
+                  </span>
+                }
+              </span>
+              <button type="button" class="st__cta" (click)="expand(s.key)">{{ s.cta }}</button>
+            </div>
+          </div>
+        } @else {
+          <div class="st__body st__body--open">
+            @switch (s.key) {
+              @case ('sleep') {
+                @if (!hasSleep()) {
+                  <p class="st__empty">{{ t.noPeriodData }}</p>
+                } @else {
+                  <app-bar-chart
+                    [rows]="sleepRows()"
+                    [target]="sleepTarget"
+                    color="var(--color-event-sleep)"
+                  />
+                  <div class="st__sequence">
+                    <div class="st__sequenceHead">
+                      <h4>{{ t.sleep.sequenceTitle }}</h4>
+                      <span class="st__muted">{{ t.sleep.sequenceHint }}</span>
+                    </div>
+                    @for (day of sleepSequence(); track day.date) {
+                      <div class="st__seqDay">
+                        <span class="st__dayPill">{{ day.date }}</span>
+                        <app-sequence-bar [items]="day.items" (pressed)="editSleep($event)" />
+                      </div>
+                    }
+                  </div>
+                }
+              }
+              @case ('weight') {
+                @if (weightRows().length === 0) {
+                  <p class="st__empty">{{ t.weight.empty }}</p>
+                } @else {
+                  <div class="st__list">
+                    @for (r of weightRows(); track r.id) {
+                      <div class="st__weightRow" data-testid="weight-row">
+                        <span>⚖️ {{ r.date }}</span>
+                        <span>
+                          <strong>{{ r.kg }}</strong>
+                          @if (r.percentile) {
+                            <small class="st__badge">{{ r.percentile }}</small>
+                          }
+                        </span>
+                      </div>
+                    }
+                  </div>
+                }
+              }
+              @default {
+                @let list = groupsOf(s.key);
+                @if (list.length === 0) {
+                  <p class="st__empty">
+                    {{ s.key === 'vomiting' ? t.vomiting.emptyRange : t.noPeriodData }}
+                  </p>
+                } @else {
+                  <div class="st__list">
+                    @for (g of list; track g.key) {
+                      <div class="st__day">
+                        <div class="st__dayHead">
+                          <span class="st__dayPill">{{ g.label }}</span>
+                          @if (g.summary) {
+                            <span class="st__daySummary">{{ g.summary }}</span>
+                          }
+                        </div>
+                        <div class="st__cards">
+                          @for (c of g.cards; track c.event.id) {
+                            <button
+                              type="button"
+                              [class]="'st__event st__event--' + c.tone"
+                              data-testid="stats-event"
+                              (click)="edit(c.event)"
+                            >
+                              <span class="st__eventTop">
+                                <span aria-hidden="true">{{ c.icon }}</span>
+                                <span class="st__time">{{ c.time }}</span>
+                              </span>
+                              <strong>{{ c.title }}</strong>
+                              @if (c.details) {
+                                <small>{{ c.details }}</small>
+                              }
+                              @if (c.extra) {
+                                <small class="st__extra">{{ c.extra }}</small>
+                              }
+                              @if (c.warn) {
+                                <small class="st__warn">{{ c.warn }}</small>
+                              }
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              }
+            }
+          </div>
+        }
+      </section>
+    }
+  }
+</section>
+
+<app-edit-sheet />

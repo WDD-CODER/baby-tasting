@@ -1,0 +1,13 @@
+@if (level(); as lvl) {
+  <section [class]="'awake awake--' + lvl" aria-live="polite">
+    <span class="awake__emoji" aria-hidden="true">{{ emoji() }}</span>
+    <div class="awake__text">
+      <small class="awake__label">{{ t.awakeTracking }}</small>
+      <strong class="awake__heading">{{ heading() }}</strong>
+    </div>
+    <div class="awake__time">
+      <small class="awake__label">{{ t.awakeDuration }}</small>
+      <strong>{{ duration() }}</strong>
+    </div>
+  </section>
+}

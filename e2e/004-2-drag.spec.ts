@@ -15,6 +15,8 @@ test('004-2: dragging an item from meal 2 of today to meal 3 of tomorrow survive
   const tomorrow = addDaysIso(today, 1)
   await addFood(page, today, 2, 'בננה')
   await expect(cell(page, today, 2).locator('.tile')).toBeVisible()
+  // the fixed bottom navigation covers the lowest rows: scroll them clear first
+  await page.evaluate(() => window.scrollBy(0, 300))
   await dragTo(page, cell(page, today, 2).locator('.tile'), cell(page, tomorrow, 3))
   await expect(cell(page, tomorrow, 3).locator('.tile')).toBeVisible()
   await page.reload()

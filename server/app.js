@@ -26,12 +26,17 @@ import { createUsersRouter } from './routes/users.js'
 import { createSettingsRouter } from './routes/settings.js'
 import { createSuggestionsRouter } from './routes/suggestions.js'
 import { createTestResetRouter } from './routes/test-reset.js'
+import { createTrackerExportRouter } from './routes/tracker-export.js'
+import { createTrackerEventsRouter } from './routes/tracker-events.js'
+import { createTrackerSettingsRouter } from './routes/tracker-settings.js'
+import { createTrackerSleepRouter } from './routes/tracker-sleep.js'
+import { createTrackerStatsRouter } from './routes/tracker-stats.js'
 
 export function createApp({ config, db, photoStore = createPhotoStore(config.cloudinary ?? null) }) {
   const app = express()
   const repos = createRepos(db)
-  const requireAuth = createRequireAuth({ repos })
   const authConfig = { ...config, appUsers: config.appUsers ?? [] }
+  const requireAuth = createRequireAuth({ repos, config: authConfig })
   createIndexes(db).catch((err) => console.error('index creation failed', err))
 
   if (config.nodeEnv === 'production') app.set('trust proxy', 1)
@@ -74,6 +79,11 @@ export function createApp({ config, db, photoStore = createPhotoStore(config.clo
   app.use('/api/v1/activity', requireAuth, createActivityRouter({ repos }))
   app.use('/api/v1/users', requireAuth, createUsersRouter({ repos }))
   app.use('/api/v1/settings', requireAuth, createSettingsRouter({ repos }))
+  app.use('/api/v1/tracker/settings', requireAuth, createTrackerSettingsRouter({ repos }))
+  app.use('/api/v1/tracker/events', requireAuth, createTrackerEventsRouter({ repos }))
+  app.use('/api/v1/tracker/export', requireAuth, createTrackerExportRouter({ repos }))
+  app.use('/api/v1/tracker/sleep', requireAuth, createTrackerSleepRouter({ repos }))
+  app.use('/api/v1/tracker/stats', requireAuth, createTrackerStatsRouter({ repos }))
   app.use('/api/v1/allergens', requireAuth, catalogContext, createAllergensRouter({ repos }))
   app.use('/api/v1/foods', requireAuth, catalogContext, createFoodsRouter({ repos }))
   app.use('/api/v1/calendar', requireAuth, catalogContext, createCalendarRouter({ repos }))
@@ -82,6 +92,11 @@ export function createApp({ config, db, photoStore = createPhotoStore(config.clo
   app.use('/api/v1/reactions', requireAuth, catalogContext, createReactionsRouter({ repos, photoStore }))
   app.use('/api', notFound)
 
+  // the service worker files must always be revalidated, or an update never reaches the phone
+  app.use(['/ngsw-worker.js', '/ngsw.json', '/safety-worker.js', '/worker-basic.min.js'], (_req, res, next) => {
+    res.setHeader('Cache-Control', 'no-cache')
+    next()
+  })
   app.use(express.static(config.staticDir))
   app.get(/^(?!\/api(\/|$)).*/, (_req, res) => {
     res.sendFile(path.join(config.staticDir, 'index.html'))

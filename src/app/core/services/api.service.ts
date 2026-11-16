@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { Observable, catchError, throwError } from 'rxjs'
 import { environment } from '../../../environments/environment'
@@ -44,6 +44,17 @@ export class ApiService {
 
   delete<T>(path: string): Observable<T> {
     return this.wrap(this.http.delete<T>(this.base + path, { withCredentials: true }))
+  }
+
+  /** A file download: the whole response, so the caller can read the file name header. */
+  getBlob(path: string): Observable<HttpResponse<Blob>> {
+    return this.wrap(
+      this.http.get(this.base + path, {
+        withCredentials: true,
+        observe: 'response',
+        responseType: 'blob',
+      }),
+    )
   }
 
   private wrap<T>(source: Observable<T>): Observable<T> {

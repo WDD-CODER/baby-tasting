@@ -1,0 +1,1559 @@
+{
+  "run": "tracker-1",
+  "branch": "orch/tracker-1",
+  "base": "main",
+  "startedAt": "2026-11-16T08:20:52.505Z",
+  "mainShaAtStart": "fdd97c9f6bf3adbed62ea4e1ad1e1749cc949fe6",
+  "plans": {
+    "009": {
+      "nnn": "009",
+      "title": "Tracker base: password sign-in that stays on, five-tab navigation, baby profile, Tracker settings, icon slots",
+      "branch": "feat/009-tracker-base-signin-nav",
+      "state": "merged",
+      "round": 2,
+      "tier": "judgment",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T08:22:56.523Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-16T09:24:06.915Z"
+        },
+        "builder fix": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T08:30:52.516Z"
+        },
+        "judgment builder": {
+          "model": "opus",
+          "tier": "judgment",
+          "at": "2026-11-16T08:56:27.191Z"
+        }
+      },
+      "humanItems": [
+        "Navigation feels natural with Tracker first and Tasting one tap away."
+      ],
+      "history": [
+        {
+          "at": "2026-11-16T08:22:56.012Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T08:22:56.526Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T08:26:23.041Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T08:30:28.398Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T08:30:36.428Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T08:30:52.001Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T08:30:52.263Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T08:30:52.519Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T08:54:15.053Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T08:56:02.099Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T08:56:26.824Z",
+          "state": "fixing",
+          "round": 2
+        },
+        {
+          "at": "2026-11-16T08:56:27.194Z",
+          "state": "fixing",
+          "round": 2
+        },
+        {
+          "at": "2026-11-16T09:21:59.606Z",
+          "state": "gate",
+          "round": 2
+        },
+        {
+          "at": "2026-11-16T09:22:00.158Z",
+          "state": "gate",
+          "round": 2
+        },
+        {
+          "at": "2026-11-16T09:22:00.644Z",
+          "state": "gate",
+          "round": 2
+        },
+        {
+          "at": "2026-11-16T09:22:01.150Z",
+          "state": "gate",
+          "round": 2
+        },
+        {
+          "at": "2026-11-16T09:24:01.431Z",
+          "state": "checking",
+          "round": 2
+        },
+        {
+          "at": "2026-11-16T09:24:06.916Z",
+          "state": "checking",
+          "round": 2
+        },
+        {
+          "at": "2026-11-16T09:24:43.971Z",
+          "state": "merging",
+          "round": 2
+        },
+        {
+          "at": "2026-11-16T09:25:36.437Z",
+          "state": "merged",
+          "round": 2
+        }
+      ],
+      "tiers": [
+        "build",
+        "judgment"
+      ],
+      "freeDiskGb": 25.7,
+      "sha": "8d489959fbe47d9d6d190078f8b7d61f5420b4cb",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 202.2,
+          "tokens": {
+            "input": 670537,
+            "output": 10212
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 14.6,
+          "tokens": {
+            "input": 22754,
+            "output": 1567
+          },
+          "exit": 0
+        },
+        {
+          "stage": "builder fix",
+          "model": "sonnet",
+          "seconds": 1397.1,
+          "tokens": {
+            "input": 5734785,
+            "output": 66822
+          },
+          "exit": 0
+        },
+        {
+          "stage": "judgment builder",
+          "model": "opus",
+          "seconds": 1528.8,
+          "tokens": {
+            "input": 11698788,
+            "output": 80743
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 36.4,
+          "tokens": {
+            "input": 463595,
+            "output": 3110
+          },
+          "exit": 0
+        }
+      ],
+      "roundCauses": [
+        "round 1: review STOP: major plan.md:1 K1: password sign-in and rolling session are not in the diff; major server/domain/tracker/settings.js:2 broken contract: imports ./icon-names.js, which the diff does not add; major server/routes/tracker-settings.js:24 K2: route is not wired and the re",
+        "round 2: gate: pnpm run build, pnpm run test"
+      ],
+      "escalations": [
+        {
+          "step": "round 2",
+          "check": "pnpm run build"
+        }
+      ],
+      "replan": "no — the builder gave no planChange",
+      "resetToBase": "1ffc397b353ab7198b2fd65f48fd5b43fa1d0597",
+      "resetFrom": "875c71164bc7e590798d44352299a55040d5d0a0",
+      "uiCards": [
+        {
+          "card": "Signing in on `/login` with `parent-a` and password `test-pass-a` opens `/` and shows `יום חדש ורענן!`; the five tabs `תיעוד`, `ציר זמן`, `סטטיסטיקה`, `טעימות`,",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 2
+        },
+        {
+          "card": "`טעימות` opens `/tasting` (the tasting calendar); its top tab `מזונות` opens `/tasting/foods`.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 2
+        },
+        {
+          "card": "On `/settings`, saving `אמא` → `מאיה` as parent A's name shows `מאיה` in the top bar.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 2
+        }
+      ],
+      "checkedHead": "6ac002f644f8c3199525ec5a00c99865b42cdfc8"
+    },
+    "010": {
+      "nnn": "010",
+      "title": "Tracker events and sleep: data model, rules and API",
+      "branch": "feat/010-tracker-events-sleep-api",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T09:27:45.715Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-16T09:40:03.492Z"
+        }
+      },
+      "humanItems": [],
+      "history": [
+        {
+          "at": "2026-11-16T09:27:45.473Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T09:27:45.718Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T09:36:56.800Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T09:39:56.811Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T09:40:03.496Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T09:40:20.836Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T09:41:00.637Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 25.6,
+      "sha": "7969a9eec24b1530eaa4937346869c4be12c5a6e",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 546.7,
+          "tokens": {
+            "input": 1727641,
+            "output": 50957
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 15.1,
+          "tokens": {
+            "input": 45513,
+            "output": 1407
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "728166c778adaeade3f8f5936858beeabc9c24fd"
+    },
+    "011": {
+      "nnn": "011",
+      "title": "Tracker log tab: today at a glance, quick actions, entry sheets, sleep timer and daily trackers",
+      "branch": "feat/011-tracker-log-tab",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T09:43:02.880Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-16T10:09:14.440Z"
+        }
+      },
+      "humanItems": [
+        "Recording a feeding one-handed takes as few taps as in the old app."
+      ],
+      "history": [
+        {
+          "at": "2026-11-16T09:43:02.652Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T09:43:02.882Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:06:53.519Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:09:08.312Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:09:14.442Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:09:38.734Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:10:15.024Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 25.5,
+      "sha": "d0f3f3b09eb1d72f2bc3c7c273b51e301b384d8e",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 1426.6,
+          "tokens": {
+            "input": 8616548,
+            "output": 118253
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 23.6,
+          "tokens": {
+            "input": 260012,
+            "output": 974
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "58b4252fab8c522984028a8f87e9cee3d95170ec"
+    },
+    "012": {
+      "nnn": "012",
+      "title": "Tracker timeline and the shared edit and delete sheet",
+      "branch": "feat/012-tracker-timeline-edit",
+      "state": "merged",
+      "round": 1,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T10:12:20.723Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-16T10:31:42.710Z"
+        },
+        "builder fix": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T10:26:37.069Z"
+        }
+      },
+      "humanItems": [
+        "The timeline reads as clearly as the old one."
+      ],
+      "history": [
+        {
+          "at": "2026-11-16T10:12:20.436Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:12:20.726Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:24:03.828Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:26:00.968Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:26:07.131Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:26:36.545Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:26:36.806Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T10:26:37.071Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T10:29:34.939Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T10:31:36.563Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T10:31:42.713Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T10:32:02.351Z",
+          "state": "merging",
+          "round": 1
+        },
+        {
+          "at": "2026-11-16T10:32:43.057Z",
+          "state": "merged",
+          "round": 1
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 25.5,
+      "sha": "bfad3859e56a7588ea19069a22cb4e68bba0131c",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 699.5,
+          "tokens": {
+            "input": 4681533,
+            "output": 54178
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 28.7,
+          "tokens": {
+            "input": 274516,
+            "output": 1910
+          },
+          "exit": 0
+        },
+        {
+          "stage": "builder fix",
+          "model": "sonnet",
+          "seconds": 174.8,
+          "tokens": {
+            "input": 166520,
+            "output": 3024
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 18.9,
+          "tokens": {
+            "input": 130541,
+            "output": 970
+          },
+          "exit": 0
+        }
+      ],
+      "roundCauses": [
+        "round 1: review STOP: major src/app/pages/tracker/entry-sheet/entry-sheet.ts:435 wrong result: undo of a deleted sleep event is rejected by the server"
+      ],
+      "checkedHead": "0e990a6eb16ca83f996c37d8092c4af1131aab60"
+    },
+    "013": {
+      "nnn": "013",
+      "title": "Tracker statistics computed on the server and the six dashboard sections",
+      "branch": "feat/013-tracker-dashboards-stats",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T10:34:40.549Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-16T10:47:02.721Z"
+        }
+      },
+      "humanItems": [
+        "The numbers match what the parents remember for the last few days."
+      ],
+      "history": [
+        {
+          "at": "2026-11-16T10:34:40.249Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:34:40.553Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:45:32.612Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:46:58.382Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:47:02.723Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:47:10.566Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:47:34.864Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 25.2,
+      "sha": "a28fc38e5810a5620c74fe209c4b5d553ae7a948",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 649.3,
+          "tokens": {
+            "input": 3667152,
+            "output": 72779
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 7.3,
+          "tokens": {
+            "input": 44173,
+            "output": 466
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "67e374386bb7396b01494a3775ce5b4494b55a2c"
+    },
+    "014": {
+      "nnn": "014",
+      "title": "Tracker settings, icon picker, Excel export, data reset and installable app",
+      "branch": "feat/014-tracker-settings-export-icons",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T10:48:45.699Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-16T11:03:01.962Z"
+        }
+      },
+      "humanItems": [
+        "The app installs on the phone's home screen and opens full screen; the icon picker makes finding a fitting icon easy."
+      ],
+      "history": [
+        {
+          "at": "2026-11-16T10:48:45.502Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T10:48:45.701Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T11:01:10.671Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T11:01:11.077Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T11:01:11.396Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T11:02:56.886Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T11:03:01.964Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T11:03:26.019Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T11:04:05.880Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 25.2,
+      "sha": "802e462386832fba855d7b064265ad79adffac48",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 742.3,
+          "tokens": {
+            "input": 6641447,
+            "output": 65133
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 23.5,
+          "tokens": {
+            "input": 326761,
+            "output": 1758
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "In Settings → `אייקונים`, choosing `nights_stay` for the sleep quick button shows it on `/`; `איפוס לברירת מחדל` brings the default back.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        },
+        {
+          "card": "In Settings, `ייצוא` downloads a file named `baby_tracker_report_<today>.xlsx`.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "502557fa33427ae951987a677c2974f873120e3f"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-16T08:22:55.609Z",
+      "plan": "009",
+      "text": "the folder baby-tasting-orch-tracker-1-009 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T08:26:32.960Z",
+      "plan": "009",
+      "text": "the folder baby-tasting-orch-tracker-1-009 was installed (root, server)"
+    },
+    {
+      "at": "2026-11-16T08:54:10.004Z",
+      "plan": "009",
+      "text": "builder left undone (round 1): [ui] items: e2e/009-1-signin.spec.ts, 009-2-stay-signed-in.spec.ts, 009-3-tasting-section.spec.ts, 009-4-parent-name.spec.ts: written, not run"
+    },
+    {
+      "at": "2026-11-16T08:56:14.451Z",
+      "plan": "009",
+      "text": "escalated to a fresh judgment-tier builder (round 2): gate: pnpm run build, pnpm run test"
+    },
+    {
+      "at": "2026-11-16T08:56:26.456Z",
+      "plan": "009",
+      "text": "the folder baby-tasting-orch-tracker-1-009 was installed (root, server)"
+    },
+    {
+      "at": "2026-11-16T09:21:56.252Z",
+      "plan": "009",
+      "text": "builder left undone (round 2): [ui] Signing in with parent-a / test-pass-a opens / and shows יום חדש ורענן!: written, not run; [ui] the five tabs are visible at 360px: written, not run; [ui] a new page in the same browser context opens the Tracker home without the sign-in page: written, not run; [ui] טעימות opens /tasting; its to"
+    },
+    {
+      "at": "2026-11-16T09:21:59.922Z",
+      "plan": "009",
+      "text": "[ui] Signing in on `/login` with `parent-a` and password `test-pass-a` opens `/` and shows `יום חדש ורענן!`; the five tabs `תיעוד`, `ציר זמן`, `סטטיסטיקה`, `טעי: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-16T09:22:00.401Z",
+      "plan": "009",
+      "text": "[ui] `טעימות` opens `/tasting` (the tasting calendar); its top tab `מזונות` opens `/tasting/foods`.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-16T09:22:00.889Z",
+      "plan": "009",
+      "text": "[ui] On `/settings`, saving `אמא` → `מאיה` as parent A's name shows `מאיה` in the top bar.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-16T09:22:06.440Z",
+      "plan": "009",
+      "text": "the folder baby-tasting-orch-tracker-1-009 was installed (root, server)"
+    },
+    {
+      "at": "2026-11-16T09:24:59.128Z",
+      "plan": "009",
+      "text": "the folder baby-tasting-orch-merge-tracker-1 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T09:27:45.252Z",
+      "plan": "010",
+      "text": "the folder baby-tasting-orch-tracker-1-010 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T09:43:02.436Z",
+      "plan": "011",
+      "text": "the folder baby-tasting-orch-tracker-1-011 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T10:06:49.780Z",
+      "plan": "011",
+      "text": "builder left undone (round 0): 011-1-diaper: written, not run; 011-2-sleep: written, not run; 011-3-bottle: written, not run; 011-4-reorder: written, not run; [human] one-handed feeding tap count: left to the Human"
+    },
+    {
+      "at": "2026-11-16T10:12:20.142Z",
+      "plan": "012",
+      "text": "the folder baby-tasting-orch-tracker-1-012 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T10:24:00.441Z",
+      "plan": "012",
+      "text": "builder left undone (round 0): [ui] 012-1 filter: written, not run; [ui] 012-2 bottle amount: written, not run; [ui] 012-3 clear note: written, not run; [ui] 012-4 delete and ביטול: written, not run; [human] The timeline reads as clearly as the old one."
+    },
+    {
+      "at": "2026-11-16T10:34:40.004Z",
+      "plan": "013",
+      "text": "the folder baby-tasting-orch-tracker-1-013 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T10:45:30.059Z",
+      "plan": "013",
+      "text": "builder left undone (round 0): 013-1 (nutrition shows 150): written, not run; 013-2 (7 ימים gives 7 bars): written, not run; [human] The numbers match what the parents remember for the last few days (left to the Human)"
+    },
+    {
+      "at": "2026-11-16T10:48:45.344Z",
+      "plan": "014",
+      "text": "the folder baby-tasting-orch-tracker-1-014 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T11:01:08.137Z",
+      "plan": "014",
+      "text": "builder left undone (round 0): [ui] Settings -> אייקונים, choosing the sleep quick button icon shows it on / and איפוס לברירת מחדל restores the default: written, not run (e2e/014-1-icon-picker.spec.ts; uses `nightlight` because `nights_stay` is not in the installed font); [ui] ייצוא downloads baby_tracker_report_<today>.xlsx: wri"
+    },
+    {
+      "at": "2026-11-16T11:01:10.917Z",
+      "plan": "014",
+      "text": "[ui] In Settings → `אייקונים`, choosing `nights_stay` for the sleep quick button shows it on `/`; `איפוס לברירת מחדל` brings the default back.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-16T11:01:11.236Z",
+      "plan": "014",
+      "text": "[ui] In Settings, `ייצוא` downloads a file named `baby_tracker_report_<today>.xlsx`.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-16T11:01:14.604Z",
+      "plan": "014",
+      "text": "the folder baby-tasting-orch-tracker-1-014 was installed (root, server)"
+    },
+    {
+      "at": "2026-11-16T11:03:44.123Z",
+      "plan": "014",
+      "text": "the folder baby-tasting-orch-merge-tracker-1 was installed (root, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 25.2,
+  "updatedAt": "2026-11-16T11:06:15.286Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: put the icon-name generator at server/lib/gen-icon-names.mjs because the plan's scope block does not list tools/ (K3 names tools/gen-icon-names.mjs) — reverse: move it to tools/ and add tools/gen-icon-names.mjs to the scope",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: kept the top-bar title as the existing 'טעימות' (no rename to 'מעקב תינוק') — reverse: change HE.app.name in src/app/core/i18n/he.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: the baby PUT keeps the stored birthWeightGrams when the field is omitted and clears it when null; the sign-in password show/hide is a small toggle under the field — reverse: drop the omitted-keeps rule in server/routes/baby.js, or remove the toggle button in login.html",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: the unsaved-changes guard on /settings now also covers the tracker form, and the e2e spec 009-5 name from K6 became 009-4 because the plan has four [ui] items — reverse: rename the spec file",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D5",
+      "plan": "009",
+      "type": "seen",
+      "text": "seen: render.yaml:15 — APP_USERS must be set to name:bcryptHash values in the Render dashboard before the next deploy (render.yaml is outside this plan's scope)",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D6",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: the icon-name generator is at server/lib/gen-icon-names.mjs, not tools/gen-icon-names.mjs, because tools/** is not in the plan's scope block and server/lib/** is. It reads names from material-symbols/index.d.ts (the package ships no codepoints file) and slot keys from icon-slots.ts — reverse: move the file to tools/ once tools/** is in scope",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D7",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: parent names must be 1–40 characters after trim, activities 1–40 characters (at most 50), and quickActionOrder must use known ids without repeats; a PUT key the server does not know gets 400 (spec §3.4 stores anything) — reverse: loosen CHECKS in server/domain/tracker/settings.js",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D8",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: on PUT /api/v1/baby, leaving birthWeightGrams out keeps the stored weight, null clears it; the baby form sends null when the field is empty — reverse: change isWeight/fields in server/routes/baby.js and parseWeight in baby-form.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D9",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: iconOverrides in a PUT replaces the whole map (like the arrays); there is no per-slot merge — reverse: merge in SettingsRepository.saveTracker",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D10",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: /timeline and /stats show the existing text עוד אין כאן כלום, and the log page shows only the heading יום חדש ורענן!; these empty states have no action button (app-empty-state actionLabel is now optional) — reverse: pass actionLabel or other texts in pages/tracker/*",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D11",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: the login error is one centred line under the password field (שם משתמש או סיסמה שגויים for 401) instead of the username field's error slot; the show/hide button sits beside the password field — reverse: bind [error] on the username field in login.html again",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D12",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: old paths like /foods and /allergens get no redirect; they fall through to ** and land on the Tracker home — reverse: add redirectTo entries to /tasting/... in app.routes.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D13",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: the [ui] item 1 is split into two e2e files (009-1 sign-in, 009-2 five tabs at 360px) so the five files 009-1 … 009-5 match K6 — reverse: merge them into 009-1",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D14",
+      "plan": "009",
+      "type": "behaviour",
+      "text": "behaviour: the Tracker settings load once per sign-in from the shell (for icon overrides and the parent name); sign-out resets them — reverse: drop the effect in shell.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D15",
+      "plan": "009",
+      "type": "removes",
+      "text": "removes: the old wording שם המשתמש לא מזוהה for a refused sign-in (now שם משתמש או סיסמה שגויים, as the plan says) and the four-tab navigation with emoji icons — reverse: restore HE.auth.unknownUser and the old tabs in shell.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D16",
+      "plan": "010",
+      "type": "behaviour",
+      "text": "behaviour: POST and PUT accept and ignore `id` and `loggedBy` in the body, because the session decides them; any other unknown field is a 400 — reverse: reject those two keys as well",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D17",
+      "plan": "010",
+      "type": "behaviour",
+      "text": "behaviour: POST /clear requires `before` as YYYY-MM-DD and there is no clear-all; it hard-deletes up to the end of that Asia/Jerusalem day, soft-deleted rows included — reverse: allow an empty body to clear everything",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D18",
+      "plan": "010",
+      "type": "behaviour",
+      "text": "behaviour: a PUT on a sleep without `endAt` keeps the stored `endAt`, and `startLocation` is replaced by what the body sends — reverse: treat a missing `endAt` as null",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D19",
+      "plan": "010",
+      "type": "behaviour",
+      "text": "behaviour: an open sleep, from a toggle or a POST, is refused with 409 `sleep_overlap` if it would run through an existing later sleep; a second open sleep via POST gives 409 `sleep_already_open` — reverse: check overlap only when the user gave a manual time",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D20",
+      "plan": "010",
+      "type": "behaviour",
+      "text": "behaviour: re-deleting an already soft-deleted event returns 404, where the old code re-stamped it and returned success — reverse: drop the deletedAt filter in softDelete",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D21",
+      "plan": "010",
+      "type": "behaviour",
+      "text": "behaviour: API field names are `eventType`, `note` and sleep `startedBy`/`endedBy`, mixing the old BabyEvent names with the plan's names; the import (T7) must map `notes` to `note` and `loggedByStart`/`loggedByEnd` to `startedBy`/`endedBy` — reverse: rename in domain/tracker/events.js and sleep.js",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D22",
+      "plan": "011",
+      "type": "behaviour",
+      "text": "behaviour: the quick meal sends nutrition {feedType:'BOTTLE'} because the server requires a feed type; the carousel still shows 'האכלה 🍼' and the bottle count ignores quick meals — reverse: let the server accept a nutrition-less quick meal",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D23",
+      "plan": "011",
+      "type": "behaviour",
+      "text": "behaviour: activity intensity 0 is sent without cryingIntensity because the server accepts 1-10 — reverse: allow 0 in server/domain/tracker/events.js",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D24",
+      "plan": "011",
+      "type": "behaviour",
+      "text": "behaviour: the long-open-sleep banner button 'סיום השינה' opens the sleep sheet, where end-current-sleep uses the chosen time, because the edit sheet is plan 012 — reverse: open the edit sheet once it exists",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D25",
+      "plan": "011",
+      "type": "behaviour",
+      "text": "behaviour: banners, floating pills and notifications live on the log page only, not on every tab — reverse: render app-log-banners in the shell",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D26",
+      "plan": "011",
+      "type": "behaviour",
+      "text": "behaviour: the quick sleep toggle cannot send quickRecorded because the server toggle accepts only location and at — reverse: add the field to tracker-sleep.js",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D27",
+      "plan": "011",
+      "type": "behaviour",
+      "text": "behaviour: carousel cards and daily-tracker chips are not tappable until plan 012 adds editing — reverse: add a click handler that opens the edit sheet",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D28",
+      "plan": "011",
+      "type": "behaviour",
+      "text": "behaviour: the entry sheet closes on a backdrop tap (the shared app-bottom-sheet does this), unlike the old app — reverse: ignore backdrop taps in the sheet",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D29",
+      "plan": "011",
+      "type": "seen",
+      "text": "seen: server/domain/tracker/icon-names.js:1 — `node server/lib/gen-icon-names.mjs` rewrites it for the 23 new slots but it is outside this plan's scope, so I reverted it. Until it is regenerated the server rejects icon overrides for the new slots; run it in the icon-settings plan, or approve that path.",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D30",
+      "plan": "011",
+      "type": "seen",
+      "text": "seen: e2e/001-2-components.spec.ts:10 — the /dev/components section count went from 14 to 15 with the new DateTime24 section; updated in scope",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D31",
+      "plan": "012",
+      "type": "behaviour",
+      "text": "behaviour: undoing a delete (the toast button ביטול) re-creates the event with POST, because there is no restore endpoint for Tracker events. It gets a new id and the current parent as logger — reverse: remove the toast action in EntrySheet.confirmDelete()",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D32",
+      "plan": "012",
+      "type": "behaviour",
+      "text": "behaviour: the timeline filter lives in the page, so it returns to היום each time /timeline is opened, not only when the app opens — reverse: move the signal into a root service",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D33",
+      "plan": "012",
+      "type": "behaviour",
+      "text": "behaviour: a quick-recorded bottle has no amounts, so its row shows no detail line instead of 'undefined' or 0, and it gets no tier accent — reverse: show raw values as spec §2.6 does",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D34",
+      "plan": "012",
+      "type": "behaviour",
+      "text": "behaviour: the edit sheet opens a quick-recorded bottle with the form defaults (120 ml offered and consumed), as spec §4.1 does. Saving it also stores those amounts, even if only the note was changed — reverse: skip amounts when none were stored",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D35",
+      "plan": "012",
+      "type": "behaviour",
+      "text": "behaviour: the edit sheet is a bottom sheet (the shared sheet component), not the old centred dialog — reverse: use a different shell component",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D36",
+      "plan": "012",
+      "type": "behaviour",
+      "text": "behaviour: the edit sheet shows the Hebrew event type, not the raw English enum (F10)",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D37",
+      "plan": "012",
+      "type": "behaviour",
+      "text": "behaviour: the delete confirmation is an inline strip inside the sheet, using the existing deleteStrip, deleteYes and deleteNo strings",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D38",
+      "plan": "013",
+      "type": "behaviour",
+      "text": "behaviour: the server stats count baby days from 06:00 Asia/Jerusalem, not midnight, because the plan asks for the 06:00 day start (the old spec used calendar days) — reverse: pass dayStartHour 0 in server/routes/tracker-stats.js",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D39",
+      "plan": "013",
+      "type": "behaviour",
+      "text": "behaviour: sleepStats returns every day of the range with zeros so a 7-day range gives 7 bars; the other five only list days that have events — reverse: drop the zero-fill in sleepStats",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D40",
+      "plan": "013",
+      "type": "behaviour",
+      "text": "behaviour: the page fetches the stats again when the range changes and after the edit sheet closes, not on a timer — reverse: remove the effects in stats-page.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D41",
+      "plan": "013",
+      "type": "behaviour",
+      "text": "behaviour: the quality-tier accent on expanded cards (spec §3.3, §3.8) is not applied, to keep the scope small — reverse: reuse the tier rules from timeline-row-view.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D42",
+      "plan": "013",
+      "type": "behaviour",
+      "text": "behaviour: the range is capped at 366 days and a reversed range (to before from) is 400 `invalid` — reverse: delete those two checks in tracker-stats.js",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D43",
+      "plan": "013",
+      "type": "seen",
+      "text": "seen: src/app/pages/tracker/stats-page/stats-page.scss is 1.71 kB over its 4 kB style budget (build warning only)",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D44",
+      "plan": "014",
+      "type": "seen",
+      "text": "seen: plan Done-when [ui] item 1 names `nights_stay`, but the installed material-symbols 0.49.0 (the latest on npm) has no such icon (src/app/core/icons/icon-names.ts), so the picker cannot offer it and a server override with it is refused — e2e/014-1-icon-picker.spec.ts uses `nightlight`; the plan item needs a name that exists in the font",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D45",
+      "plan": "014",
+      "type": "behaviour",
+      "text": "behaviour: the legend is a sub-screen shown in place on /settings (a back button returns), not a new route, because the plan appends only settings/icons — reverse: add a settings/legend route and link to it",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D46",
+      "plan": "014",
+      "type": "behaviour",
+      "text": "behaviour: `אפס הכל` (full reset) sends POST /tracker/events/clear { before: '9999-12-31' } because the existing server route requires a date — reverse: let the server accept a body without `before` as 'all'",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D47",
+      "plan": "014",
+      "type": "behaviour",
+      "text": "behaviour: a custom-activity name is removed by exact name (all duplicates go), with no confirmation, and the add field has no Enter-to-submit, as in spec §8.6 — reverse: wrap the field in a form and add a confirm on remove",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D48",
+      "plan": "014",
+      "type": "behaviour",
+      "text": "behaviour: the export date range shows an inline error and disables the button when `to` is before `from` (the spec had no check) — reverse: drop `error_` in export-card.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D49",
+      "plan": "014",
+      "type": "behaviour",
+      "text": "behaviour: the baby-profile form on Settings is the existing shared app-baby-form, with its own save button, rather than the old ± 10 g stepper — reverse: build a stepper variant in shared/baby-form",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D50",
+      "plan": "014",
+      "type": "behaviour",
+      "text": "behaviour: the icon-picker keyword chips show only the Latin keywords of a slot, since the search runs on English icon names — reverse: show every keyword and map Hebrew words to English names",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D51",
+      "plan": "014",
+      "type": "seen",
+      "text": "seen: src/app/pages/tracker/stats-page/stats-page.scss exceeds the 4 kB component style budget (5.71 kB) — a build warning that predates this plan",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-16T11:06:15.284Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-16T11:06:15.286Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}

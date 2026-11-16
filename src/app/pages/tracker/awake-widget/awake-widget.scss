@@ -1,0 +1,56 @@
+:host {
+  display: block;
+}
+
+.awake {
+  --awake-color: var(--color-awake-ok);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--awake-color);
+  border-radius: var(--radius-card);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+
+  &--soon {
+    --awake-color: var(--color-awake-soon);
+  }
+
+  &--bath {
+    --awake-color: var(--color-awake-bath);
+  }
+
+  &--over {
+    --awake-color: var(--color-awake-over);
+  }
+
+  &__emoji {
+    font-size: var(--fs-xl);
+  }
+
+  &__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  &__time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  &__label {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-xs);
+  }
+
+  &__heading {
+    color: var(--awake-color);
+    font-size: var(--fs-md);
+  }
+}

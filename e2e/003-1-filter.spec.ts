@@ -8,7 +8,7 @@ test('003-1: the list shows בננה; אלרגנים בלבד hides it and keeps
   await resetHousehold(request)
   await signIn(page)
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(5) })
-  await page.goto('/foods')
+  await page.goto('/tasting/foods')
   await expect(page.getByText('בננה')).toBeVisible()
   await page.getByRole('button', { name: 'אלרגנים בלבד' }).click()
   await expect(page.getByText('בננה')).toHaveCount(0)

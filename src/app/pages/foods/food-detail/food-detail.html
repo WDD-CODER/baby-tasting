@@ -1,5 +1,5 @@
 <section class="detail">
-  <a class="detail__back" routerLink="/foods">{{ t.back }}</a>
+  <a class="detail__back" routerLink="/tasting/foods">{{ t.back }}</a>
   @if (loading_()) {
     <app-loading-state />
   } @else if (failed_() || !food()) {
@@ -32,7 +32,7 @@
         <app-chip [selected]="f.queuePosition !== null" (pressed)="toggleQueue()">{{
           t.queue
         }}</app-chip>
-        <a class="detail__edit" [routerLink]="['/foods', f.id, 'edit']">{{ t.edit }}</a>
+        <a class="detail__edit" [routerLink]="['/tasting/foods', f.id, 'edit']">{{ t.edit }}</a>
       </div>
 
       <h3 class="detail__title">{{ t.historyTitle }}</h3>
@@ -59,7 +59,7 @@
       <ul class="detail__list">
         @for (reaction of reactions_(); track reaction.id) {
           <li class="entry">
-            <a class="entry__link" [routerLink]="['/reactions', reaction.id]">
+            <a class="entry__link" [routerLink]="['/tasting/reactions', reaction.id]">
               <span class="entry__date">{{ date(reaction.date) }}</span>
               <span class="entry__meta">· {{ symptomText(reaction) }}</span>
             </a>

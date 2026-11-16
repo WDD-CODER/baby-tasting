@@ -9,6 +9,7 @@ test('004-5: an item given on a date last month shows its emoji on that day afte
   await resetHousehold(request)
   await signIn(page)
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(8) })
+  await page.goto('/tasting')
   const today = todayIso()
   const lastMonth = new Date(`${today.slice(0, 7)}-01T00:00:00Z`)
   lastMonth.setUTCMonth(lastMonth.getUTCMonth() - 1)

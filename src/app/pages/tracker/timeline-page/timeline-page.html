@@ -1,0 +1,60 @@
+<section class="tl">
+  <header class="tl__head">
+    <h2 class="tl__title">{{ t.title }}</h2>
+    <div class="tl__tools">
+      <div class="tl__filter" role="group" [attr.aria-label]="t.filterLabel">
+        @for (d of windows; track d) {
+          <button
+            type="button"
+            class="tl__pill"
+            [class.tl__pill--on]="days() === d"
+            [attr.aria-pressed]="days() === d"
+            (click)="days.set(d)"
+          >
+            {{ label(d) }}
+          </button>
+        }
+      </div>
+      <button
+        type="button"
+        class="tl__refresh"
+        [attr.aria-label]="t.refresh"
+        [title]="t.refresh"
+        (click)="refresh()"
+      >
+        <span aria-hidden="true">⟳</span>
+      </button>
+    </div>
+  </header>
+
+  @if (!loaded()) {
+    <p class="tl__loading" role="status">{{ t.loading }}</p>
+  } @else if (all().length === 0 && !open()) {
+    <div class="tl__empty">
+      <span class="tl__emptyIcon" aria-hidden="true">📭</span>
+      <strong>{{ t.emptyTitle }}</strong>
+      <span>{{ t.emptyHint }}</span>
+    </div>
+  } @else {
+    <div class="tl__list" data-testid="timeline-list">
+      @if (open(); as sleeping) {
+        <div class="tl__sleeping" data-testid="timeline-sleeping">
+          <span class="tl__sleepIcon" aria-hidden="true">💤</span>
+          <div class="tl__sleepBody">
+            <div class="tl__sleepHead">
+              <strong>{{ t.sleepingNow }}</strong>
+              <span class="tl__sleepPill">{{ t.sleepActivePill }}</span>
+            </div>
+            <span>{{ sleepingLine() }}</span>
+            <small>{{ sleepingBy() }}</small>
+          </div>
+        </div>
+      }
+      @for (e of visible(); track e.id) {
+        <app-timeline-row [event]="e" [events]="all()" (edit)="edit($event)" />
+      }
+    </div>
+  }
+</section>
+
+<app-edit-sheet />

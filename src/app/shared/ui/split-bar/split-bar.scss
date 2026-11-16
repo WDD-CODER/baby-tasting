@@ -1,0 +1,35 @@
+:host {
+  display: block;
+}
+
+.split {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+
+  &__labels {
+    display: flex;
+    justify-content: space-between;
+
+    padding-inline: var(--space-1);
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+  }
+
+  &__track {
+    display: flex;
+
+    block-size: 8px;
+    inline-size: 100%;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+
+    background: var(--color-surface-raised);
+  }
+
+  &__seg {
+    block-size: 100%;
+  }
+}

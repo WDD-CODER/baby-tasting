@@ -1,0 +1,60 @@
+:host {
+  display: block;
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  &__label {
+    flex: none;
+
+    inline-size: 5.5rem;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    white-space: nowrap;
+  }
+
+  &__track {
+    position: relative;
+
+    flex: 1;
+
+    block-size: 20px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+
+    background: var(--color-surface-raised);
+  }
+
+  &__fill {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+
+    opacity: 0.7;
+  }
+
+  &__caption {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: var(--space-2);
+
+    display: flex;
+    align-items: center;
+
+    color: var(--color-text);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+  }
+}

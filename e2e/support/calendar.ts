@@ -23,6 +23,7 @@ export function cell(page: Page, date: string, meal: number): Locator {
 
 /** Adds a food to a week-view cell through the add-food sheet. */
 export async function addFood(page: Page, date: string, meal: number, name: string): Promise<void> {
+  if (!new URL(page.url()).pathname.startsWith('/tasting')) await page.goto('/tasting')
   await cell(page, date, meal).locator('.cell__add').click()
   await page.getByLabel('חיפוש מזון').fill(name)
   await page.getByRole('button', { name: new RegExp(name) }).first().click()

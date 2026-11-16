@@ -1,0 +1,174 @@
+<section class="qg">
+  @if (vomitingPanel()) {
+    <div class="qg__panel qg__panel--vomiting" data-testid="quick-vomiting">
+      <header class="qg__panelHead">
+        <strong>{{ t.quickVomitingHeader }}</strong>
+        <button
+          type="button"
+          class="qg__close"
+          [attr.aria-label]="t.close"
+          (click)="closeVomiting()"
+        >
+          ✕
+        </button>
+      </header>
+      <div class="qg__tiles">
+        @for (o of vomitingOptions; track o.id) {
+          <button type="button" class="qg__tile" (click)="quickVomiting(o.id)">
+            <span aria-hidden="true">{{ o.emoji }}</span>
+            <span>{{ o.label }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @if (diaperPanel()) {
+    <div class="qg__panel qg__panel--diaper" data-testid="quick-diaper">
+      <header class="qg__panelHead">
+        <strong>{{ t.quickDiaperHeader }}</strong>
+        <button type="button" class="qg__close" [attr.aria-label]="t.close" (click)="closeDiaper()">
+          ✕
+        </button>
+      </header>
+      <div class="qg__tiles">
+        @for (o of diaperOptions; track o.id) {
+          <button type="button" class="qg__tile" (click)="quickDiaper(o.id)">
+            <span aria-hidden="true">{{ o.emoji }}</span>
+            <span>{{ t.quickDiaperOptions[o.id] }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @if (showAwake()) {
+    <app-awake-widget class="qg__wide" [minutes]="awake()" [bathActive]="bathActive()" />
+  }
+
+  <div class="qg__wide">
+    <button
+      type="button"
+      class="qg__reorder"
+      [class.qg__reorder--on]="reorder()"
+      (click)="toggleReorder()"
+    >
+      {{ reorder() ? '✓ ' + t.reorderDone : '⠿ ' + t.reorderStart }}
+    </button>
+  </div>
+
+  <div
+    class="qg__list qg__wide"
+    cdkDropList
+    cdkDropListOrientation="mixed"
+    [cdkDropListDisabled]="!reorder()"
+    (cdkDropListDropped)="drop($event)"
+  >
+    @for (id of order(); track id) {
+      <div
+        class="qg__item"
+        [class.qg__item--wide]="id === 'sleep'"
+        [class.qg__item--reorder]="reorder()"
+        cdkDrag
+        [cdkDragDisabled]="!reorder()"
+        [attr.data-quick]="id"
+      >
+        @switch (id) {
+          @case ('meal') {
+            <button
+              type="button"
+              class="qg__btn qg__btn--meal"
+              [class.qg__btn--pressed]="pressed() === 'meal'"
+              (pointerdown)="onDown('meal', $event)"
+              (pointermove)="onMove($event)"
+              (pointerup)="onUp('meal', $event)"
+              (pointercancel)="cancelPress()"
+              (pointerleave)="cancelPress()"
+              (contextmenu)="$event.preventDefault()"
+            >
+              <app-icon slot="quick.meal" [size]="32" />
+              <strong>{{ t.mealTitle }}</strong>
+              <small>🍼 {{ countsText() }}</small>
+              <small>{{ t.mealHint }}</small>
+              <span class="qg__pill" [class.qg__pill--over]="countdown().isOverdue">{{
+                countdownText()
+              }}</span>
+            </button>
+          }
+          @case ('diaper') {
+            <button
+              type="button"
+              class="qg__btn qg__btn--diaper"
+              [class.qg__btn--pressed]="pressed() === 'diaper'"
+              (pointerdown)="onDown('diaper', $event)"
+              (pointermove)="onMove($event)"
+              (pointerup)="onUp('diaper', $event)"
+              (pointercancel)="cancelPress()"
+              (pointerleave)="cancelPress()"
+              (contextmenu)="$event.preventDefault()"
+            >
+              <app-icon slot="quick.diaper" [size]="32" />
+              <strong>{{ t.diaperButton }}</strong>
+              <small>💦 {{ pee() }} | 💩 {{ poo() }} | 💦💩 {{ both() }}</small>
+              <small>{{ t.diaperHint }}</small>
+            </button>
+          }
+          @case ('sleep') {
+            <button
+              type="button"
+              class="qg__btn qg__btn--sleep"
+              [class.qg__btn--open]="openSleep()"
+              [class.qg__btn--pressed]="pressed() === 'sleep'"
+              (pointerdown)="onDown('sleep', $event)"
+              (pointermove)="onMove($event)"
+              (pointerup)="onUp('sleep', $event)"
+              (pointercancel)="cancelPress()"
+              (pointerleave)="cancelPress()"
+              (contextmenu)="$event.preventDefault()"
+            >
+              <app-icon slot="quick.sleep" [size]="32" [filled]="!!openSleep()" />
+              <span class="qg__sleepText">
+                <strong>{{ openSleep() ? t.sleepButtonEnd : t.sleepButtonStart }}</strong>
+                <small>{{ openSleep() ? t.sleepHintEnd : t.sleepHintStart }}</small>
+              </span>
+              @if (openSleep(); as open) {
+                <app-sleep-timer [startAt]="open.sleep?.startAt ?? open.timestamp" />
+              } @else {
+                <span>{{ t.awakeLabel }}</span>
+              }
+            </button>
+          }
+          @case ('activity') {
+            <button type="button" class="qg__btn qg__btn--activity" (click)="openFull('activity')">
+              <app-icon slot="quick.activity" [size]="32" />
+              <strong>{{ t.activityButton }}</strong>
+            </button>
+          }
+          @case ('weight') {
+            <button type="button" class="qg__btn qg__btn--weight" (click)="openFull('weight')">
+              <app-icon slot="quick.weight" [size]="32" />
+              <strong>{{ t.weightButton }}</strong>
+            </button>
+          }
+          @case ('vomiting') {
+            <button
+              type="button"
+              class="qg__btn qg__btn--vomiting"
+              [class.qg__btn--pressed]="pressed() === 'vomiting'"
+              (pointerdown)="onDown('vomiting', $event)"
+              (pointermove)="onMove($event)"
+              (pointerup)="onUp('vomiting', $event)"
+              (pointercancel)="cancelPress()"
+              (pointerleave)="cancelPress()"
+              (contextmenu)="$event.preventDefault()"
+            >
+              <app-icon slot="quick.vomiting" [size]="32" />
+              <strong>{{ t.vomitingButton }}</strong>
+              <small>{{ t.vomitingHint }}</small>
+            </button>
+          }
+        }
+      </div>
+    }
+  </div>
+</section>

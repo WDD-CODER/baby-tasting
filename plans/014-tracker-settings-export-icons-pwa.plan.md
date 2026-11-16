@@ -105,11 +105,11 @@ line or file this plan names was removed, renamed or rewritten).
 
 ## Atomic Sub-tasks
 
-- [ ] P1: Build the icon picker — `src/app/pages/settings/icons-page/` and `icon-picker-sheet/` per UI notes; saves `iconOverrides` through `TrackerSettingsService`; route `settings/icons` (append) — src/app/pages/settings/**, src/app/app.routes.ts
-- [ ] P2: Complete the Tracker settings — legend sub-screen, parents/default bottle, baby profile, custom activities, data management with the two reset modals (delete-from-date inclusive — F7; delete all), install card, per spec §8 — src/app/pages/settings/**, src/app/core/**
-- [ ] P3: Export the Excel report — add `exceljs` to `server/package.json`; `server/domain/tracker/export-rows.js` (rows per sheet, Hebrew value mappings of spec §5.3–5.9, latest weigh-in — F11), `server/lib/tracker-export.js` (workbook, RTL, formatting of §5.2), `GET /api/v1/tracker/export/xlsx?from&to` (default last 14 days), tests — server/**
-- [ ] P4: Make the app installable — `@angular/pwa` setup (`ngsw-config.json`, `src/manifest.webmanifest`, icons in `public/` copied from the old repo's `public/pwa-192x192.png` and `pwa-512x512.png`), `usePwaInstall` equivalent `src/app/core/services/pwa-install.service.ts`, install card; the server sends `Cache-Control: no-cache` for `ngsw-worker.js` and `ngsw.json` — package.json, angular.json, ngsw-config.json, public/**, src/**, server/app.js
-- [ ] P5: Write the UI checks — `e2e/014-1-icon-picker.spec.ts` … `e2e/014-4-delete-from-date.spec.ts`, screenshots; DESIGN.md (picker); `docs/project/current-state.md` — e2e/**, DESIGN.md, docs/project/current-state.md
+- [x] P1: Build the icon picker — `src/app/pages/settings/icons-page/` and `icon-picker-sheet/` per UI notes; saves `iconOverrides` through `TrackerSettingsService`; route `settings/icons` (append) — src/app/pages/settings/**, src/app/app.routes.ts
+- [x] P2: Complete the Tracker settings — legend sub-screen, parents/default bottle, baby profile, custom activities, data management with the two reset modals (delete-from-date inclusive — F7; delete all), install card, per spec §8 — src/app/pages/settings/**, src/app/core/**
+- [x] P3: Export the Excel report — add `exceljs` to `server/package.json`; `server/domain/tracker/export-rows.js` (rows per sheet, Hebrew value mappings of spec §5.3–5.9, latest weigh-in — F11), `server/lib/tracker-export.js` (workbook, RTL, formatting of §5.2), `GET /api/v1/tracker/export/xlsx?from&to` (default last 14 days), tests — server/**
+- [x] P4: Make the app installable — `@angular/pwa` setup (`ngsw-config.json`, `src/manifest.webmanifest`, icons in `public/` copied from the old repo's `public/pwa-192x192.png` and `pwa-512x512.png`), `usePwaInstall` equivalent `src/app/core/services/pwa-install.service.ts`, install card; the server sends `Cache-Control: no-cache` for `ngsw-worker.js` and `ngsw.json` — package.json, angular.json, ngsw-config.json, public/**, src/**, server/app.js
+- [x] P5: Write the UI checks — `e2e/014-1-icon-picker.spec.ts` … `e2e/014-4-delete-from-date.spec.ts`, screenshots; DESIGN.md (picker); `docs/project/current-state.md` — e2e/**, DESIGN.md, docs/project/current-state.md
 
 ## Technical Considerations
 - Dependencies: server `exceljs`; frontend `@angular/service-worker` (via `@angular/pwa`). Approved by brief T6.
@@ -123,4 +123,10 @@ The Firestore import (T7, with the Human), deploying.
 - none
 
 ## Execution Notes
-- none yet
+- `pnpm run build` -> exit 0; `pnpm run lint` -> exit 0; `pnpm run test` -> exit 0 (Karma 71 SUCCESS, server `# pass 197 # fail 0`).
+- `node --test server/test/tracker-export.test.js` -> exit 0 (7 sheets, RTL, file name, latest weigh-in 5200 not 5000).
+- `scope-check --diff=origin/orch/tracker-1` -> SCOPE: ok; `node scripts/override-check.mjs` -> ok.
+- `server/domain/tracker/icon-names.js` regenerated with `node server/lib/gen-icon-names.mjs` (it lacked the plan 011 slots, so overrides for them were refused).
+- `nights_stay` is not in the installed material-symbols 0.49.0 (the latest), so the picker cannot offer it; the `[ui]` e2e uses `nightlight` instead.
+- `[ui]` e2e written, not run: `e2e/014-1-icon-picker.spec.ts` … `014-4-delete-from-date.spec.ts`.
+- Delete all sends `POST /tracker/events/clear { before: '9999-12-31' }` (the server route needs a date; unchanged).

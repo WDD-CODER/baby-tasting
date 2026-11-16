@@ -1,0 +1,34 @@
+<app-card>
+  <div class="activities">
+    <h3 class="activities__title">{{ t.title }}</h3>
+    <p class="activities__text">{{ t.text }}</p>
+    <div class="activities__add">
+      <app-text-field
+        class="activities__input"
+        name="newActivity"
+        [label]="t.placeholder"
+        [ngModel]="name_()"
+        (ngModelChange)="name_.set($event)"
+      />
+      <app-button [disabled]="!name_().trim()" [loading]="busy_()" (pressed)="add()">{{
+        t.add
+      }}</app-button>
+    </div>
+    <ul class="activities__list">
+      @for (a of list_(); track $index) {
+        <li class="activities__row">
+          <span>{{ a }}</span>
+          <button
+            type="button"
+            class="activities__remove"
+            [attr.aria-label]="t.remove"
+            [title]="t.remove"
+            (click)="remove(a)"
+          >
+            ✕
+          </button>
+        </li>
+      }
+    </ul>
+  </div>
+</app-card>

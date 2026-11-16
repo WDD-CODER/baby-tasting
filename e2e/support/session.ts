@@ -8,9 +8,15 @@ export async function resetHousehold(request: APIRequestContext): Promise<void> 
   if (!res.ok()) throw new Error(`test reset failed: ${res.status()}`)
 }
 
-export async function signIn(page: Page, username = process.env['E2E_USERNAME'] ?? 'parent-a'): Promise<void> {
+/** Signs in through the sign-in page; the slots' APP_USERS hold parent-a / test-pass-a and parent-b / test-pass-b. */
+export async function signIn(
+  page: Page,
+  username = process.env['E2E_USERNAME'] ?? 'parent-a',
+  password = 'test-pass-a',
+): Promise<void> {
   await page.goto('/login')
   await page.getByLabel('שם משתמש').fill(username)
+  await page.getByLabel('סיסמה', { exact: true }).fill(password)
   await page.getByRole('button', { name: 'כניסה' }).click()
   await page.waitForURL((url) => !url.pathname.startsWith('/login'))
 }

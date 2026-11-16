@@ -1,0 +1,567 @@
+<app-bottom-sheet [open]="!!activeKind()" [title]="title()" (closed)="closed.emit()">
+  @if (activeKind(); as kind) {
+    <form class="es" (submit)="onSubmit($event)" novalidate>
+      @if (editing()) {
+        <p class="es__info">
+          <strong>{{ e.info }}</strong><br />{{ typeLine() }}
+        </p>
+      }
+      @switch (kind) {
+        @case ('bottle') {
+          <button
+            type="button"
+            class="es__toggle"
+            [class.es__toggle--on]="swallowing()"
+            [attr.aria-pressed]="swallowing()"
+            (click)="swallowing.set(!swallowing())"
+          >
+            <span>🦩 {{ s.swallowing }}</span>
+            <strong>{{ swallowing() ? s.yes : s.no }}</strong>
+          </button>
+
+          <div class="es__seg">
+            <button
+              type="button"
+              class="es__opt"
+              [class.es__opt--on]="feedType() === 'BOTTLE'"
+              (click)="feedType.set('BOTTLE')"
+            >
+              {{ s.feedBottle }}
+            </button>
+            <button
+              type="button"
+              class="es__opt"
+              [class.es__opt--on]="feedType() === 'BREAST'"
+              (click)="feedType.set('BREAST')"
+            >
+              {{ s.feedBreast }}
+            </button>
+          </div>
+
+          @if (feedType() === 'BOTTLE') {
+            <div class="es__seg">
+              @for (o of liquidOptions; track o.value) {
+                <button
+                  type="button"
+                  class="es__opt"
+                  [class.es__opt--on]="liquid() === o.value"
+                  (click)="liquid.set(o.value)"
+                >
+                  {{ o.label }}
+                </button>
+              }
+            </div>
+
+            <div class="es__field">
+              <label class="es__label" for="es-offered">{{ s.offered }}</label>
+              <div class="es__stepper">
+                @for (d of [-10, -5]; track d) {
+                  <button type="button" class="es__step" (click)="stepOffered(d)">{{ d }}</button>
+                }
+                <input
+                  id="es-offered"
+                  class="es__input"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  [value]="offered()"
+                  (input)="setOffered(valueOf($event))"
+                />
+                @for (d of [5, 10]; track d) {
+                  <button type="button" class="es__step" (click)="stepOffered(d)">+{{ d }}</button>
+                }
+                <span>{{ s.ml }}</span>
+              </div>
+            </div>
+
+            <div class="es__field">
+              <label class="es__label" for="es-consumed">{{ s.consumed }}</label>
+              <div class="es__stepper">
+                @for (d of [-10, -5]; track d) {
+                  <button type="button" class="es__step" (click)="stepConsumed(d)">{{ d }}</button>
+                }
+                <input
+                  id="es-consumed"
+                  class="es__input"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  [value]="consumed()"
+                  (input)="setConsumed(valueOf($event))"
+                />
+                @for (d of [5, 10]; track d) {
+                  <button type="button" class="es__step" (click)="stepConsumed(d)">+{{ d }}</button>
+                }
+                <span>{{ s.ml }}</span>
+              </div>
+            </div>
+
+            <div class="es__presets">
+              @for (p of bottlePresets; track p) {
+                <button type="button" class="es__chip" (click)="preset(p)">
+                  {{ p }} {{ s.ml }}
+                </button>
+              }
+            </div>
+          } @else {
+            <div class="es__field">
+              <span class="es__label">{{ s.breastSide }}</span>
+              <div class="es__seg">
+                @for (o of sideOptions; track o.value) {
+                  <button
+                    type="button"
+                    class="es__opt"
+                    [class.es__opt--on]="side() === o.value"
+                    (click)="side.set(o.value)"
+                  >
+                    {{ o.label }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="es__field">
+              <span class="es__label">{{ s.breastDuration }}</span>
+              <div class="es__stepper">
+                @for (d of [-5, -1]; track d) {
+                  <button type="button" class="es__step" (click)="stepNumber(duration, d, 1)">
+                    {{ d }}
+                  </button>
+                }
+                <strong class="es__value">{{ duration() }} {{ s.minutes }}</strong>
+                @for (d of [1, 5]; track d) {
+                  <button type="button" class="es__step" (click)="stepNumber(duration, d, 1)">
+                    +{{ d }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="es__field es__field--top">
+              @if (!showTopUp()) {
+                <button type="button" class="es__chip" (click)="showTopUp.set(true)">
+                  {{ s.addTopUp }}
+                </button>
+              } @else {
+                <div class="es__row">
+                  <strong>{{ s.topUpTitle }}</strong>
+                  <button type="button" class="es__link" (click)="showTopUp.set(false)">
+                    {{ s.hide }}
+                  </button>
+                </div>
+                <div class="es__seg">
+                  @for (o of topUpOptions; track o.value) {
+                    <button
+                      type="button"
+                      class="es__opt"
+                      [class.es__opt--on]="topUpLiquid() === o.value"
+                      (click)="topUpLiquid.set(o.value)"
+                    >
+                      {{ o.label }}
+                    </button>
+                  }
+                </div>
+                <span class="es__label">{{ s.topUpAmount }}</span>
+                <div class="es__stepper">
+                  <button
+                    type="button"
+                    class="es__step"
+                    aria-label="-10"
+                    (click)="stepNumber(topUpMl, -10, 0, 300)"
+                  >
+                    −
+                  </button>
+                  <strong class="es__value">{{ topUpMl() }} {{ s.ml }}</strong>
+                  <button
+                    type="button"
+                    class="es__step"
+                    aria-label="+10"
+                    (click)="stepNumber(topUpMl, 10, 0, 300)"
+                  >
+                    +
+                  </button>
+                </div>
+              }
+            </div>
+          }
+
+          <div class="es__field">
+            <span class="es__label">{{ s.spitUp }}</span>
+            <div class="es__seg">
+              @for (o of spitOptions; track o.value) {
+                <button
+                  type="button"
+                  class="es__opt"
+                  [class.es__opt--on]="spitUp() === o.value"
+                  (click)="spitUp.set(o.value)"
+                >
+                  {{ o.label }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        @case ('diaper') {
+          <div class="es__field">
+            <span class="es__label">{{ s.diaperContains }}</span>
+            <div class="es__seg">
+              @for (o of containsOptions; track o.value) {
+                <button
+                  type="button"
+                  class="es__opt"
+                  [class.es__opt--on]="contains() === o.value"
+                  (click)="contains.set(o.value)"
+                >
+                  {{ o.label }}
+                </button>
+              }
+            </div>
+          </div>
+          @if (showPee()) {
+            <div class="es__field">
+              <span class="es__label">{{ s.peeVolume }}</span>
+              <div class="es__seg">
+                @for (o of peeOptions; track o.value) {
+                  <button
+                    type="button"
+                    class="es__opt"
+                    [class.es__opt--on]="peeVolume() === o.value"
+                    (click)="peeVolume.set(o.value)"
+                  >
+                    {{ o.label }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+          @if (showPoo()) {
+            <div class="es__field es__field--top">
+              <span class="es__label">{{ s.pooAmount }}</span>
+              <div class="es__seg">
+                @for (o of pooAmountOptions; track o.value) {
+                  <button
+                    type="button"
+                    class="es__opt"
+                    [class.es__opt--on]="pooAmount() === o.value"
+                    (click)="pooAmount.set(o.value)"
+                  >
+                    {{ o.label }}
+                  </button>
+                }
+              </div>
+              <span class="es__label">{{ s.pooColor }}</span>
+              <div class="es__seg">
+                @for (o of colorOptions; track o.value) {
+                  <button
+                    type="button"
+                    class="es__opt"
+                    [class.es__opt--on]="pooColor() === o.value"
+                    (click)="pooColor.set(o.value)"
+                  >
+                    {{ o.label }}
+                  </button>
+                }
+              </div>
+              <span class="es__label">{{ s.pooTexture }}</span>
+              <div class="es__seg">
+                @for (o of textureOptions; track o.value) {
+                  <button
+                    type="button"
+                    class="es__opt"
+                    [class.es__opt--on]="pooTexture() === o.value"
+                    (click)="pooTexture.set(o.value)"
+                  >
+                    {{ o.label }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        }
+
+        @case ('activity') {
+          <div class="es__field">
+            <span class="es__label">{{ s.activityType }}</span>
+            <div class="es__grid">
+              @for (name of activities(); track $index) {
+                <button
+                  type="button"
+                  class="es__opt"
+                  [class.es__opt--on]="activityName() === name"
+                  (click)="activityName.set(name)"
+                >
+                  {{ name }}
+                </button>
+              }
+            </div>
+          </div>
+          <div class="es__field">
+            <label class="es__label" for="es-intensity">{{ s.activityIntensity }}</label>
+            <div class="es__row">
+              <input
+                id="es-intensity"
+                type="range"
+                min="0"
+                max="10"
+                step="1"
+                [value]="intensity()"
+                (input)="onNumber(intensity, $event)"
+              />
+              <strong class="es__value">{{ intensity() === 0 ? s.calm : intensity() }}</strong>
+            </div>
+          </div>
+        }
+
+        @case ('weight') {
+          <div class="es__field">
+            <span class="es__label">{{ s.weightLabel }}</span>
+            <strong class="es__value">{{
+              t.weightDetails.replace('{kg}', kg()).replace('{g}', grams())
+            }}</strong>
+            <div class="es__stepper">
+              <button type="button" class="es__step" (click)="stepGrams(-100, 100)">-100ג׳</button>
+              <button type="button" class="es__step" (click)="stepGrams(-10, 10)">-10ג׳</button>
+              <button type="button" class="es__step" (click)="stepGrams(10, 10)">+10ג׳</button>
+              <button type="button" class="es__step" (click)="stepGrams(100, 100)">+100ג׳</button>
+            </div>
+          </div>
+          <div class="es__field">
+            <label class="es__label" for="es-grams">{{ s.weightExact }}</label>
+            <input
+              id="es-grams"
+              class="es__input es__input--wide"
+              inputmode="numeric"
+              [placeholder]="s.weightPlaceholder"
+              [value]="grams()"
+              (input)="onText(grams, $event)"
+            />
+          </div>
+          <div class="es__field">
+            <label class="es__label" for="es-percentile">{{ s.percentile }}</label>
+            <input
+              id="es-percentile"
+              class="es__input es__input--wide"
+              inputmode="numeric"
+              [placeholder]="s.percentilePlaceholder"
+              [value]="percentile()"
+              (input)="onText(percentile, $event)"
+            />
+          </div>
+        }
+
+        @case ('pumping') {
+          <div class="es__field">
+            <label class="es__label" for="es-left">{{ s.pumpLeft }}</label>
+            <div class="es__stepper">
+              <button type="button" class="es__step" (click)="stepNumber(pumpLeft, -10, 0)">
+                -10
+              </button>
+              <strong class="es__value">{{ pumpLeft() }} {{ s.ml }}</strong>
+              <button type="button" class="es__step" (click)="stepNumber(pumpLeft, 10, 0)">
+                +10
+              </button>
+            </div>
+            <input
+              id="es-left"
+              type="range"
+              min="0"
+              max="250"
+              step="5"
+              [value]="pumpLeft()"
+              (input)="onNumber(pumpLeft, $event)"
+            />
+          </div>
+          <div class="es__field">
+            <label class="es__label" for="es-right">{{ s.pumpRight }}</label>
+            <div class="es__stepper">
+              <button type="button" class="es__step" (click)="stepNumber(pumpRight, -10, 0)">
+                -10
+              </button>
+              <strong class="es__value">{{ pumpRight() }} {{ s.ml }}</strong>
+              <button type="button" class="es__step" (click)="stepNumber(pumpRight, 10, 0)">
+                +10
+              </button>
+            </div>
+            <input
+              id="es-right"
+              type="range"
+              min="0"
+              max="250"
+              step="5"
+              [value]="pumpRight()"
+              (input)="onNumber(pumpRight, $event)"
+            />
+          </div>
+        }
+
+        @case ('vomiting') {
+          <div class="es__field">
+            <span class="es__label">{{ s.vomitingSize }}</span>
+            <div class="es__seg">
+              @for (o of vomitingOptions; track o.value) {
+                <button
+                  type="button"
+                  class="es__opt"
+                  [class.es__opt--on]="vomitSize() === o.value"
+                  (click)="vomitSize.set(o.value)"
+                >
+                  <span aria-hidden="true">{{ o.emoji }}</span> {{ o.label }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        @case ('sleep') {
+          @if (!editing()) {
+            <div class="es__seg">
+              <button
+                type="button"
+                class="es__opt"
+                [class.es__opt--on]="sleepMode() === 'TIMER'"
+                (click)="sleepMode.set('TIMER')"
+              >
+                {{ s.sleepTimerMode }}
+              </button>
+              <button
+                type="button"
+                class="es__opt"
+                [class.es__opt--on]="sleepMode() === 'MANUAL'"
+                (click)="sleepMode.set('MANUAL')"
+              >
+                {{ s.sleepManualMode }}
+              </button>
+            </div>
+          }
+
+          @if (sleepMode() === 'TIMER') {
+            <p class="es__info">{{ openSleep() ? s.sleepOpenInfo : s.sleepTimerInfo }}</p>
+            <div class="es__field">
+              <span class="es__label">{{ s.sleepStartTime }}</span>
+              <app-datetime24 [(value)]="timestamp" />
+            </div>
+            @if (openSleep()) {
+              <button
+                type="button"
+                class="es__submit"
+                [disabled]="submitting()"
+                (click)="endCurrentSleep()"
+              >
+                {{ s.sleepEndCurrent }}
+              </button>
+            } @else {
+              <div class="es__field">
+                <span class="es__label">{{ s.sleepLocationStart }}</span>
+                <div class="es__grid">
+                  @for (o of timerLocations; track o.value) {
+                    <button
+                      type="button"
+                      class="es__opt"
+                      [disabled]="submitting()"
+                      (click)="startSleep(o.value)"
+                    >
+                      {{ o.label }}
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          } @else {
+            <p class="es__info">{{ s.sleepManualInfo }}</p>
+            <div class="es__field">
+              <span class="es__label">{{ s.sleepStartManual }}</span>
+              <app-datetime24 [(value)]="sleepStart" />
+            </div>
+            <div class="es__field">
+              <span class="es__label">{{ s.sleepEndManual }}</span>
+              <app-datetime24 [(value)]="sleepEnd" />
+            </div>
+            <div class="es__field">
+              <span class="es__label">{{ s.sleepLocation }}</span>
+              <div class="es__grid">
+                @for (o of manualLocations; track o.value) {
+                  <button
+                    type="button"
+                    class="es__opt"
+                    [class.es__opt--on]="sleepLocation() === o.value"
+                    (click)="sleepLocation.set(o.value)"
+                  >
+                    {{ o.label }}
+                  </button>
+                }
+              </div>
+            </div>
+            <div class="es__field">
+              <label class="es__label" for="es-sleep-note">{{ s.sleepNote }}</label>
+              <input
+                id="es-sleep-note"
+                class="es__input es__input--wide"
+                [placeholder]="s.sleepNotePlaceholder"
+                [value]="note()"
+                (input)="onText(note, $event)"
+              />
+            </div>
+            @if (error()) {
+              <p class="es__error" role="alert">{{ error() }}</p>
+            }
+            <button type="submit" class="es__submit" [disabled]="submitting()">
+              {{ editing() ? submitLabel() : submitting() ? s.submitting : s.sleepSubmit }}
+            </button>
+          }
+        }
+      }
+
+      @if (kind !== 'sleep') {
+        <div class="es__field">
+          <span class="es__label">{{ s.eventTime }}</span>
+          <app-datetime24 [(value)]="timestamp" />
+        </div>
+        <div class="es__field">
+          <label class="es__label" for="es-note">{{ s.note }}</label>
+          <input
+            id="es-note"
+            class="es__input es__input--wide"
+            [placeholder]="s.notePlaceholder"
+            [value]="note()"
+            (input)="onText(note, $event)"
+          />
+        </div>
+        @if (error()) {
+          <p class="es__error" role="alert">{{ error() }}</p>
+        }
+        <button type="submit" class="es__submit" [disabled]="submitting()">
+          {{ submitLabel() }}
+        </button>
+      }
+
+      @if (editing()) {
+        <button
+          type="button"
+          class="es__delete"
+          data-testid="edit-delete"
+          [disabled]="submitting()"
+          (click)="askDelete()"
+        >
+          {{ e.delete }}
+        </button>
+        @if (deleteAsk()) {
+          <div class="es__confirm" role="alertdialog" [attr.aria-label]="t.deleteStrip">
+            <p class="es__confirmText">{{ t.deleteStrip }}</p>
+            <div class="es__confirmRow">
+              <button
+                type="button"
+                class="es__confirmYes"
+                data-testid="edit-delete-yes"
+                (click)="confirmDelete()"
+              >
+                {{ t.deleteYes }}
+              </button>
+              <button type="button" class="es__confirmNo" (click)="cancelDelete()">
+                {{ t.deleteNo }}
+              </button>
+            </div>
+          </div>
+        }
+      }
+    </form>
+  }
+</app-bottom-sheet>

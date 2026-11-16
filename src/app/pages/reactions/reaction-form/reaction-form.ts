@@ -213,7 +213,7 @@ export class ReactionForm implements HasUnsavedChanges {
       if (this.reactionId) await this.reactions.update(this.reactionId, input)
       else await this.reactions.create(input)
       this.leaving_ = true
-      await this.router.navigateByUrl('/allergens/reactions')
+      await this.router.navigateByUrl('/tasting/allergens/reactions')
     } catch {
       this.error_.set(this.t.saveFailed)
     } finally {
@@ -233,14 +233,14 @@ export class ReactionForm implements HasUnsavedChanges {
     try {
       await this.reactions.remove(this.reactionId)
       this.leaving_ = true
-      await this.router.navigateByUrl('/allergens/reactions')
+      await this.router.navigateByUrl('/tasting/allergens/reactions')
     } catch {
       this.error_.set(this.t.saveFailed)
     }
   }
 
   protected async cancel(): Promise<void> {
-    await this.router.navigateByUrl(this.isEdit ? '/allergens/reactions' : '/')
+    await this.router.navigateByUrl(this.isEdit ? '/tasting/allergens/reactions' : '/tasting')
   }
 
   private fill(reaction: Reaction): void {
