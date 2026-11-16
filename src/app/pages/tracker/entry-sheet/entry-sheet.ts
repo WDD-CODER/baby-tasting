@@ -435,9 +435,17 @@ export class EntrySheet {
   private async restore(event: TrackerEvent): Promise<void> {
     const body = Object.fromEntries(
       Object.entries(event).filter(([key]) => key !== 'id' && key !== 'loggedBy'),
-    ) as NewTrackerEvent
+    ) as Record<string, unknown>
+    // The server sets these on a sleep; it rejects them from a client.
+    const sleep = body['sleep']
+    if (sleep && typeof sleep === 'object') {
+      const { startAt, endAt, startLocation } = sleep as Record<string, unknown>
+      body['sleep'] = Object.fromEntries(
+        Object.entries({ startAt, endAt, startLocation }).filter(([, v]) => v !== undefined),
+      )
+    }
     try {
-      await this.events.create(body)
+      await this.events.create(body as unknown as NewTrackerEvent)
       this.toast.show(this.e.restored, 'good')
     } catch (err) {
       this.toast.show(saveErrorText(err, this.e.restoreFailed), 'bad')
