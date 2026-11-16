@@ -1,0 +1,24 @@
+<section class="tracker" data-testid="diaper-tracker">
+  <header class="tracker__head">
+    <strong>🧷 {{ t.diaperTrackerTitle }}</strong>
+    <span class="tracker__pill">{{ countText() }}</span>
+  </header>
+
+  @if (diapers().length === 0) {
+    <p class="tracker__empty">{{ t.diaperEmpty }}</p>
+  } @else {
+    <div class="tracker__summary">
+      <span class="tracker__cell tracker__cell--pee">💦 {{ t.diaperPee }}: {{ pee() }}</span>
+      <span class="tracker__cell tracker__cell--poo">💩 {{ t.diaperPoo }}: {{ poo() }}</span>
+      <span class="tracker__cell tracker__cell--both">💦💩 {{ t.diaperBoth }}: {{ both() }}</span>
+    </div>
+    <div class="tracker__chips">
+      @for (d of diapers(); track d.id) {
+        <span class="tracker__chip" [title]="by(d)">
+          <span aria-hidden="true">{{ glyph(d) }}</span>
+          <small>{{ clock(d) }}</small>
+        </span>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,87 @@
+<div class="banners">
+  @if (feeding().isOverdue) {
+    <div
+      class="banner"
+      [class.banner--asleep]="openSleep()"
+      [class.banner--urgent]="!openSleep()"
+      role="status"
+    >
+      <span aria-hidden="true">{{ openSleep() ? '🍼✨' : '🍼🚨' }}</span>
+      <span>{{ openSleep() ? t.bannerFeedingAsleep : t.bannerFeeding }}</span>
+    </div>
+  }
+
+  @if (pumpFeed()) {
+    <div class="banner banner--pump" role="status">
+      <span aria-hidden="true">🤱🍼</span>
+      <span class="banner__text">{{ pumpText() }}</span>
+      <button type="button" class="banner__btn" (click)="logPumping.emit()">
+        {{ t.bannerPumpingDone }}
+      </button>
+      <button
+        type="button"
+        class="banner__x"
+        [attr.aria-label]="t.bannerPumpingDismiss"
+        (click)="dismissPumping()"
+      >
+        ✕
+      </button>
+    </div>
+  }
+
+  @if (longSleep()) {
+    <div class="banner banner--long" role="status">
+      <span aria-hidden="true">💤⏰</span>
+      <span class="banner__text">{{ t.bannerLongSleep }}</span>
+      <button type="button" class="banner__btn" (click)="endSleep.emit()">
+        {{ t.bannerLongSleepEnd }}
+      </button>
+      <button
+        type="button"
+        class="banner__x"
+        [attr.aria-label]="t.bannerDismiss"
+        (click)="dismissLongSleep()"
+      >
+        ✕
+      </button>
+    </div>
+  }
+
+  @if (nap()) {
+    <div class="banner banner--nap" role="status">
+      <app-icon slot="quick.sleep" [size]="20" />
+      <span>{{ t.bannerNap }}</span>
+    </div>
+  }
+</div>
+
+<div class="pills">
+  @if (openSleep(); as open) {
+    <div class="pill pill--sleep" data-testid="open-sleep-pill" role="status">
+      <app-icon slot="event.sleep" [size]="20" [filled]="true" />
+      <span>{{ t.openSleepPill }}</span>
+      <app-sleep-timer [startAt]="open.sleep?.startAt ?? open.timestamp" />
+    </div>
+  }
+  @if (showBioGaya()) {
+    <div class="pill pill--bio" data-testid="bio-gaya-pill">
+      <app-icon slot="card.biogaya" [size]="20" />
+      <span>{{ t.bioGayaPill }}</span>
+      <button type="button" class="pill__give" (click)="giveBioGaya()">{{ t.bioGayaGive }}</button>
+    </div>
+  }
+  @if (showBigNap()) {
+    <button type="button" class="pill pill--nap" (click)="hideBigNap()">
+      <span aria-hidden="true">😴</span>
+      <span>{{ t.pillBigNap }}</span>
+      <span aria-hidden="true">✕</span>
+    </button>
+  }
+  @if (showBath()) {
+    <button type="button" class="pill pill--bath" (click)="hideBath()">
+      <span aria-hidden="true">🛁</span>
+      <span>{{ t.pillBath }}</span>
+      <span aria-hidden="true">✕</span>
+    </button>
+  }
+</div>

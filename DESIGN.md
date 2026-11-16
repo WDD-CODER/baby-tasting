@@ -22,6 +22,18 @@ All values live in `src/styles/tokens.scss`; no colour literal appears anywhere 
 | `--color-tier-good` | `#46A758` | maintenance |
 | `--color-tier-great` | `#30A46C` | great tier |
 | `--color-cat-nutrition` | `#F6C9A8` | nutrition category |
+| `--color-event-nutrition` | `#3B82F6` | bottle feeding events |
+| `--color-event-breast` | `#0EA5E9` | breastfeeding events |
+| `--color-event-diaper` | `#14B8A6` | diaper events |
+| `--color-event-sleep` | `#6366F1` | sleep events, the open-sleep pill |
+| `--color-event-sleep-great` | `#A855F7` | an excellent sleep cycle (45 min or more) |
+| `--color-event-activity` | `#F59E0B` | activity events |
+| `--color-event-weight` | `#EC4899` | weight events |
+| `--color-event-pumping` | `#D946EF` | pumping events |
+| `--color-event-vomiting` | `#FB7185` | vomiting events |
+| `--color-event-supplement` | `#10B981` | supplement (Bio Gaya) events |
+| `--color-awake-ok` / `-soon` / `-bath` / `-over` | `#EAB308` / `#F97316` / `#F59E0B` / `#F43F5E` | the awake-time widget states |
+| `--color-nap-window` | `#3730A3` | the midday nap window banner |
 
 ## Typography
 

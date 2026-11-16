@@ -1,0 +1,8 @@
+@if (given()) {
+  <section class="bio" data-testid="bio-gaya-card">
+    <app-icon slot="card.biogaya" [size]="24" />
+    <strong>{{ t.bioGayaTitle }}</strong>
+    <span class="bio__pill">✓ {{ time() }}</span>
+    <small class="bio__by">{{ parent() }}</small>
+  </section>
+}

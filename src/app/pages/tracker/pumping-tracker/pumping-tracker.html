@@ -1,0 +1,26 @@
+<section class="tracker" data-testid="pumping-tracker">
+  <header class="tracker__head">
+    <strong>🍼🤱 {{ t.pumpingTrackerTitle }}</strong>
+    <button type="button" class="tracker__add" (click)="add.emit()">{{ t.pumpingAdd }}</button>
+  </header>
+
+  @if (pumps().length === 0) {
+    <p class="tracker__empty">{{ t.pumpingEmpty }}</p>
+  } @else {
+    <div class="tracker__summary">
+      <span class="tracker__cell">⬅️ {{ t.pumpLeft }}: {{ left() }} מ״ל</span>
+      <span class="tracker__cell">➡️ {{ t.pumpRight }}: {{ right() }} מ״ל</span>
+      <span class="tracker__cell">🔄 {{ t.pumpTotal }}: {{ left() + right() }} מ״ל</span>
+    </div>
+    <div class="tracker__chips">
+      @for (p of pumps(); track p.id) {
+        <span class="tracker__chip">
+          <span aria-hidden="true">🍼</span>
+          <strong>{{ total(p) }} מ״ל</strong>
+          <small>{{ p.pumping?.leftAmountMl }}L / {{ p.pumping?.rightAmountMl }}R</small>
+          <small>{{ clock(p) }}</small>
+        </span>
+      }
+    </div>
+  }
+</section>

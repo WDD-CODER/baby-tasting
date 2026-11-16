@@ -1,5 +1,13 @@
 <div class="toasts" aria-live="polite">
   @for (message of toasts.messages(); track message.id) {
-    <div [class]="'toast toast--' + message.tone" role="status">{{ message.text }}</div>
+    <div [class]="'toast toast--' + message.tone" role="status">
+      <span>{{ message.text }}</span>
+      @if (message.action; as action) {
+        <span aria-hidden="true">·</span>
+        <button type="button" class="toast__action" (click)="toasts.act(message.id)">
+          {{ action.label }}
+        </button>
+      }
+    </div>
   }
 </div>
