@@ -25,7 +25,10 @@ export async function startSleep(page: Page): Promise<void> {
 
 /** A long press on a quick button (`meal`, `diaper`, `sleep`, `vomiting`): opens its full sheet. */
 export async function holdQuick(page: Page, quick: string): Promise<void> {
-  const box = await page.locator(`[data-quick="${quick}"] button`).boundingBox()
+  const button = page.locator(`[data-quick="${quick}"] button`)
+  // centre it: the fixed bottom navigation covers the lowest buttons
+  await button.evaluate((el) => el.scrollIntoView({ block: "center" }))
+  const box = await button.boundingBox()
   if (!box) throw new Error(`no ${quick} button`)
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
   await page.mouse.down()

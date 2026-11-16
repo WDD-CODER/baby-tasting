@@ -26,7 +26,11 @@ export async function addFood(page: Page, date: string, meal: number, name: stri
   if (!new URL(page.url()).pathname.startsWith('/tasting')) await page.goto('/tasting')
   await cell(page, date, meal).locator('.cell__add').click()
   await page.getByLabel('חיפוש מזון').fill(name)
+  // wait for the server to confirm: acting on the tile before that hits its temporary id
+  const created = page.waitForResponse((r) => r.request().method() === 'POST' && /\/api\/v1\/calendar$/.test(r.url()))
   await page.getByRole('button', { name: new RegExp(name) }).first().click()
+  await created
+  await page.waitForLoadState('networkidle')
 }
 
 /** Drags a tile onto another cell with the mouse (the mouse has no start delay). */

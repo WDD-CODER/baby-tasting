@@ -31,5 +31,5 @@ test('015-2: recording a past sleep during a running one and choosing להשאי
   await expect(page.getByTestId('open-sleep-pill')).toBeVisible()
   await page.goto('/timeline')
   await expect(page.getByTestId('timeline-sleeping')).toBeVisible()
-  await expect(page.getByTestId('timeline-row').filter({ hasText: 'סיים' })).toHaveCount(1)
+  await expect(page.getByTestId('timeline-row').filter({ hasText: / עד \d{2}:\d{2}/ })).toHaveCount(1)
 })
