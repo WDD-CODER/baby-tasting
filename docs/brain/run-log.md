@@ -5,4 +5,5 @@ One row per orchestrator run, written by `node scripts/orch-state.mjs finish` fr
 | Date | Run | Plans | Merged | Parked | Parked reasons | Fix rounds | Escalations | Gate fails | Final gate | ✗ | Checker misses | ✗ per plan |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-11-15 | night-1 | 001,002,003,004,005,006,007,008 | 8 | 0 | - | 2 | 3 | 0 | ok | 0 | 0 | 0 |
-| 2026-11-16 | tracker-1 | 009,010,011,012,013,014 | 6 | 0 | - | 3 | 1 | 1 | ok | - | - | - |
+| 2026-11-16 | tracker-1 | 009,010,011,012,013,014 | 6 | 0 | - | 3 | 1 | 1 | ok | 0 | 0 | 0 |
+| 2026-11-16 | tracker-2 | 015 | 1 | 0 | - | 0 | 0 | 0 | ok | - | - | - |
