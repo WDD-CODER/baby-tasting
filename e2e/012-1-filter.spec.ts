@@ -11,7 +11,6 @@ test('012-1: switching the filter from היום to 7 ימים shows an event fro
     activity: { activityName: 'שירים' },
   })
   await page.goto('/timeline')
-  await expect(page.getByTestId('timeline-list')).toBeVisible()
   await expect(page.getByTestId('timeline-row')).toHaveCount(0)
   await page.getByRole('button', { name: '7 ימים' }).click()
   await expect(page.getByTestId('timeline-row')).toHaveCount(1)

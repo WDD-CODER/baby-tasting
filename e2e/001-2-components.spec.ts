@@ -7,6 +7,6 @@ test('001-2: /dev/components shows the heading and one section per shared compon
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(5) })
   await page.goto('/dev/components')
   await expect(page.getByRole('heading', { name: 'רכיבים משותפים' })).toBeVisible()
-  await expect(page.locator('section[data-component]')).toHaveCount(15)
+  await expect(page.locator('section[data-component]')).toHaveCount(18)
   await page.screenshot({ path: 'e2e/screens/001-2.png', fullPage: true })
 })

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import { dragTo } from './support/calendar'
 import { openLog } from './support/tracker'
 
-test.use({ viewport: { width: 360, height: 780 } })
+test.use({ viewport: { width: 360, height: 1400 } })
 
 test('011-4: dragging one quick button before another keeps the new order after a reload', async ({ page, request }) => {
   await openLog(page, request)

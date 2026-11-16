@@ -9,6 +9,7 @@ test('004-4: adding דבש to an 8-month-old shows the warning before the item i
   await resetHousehold(request)
   await signIn(page)
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(8) })
+  await page.goto('/tasting')
   const today = todayIso()
   await cell(page, today, 2).locator('.cell__add').click()
   await page.getByLabel('חיפוש מזון').fill('דבש')
