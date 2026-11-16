@@ -5,7 +5,7 @@ test('003-3: unsaved changes ask before leaving; archive asks for confirmation',
   await resetHousehold(request)
   await signIn(page)
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(5) })
-  await page.goto('/foods')
+  await page.goto('/tasting/foods')
   await page.getByRole('link', { name: 'הוספת מזון' }).or(page.getByRole('button', { name: 'הוספת מזון' })).first().click()
   await expect(page).toHaveURL(/\/foods\/new$/)
   await page.getByLabel('שם', { exact: true }).fill('מזון בדיקה')
@@ -14,7 +14,7 @@ test('003-3: unsaved changes ask before leaving; archive asks for confirmation',
   await page.screenshot({ path: 'e2e/screens/003-3.png' })
   await page.getByRole('button', { name: 'להישאר' }).click()
 
-  await page.goto('/foods')
+  await page.goto('/tasting/foods')
   await page.getByRole('link', { name: /בננה/ }).click()
   await page.getByRole('button', { name: 'העברה לארכיון' }).click()
   await expect(page.getByText('להעביר את בננה לארכיון?')).toBeVisible()

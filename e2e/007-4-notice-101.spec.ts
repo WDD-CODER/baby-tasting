@@ -9,7 +9,7 @@ test('007-4: choosing breathing difficulty shows the 101 notice', async ({ page,
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(8) })
   const today = todayIso()
   await giveFood(page, 'ביצה קשה', today)
-  await page.goto('/')
+  await page.goto('/tasting')
   await cell(page, today, 1).locator('.tile').click()
   await page.getByRole('button', { name: 'תגובה', exact: true }).click()
   const notice = 'במקרה של קושי בנשימה או החמרה מהירה — התקשרו 101'

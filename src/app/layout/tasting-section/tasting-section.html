@@ -1,0 +1,13 @@
+<nav class="top-tabs" [attr.aria-label]="tabs[0].label">
+  @for (tab of tabs; track tab.path) {
+    <a
+      class="top-tab"
+      [routerLink]="tab.path"
+      routerLinkActive="top-tab--active"
+      [routerLinkActiveOptions]="{ exact: tab.exact }"
+      ariaCurrentWhenActive="page"
+      >{{ tab.label }}</a
+    >
+  }
+</nav>
+<router-outlet />

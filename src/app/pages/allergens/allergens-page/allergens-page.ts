@@ -116,7 +116,7 @@ export class AllergensPage {
   }
 
   protected manage(): void {
-    void this.router.navigate(['/foods/allergens'])
+    void this.router.navigate(['/tasting/foods/allergens'])
   }
 
   protected async load(): Promise<void> {

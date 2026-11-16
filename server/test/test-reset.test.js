@@ -21,7 +21,7 @@ test('the reset route does not exist unless e2eReset is on', async () => {
 })
 
 test('E2E_RESET is ignored in production', () => {
-  const base = { MONGODB_URI: 'mongodb://x', SESSION_SECRET: 's', APP_USERS: 'a', E2E_RESET: '1' }
+  const base = { MONGODB_URI: 'mongodb://x', SESSION_SECRET: 's', APP_USERS: 'a:$2b$10$hash', E2E_RESET: '1' }
   assert.equal(loadConfig({ ...base, NODE_ENV: 'production' }).e2eReset, false)
   assert.equal(loadConfig({ ...base, NODE_ENV: 'development' }).e2eReset, true)
 })

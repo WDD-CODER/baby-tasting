@@ -14,6 +14,14 @@
     [ngModel]="birthDate_()"
     (ngModelChange)="birthDate_.set($event)"
   />
+  <app-text-field
+    name="babyBirthWeight"
+    type="number"
+    [label]="t.birthWeight"
+    [error]="weightError_()"
+    [ngModel]="birthWeight_()"
+    (ngModelChange)="birthWeight_.set($event)"
+  />
   <app-button
     type="submit"
     [fullWidth]="true"

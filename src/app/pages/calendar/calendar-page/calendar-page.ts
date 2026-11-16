@@ -239,7 +239,7 @@ export class CalendarPage {
     const alert = this.allergenStatus.alerts().find((a) => a.id === id)
     if (!alert) return
     if (alert.kind === 'locked') {
-      void this.router.navigate(['/allergens'])
+      void this.router.navigate(['/tasting/allergens'])
       return
     }
     const foods = this.foods()
@@ -349,7 +349,7 @@ export class CalendarPage {
 
   protected newFood(): void {
     this.addFor_.set(null)
-    void this.router.navigate(['/foods/new'], { queryParams: { returnTo: '/' } })
+    void this.router.navigate(['/tasting/foods/new'], { queryParams: { returnTo: '/tasting' } })
   }
 
   protected openItem(item: CalendarItem): void {
@@ -386,14 +386,14 @@ export class CalendarPage {
     const item = this.actionsItem()
     if (!item) return
     this.actionsId_.set(null)
-    void this.router.navigate(['/reactions/new'], { queryParams: { itemId: item.id } })
+    void this.router.navigate(['/tasting/reactions/new'], { queryParams: { itemId: item.id } })
   }
 
   protected openDetails(): void {
     const item = this.actionsItem()
     if (!item) return
     this.actionsId_.set(null)
-    void this.router.navigate(['/foods', item.foodId])
+    void this.router.navigate(['/tasting/foods', item.foodId])
   }
 
   protected async moveFromActions(target: { date: string; meal: Meal }): Promise<void> {
