@@ -9,8 +9,9 @@ import {
   toApiEvent,
   validateEvent,
 } from '../domain/tracker/events.js'
-import { checkOverlap, durationMinutes } from '../domain/tracker/sleep.js'
-import { HttpError } from '../lib/http-error.js'
+import { MAX_AWAKE_MINUTES, findConflict, intervalOf } from '../domain/tracker/conflicts.js'
+import { durationMinutes } from '../domain/tracker/sleep.js'
+import { HttpError, conflictError } from '../lib/http-error.js'
 import { handle, notFound } from './catalog-helpers.js'
 
 const DEFAULT_LIMIT = 400
@@ -51,11 +52,45 @@ function buildSleep(input, existing, parentType) {
   return sleep
 }
 
+// The stored events that could conflict with an event-like `candidate` (sleeps and awake-only events).
+async function loadNear(repos, householdId, candidate) {
+  const iv = intervalOf(candidate)
+  if (!iv) return []
+  // a point event needs its own instant inside the window
+  const endAt = iv.end === Infinity ? null : new Date(iv.end + 1).toISOString()
+  return repos.trackerEvents.findConflictCandidates(householdId, iv.startAt, endAt, MAX_AWAKE_MINUTES * 60000)
+}
+
+// Throws 409 event_conflict naming the first blocker (D-016-2). `candidate`: { id?, eventType, timestamp, ... }.
+export async function assertEventFits(repos, householdId, candidate) {
+  const conflict = findConflict(candidate, await loadNear(repos, householdId, candidate), { now: new Date().toISOString() })
+  if (conflict) throw conflictError(conflict)
+}
+
 export async function assertSleepFits(repos, householdId, sleep, id) {
-  const near = await repos.trackerEvents.findSleepsNear(householdId, sleep.startAt, sleep.endAt)
-  if (checkOverlap(near, { startAt: sleep.startAt, endAt: sleep.endAt, id }).overlaps) {
-    throw new HttpError(409, 'sleep_overlap', 'This sleep overlaps another sleep')
+  await assertEventFits(repos, householdId, { id, eventType: 'SLEEP', timestamp: sleep.startAt, sleep })
+}
+
+// D-016-3: an awake-only event after the open sleep's start, with `endOpenSleep`, ends that sleep at the event's time.
+async function endOpenSleepFor(repos, householdId, doc, parentType, username) {
+  const near = await loadNear(repos, householdId, doc)
+  const conflict = findConflict(doc, near)
+  if (!conflict) return
+  const startsBefore = Date.parse(conflict.startAt) < Date.parse(doc.timestamp)
+  if (!(conflict.eventType === 'SLEEP' && conflict.endAt === null && startsBefore)) throw conflictError(conflict)
+  const open = near.find((e) => String(e._id) === conflict.id)
+  const sleep = {
+    ...open.sleep,
+    endAt: doc.timestamp,
+    durationMinutes: durationMinutes(open.sleep.startAt, doc.timestamp),
+    endedBy: parentType,
   }
+  const others = near.filter((e) => String(e._id) !== conflict.id)
+  const next =
+    findConflict({ id: conflict.id, eventType: 'SLEEP', timestamp: sleep.startAt, sleep }, others) ??
+    findConflict(doc, others)
+  if (next) throw conflictError(next)
+  await repos.trackerEvents.update(householdId, open._id, { set: { sleep } }, username)
 }
 
 export function createTrackerEventsRouter({ repos }) {
@@ -75,18 +110,26 @@ export function createTrackerEventsRouter({ repos }) {
   router.post(
     '/',
     handle(async (req, res) => {
-      const type = req.body?.eventType
+      const { endOpenSleep, ...body } = req.body ?? {}
+      const type = body.eventType
       if (!EVENT_TYPES.includes(type)) throw invalid([{ field: 'eventType', message: `must be one of ${EVENT_TYPES.join(', ')}` }])
-      const check = validateEvent(type, req.body)
+      if (endOpenSleep !== undefined && typeof endOpenSleep !== 'boolean') {
+        throw invalid([{ field: 'endOpenSleep', message: 'must be true or false' }])
+      }
+      const check = validateEvent(type, body)
       if (!check.ok) throw invalid(check.errors)
       const parentType = req.user.parentType
-      const doc = normalizeEvent(type, req.body, { now: new Date().toISOString(), loggedBy: parentType })
+      const doc = normalizeEvent(type, body, { now: new Date().toISOString(), loggedBy: parentType })
       if (type === 'SLEEP') {
-        doc.sleep = buildSleep(req.body.sleep, null, parentType)
+        doc.sleep = buildSleep(body.sleep, null, parentType)
         if (doc.sleep.endAt === null && (await repos.trackerEvents.findOpenSleep(req.householdId))) {
           throw new HttpError(409, 'sleep_already_open', 'A sleep is already open')
         }
         await assertSleepFits(repos, req.householdId, doc.sleep)
+      } else if (endOpenSleep === true) {
+        await endOpenSleepFor(repos, req.householdId, doc, parentType, req.user.username)
+      } else {
+        await assertEventFits(repos, req.householdId, doc)
       }
       const baby = await repos.babies.getForHousehold(req.householdId)
       doc.babyId = baby ? String(baby._id) : null
@@ -142,6 +185,14 @@ export function createTrackerEventsRouter({ repos }) {
       } else {
         if (body.timestamp !== undefined) set.timestamp = new Date(body.timestamp).toISOString()
         if (body[key] !== undefined) set[key] = body[key]
+        if (body.timestamp !== undefined || body[key] !== undefined) {
+          await assertEventFits(repos, req.householdId, {
+            id: String(existing._id),
+            eventType: type,
+            timestamp: set.timestamp ?? existing.timestamp,
+            [key]: set[key] ?? existing[key],
+          })
+        }
       }
       const updated = await repos.trackerEvents.update(req.householdId, req.params.id, { set, unset }, req.user.username)
       if (!updated) throw notFound()

@@ -54,7 +54,7 @@ test('fixing the open sleep start keeps it open; a future start or an overlap is
   assert.equal(putFuture.status, 400)
   const clash = await a.post('/api/v1/tracker/sleep/open/start').send({ startAt: '2019-02-01T07:30:00.000Z' })
   assert.equal(clash.status, 409)
-  assert.equal(clash.body.error.code, 'sleep_overlap')
+  assert.equal(clash.body.error.code, 'event_conflict')
   assert.equal((await a.post('/api/v1/tracker/sleep/open/start').send({ startAt: 'soon' })).status, 400)
 
   // Mode 2: a recorded sleep that overlaps the open one is 409; one that ends before it is saved and the open one stays.
@@ -63,7 +63,7 @@ test('fixing the open sleep start keeps it open; a future start or an overlap is
     sleep: { startAt: '2019-02-01T09:00:00.000Z', endAt: '2019-02-01T09:50:00.000Z' },
   })
   assert.equal(over.status, 409)
-  assert.equal(over.body.error.code, 'sleep_overlap')
+  assert.equal(over.body.error.code, 'event_conflict')
   const past = await a.post('/api/v1/tracker/events').send({
     eventType: 'SLEEP',
     sleep: { startAt: '2019-02-01T08:10:00.000Z', endAt: '2019-02-01T09:00:00.000Z' },
@@ -115,7 +115,7 @@ test('toggle without at uses now; a very short sleep lasts at least 1 minute', a
   assert.equal(end.body.event.sleep.durationMinutes, 1)
 })
 
-test('toggle refuses a manual time that overlaps another sleep (409 sleep_overlap)', async () => {
+test('toggle refuses a manual time that overlaps another sleep (409 event_conflict)', async () => {
   const a = await signedInAgent(ctx.newApp(), 'parent-a')
   await a.post('/api/v1/tracker/events').send({
     eventType: 'SLEEP',
@@ -123,7 +123,7 @@ test('toggle refuses a manual time that overlaps another sleep (409 sleep_overla
   })
   const clash = await a.post('/api/v1/tracker/sleep/toggle').send({ at: '2020-03-01T10:30:00.000Z' })
   assert.equal(clash.status, 409)
-  assert.equal(clash.body.error.code, 'sleep_overlap')
+  assert.equal(clash.body.error.code, 'event_conflict')
   assert.equal((await a.get('/api/v1/tracker/sleep/open')).body, null)
   // an open sleep that would start before another sleep and run through it is refused too
   const early = await a.post('/api/v1/tracker/sleep/toggle').send({ at: '2020-03-01T09:00:00.000Z' })

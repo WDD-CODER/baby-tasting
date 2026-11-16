@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { isIso, SLEEP_LOCATIONS, toApiEvent } from '../domain/tracker/events.js'
 import { moveOpenSleepStart, toggleSleep } from '../domain/tracker/sleep.js'
-import { HttpError } from '../lib/http-error.js'
+import { HttpError, conflictError } from '../lib/http-error.js'
 import { handle } from './catalog-helpers.js'
 import { assertSleepFits } from './tracker-events.js'
 
@@ -40,10 +40,10 @@ export function createTrackerSleepRouter({ repos }) {
       const startAt = new Date(b.startAt).toISOString()
       const open = await repos.trackerEvents.findOpenSleep(req.householdId)
       if (!open) throw new HttpError(404, 'not_found', 'No sleep is open')
-      const others = await repos.trackerEvents.findSleepsNear(req.householdId, startAt, null)
+      const others = await repos.trackerEvents.findConflictCandidates(req.householdId, startAt, null)
       const result = moveOpenSleepStart({ open, startAt, now: new Date().toISOString(), others })
       if (result.error === 'start_in_future') throw new HttpError(400, 'start_in_future', 'The start is in the future')
-      if (result.error === 'sleep_overlap') throw new HttpError(409, 'sleep_overlap', 'This sleep overlaps another sleep')
+      if (result.error === 'event_conflict') throw conflictError(result.conflict)
       const updated = await repos.trackerEvents.update(
         req.householdId,
         open._id,

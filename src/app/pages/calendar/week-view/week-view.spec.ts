@@ -58,4 +58,38 @@ describe('WeekView', () => {
     fixture.destroy()
     wrapper.remove()
   })
+
+  it('keeps the rendered items during a drag and applies a refresh after it (D-016-4)', async () => {
+    const pending: CalendarItem = { ...item, id: 'tmp-1' }
+    const fixture = TestBed.createComponent(WeekView)
+    fixture.componentRef.setInput('weekStart', '2026-11-15')
+    fixture.componentRef.setInput('today', '2026-11-17')
+    fixture.componentRef.setInput('items', [pending])
+    fixture.componentRef.setInput('foods', [food])
+    fixture.detectChanges()
+    const el = fixture.nativeElement as HTMLElement
+    const tiles = (): number => el.querySelectorAll('.cell__item').length
+    expect(tiles()).toBe(1)
+
+    const view = fixture.componentInstance as unknown as {
+      dragStarted(): void
+      open(i: CalendarItem): void
+    }
+    const opened: CalendarItem[] = []
+    fixture.componentInstance.itemOpened.subscribe((i) => opened.push(i))
+    view.open(pending) // not confirmed yet: never opens
+    expect(opened.length).toBe(0)
+    view.open(item)
+    expect(opened.length).toBe(1)
+
+    view.dragStarted()
+    fixture.componentRef.setInput('items', [])
+    fixture.detectChanges()
+    expect(tiles()).toBe(1) // the refresh waits for the drop
+    ;(fixture.componentInstance as unknown as { dragEnded(): void }).dragEnded()
+    await new Promise((resolve) => setTimeout(resolve, 80))
+    fixture.detectChanges()
+    expect(tiles()).toBe(0)
+    fixture.destroy()
+  })
 })

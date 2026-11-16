@@ -125,6 +125,22 @@ export class TrackerEventsService {
     return res.event
   }
 
+  /** One event by id: from the loaded list, else a small window query around its start. Null when not found. */
+  async find(id: string, startAt: string): Promise<TrackerEvent | null> {
+    const local = this.events_().find((e) => e.id === id)
+    if (local) return local
+    try {
+      const from = new Date(Date.parse(startAt) - 1000).toISOString()
+      const to = new Date(Date.parse(startAt) + 1000).toISOString()
+      const res = await firstValueFrom(
+        this.api.get<{ events: TrackerEvent[] }>(`/tracker/events?from=${from}&to=${to}&limit=100`),
+      )
+      return res.events.find((e) => e.id === id) ?? null
+    } catch {
+      return null
+    }
+  }
+
   /** A success toast with an undo button that deletes the event. */
   showUndo(id: string, text: string): void {
     const t = HE.tracker.log

@@ -19,6 +19,11 @@ export function handle(fn) {
     try {
       await fn(req, res)
     } catch (err) {
+      // a 409 event_conflict carries the blocker next to code and message (D-016-2)
+      if (err?.code === 'event_conflict' && err.conflict) {
+        res.status(409).json({ error: { code: err.code, message: err.message, conflict: err.conflict } })
+        return
+      }
       next(err)
     }
   }

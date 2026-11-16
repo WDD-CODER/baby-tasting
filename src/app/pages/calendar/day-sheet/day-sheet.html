@@ -16,6 +16,7 @@
               class="row"
               cdkDrag
               [cdkDragData]="item"
+              [cdkDragDisabled]="isPending(item)"
               [cdkDragStartDelay]="dragDelay"
               (cdkDragStarted)="dragStarted()"
               (cdkDragEnded)="dragEnded()"
