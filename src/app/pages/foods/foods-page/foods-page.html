@@ -1,0 +1,135 @@
+<section class="foods">
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state (retry)="load()" />
+  } @else if (!hasAny_()) {
+    <app-empty-state [title]="empty" [actionLabel]="t.add" (action)="add()" />
+  } @else {
+    @if (progress_(); as p) {
+      <details class="progress" open>
+        <summary class="progress__summary">{{ progressT.title }} · {{ triedText_() }}</summary>
+        <ul class="progress__rows">
+          @for (row of categoryRows_(); track row.category) {
+            <li class="progress__row">
+              <span class="progress__label">{{ row.label }}</span>
+              <span class="progress__count">{{ row.tried }}/{{ row.total }}</span>
+              <span class="progress__bar" aria-hidden="true">
+                <span class="progress__fill" [style.inline-size.%]="row.percent"></span>
+              </span>
+            </li>
+          }
+        </ul>
+        <div class="progress__chips">
+          @for (chip of allergenChips_(); track chip.state) {
+            <app-chip [tone]="chip.tone">{{ chip.label }}</app-chip>
+          }
+        </div>
+      </details>
+    }
+
+    <div class="foods__filters">
+      <input
+        class="foods__search"
+        type="search"
+        [attr.aria-label]="t.search"
+        [placeholder]="t.search"
+        [value]="query_()"
+        (input)="onQuery($event)"
+      />
+      <div class="foods__categories">
+        <app-chip [selected]="category_() === 'all'" (pressed)="category_.set('all')">{{
+          t.all
+        }}</app-chip>
+        @for (c of categories; track c.key) {
+          <app-chip [selected]="category_() === c.key" (pressed)="category_.set(c.key)">{{
+            c.label
+          }}</app-chip>
+        }
+      </div>
+      <div>
+        <app-chip tone="accent" [selected]="allergensOnly_()" (pressed)="toggleAllergensOnly()">
+          {{ t.allergensOnly }}
+        </app-chip>
+      </div>
+    </div>
+
+    @if (queue_().length > 0) {
+      <h3 class="foods__group">{{ t.queueTitle }}</h3>
+      <ul class="foods__list queue" cdkDropList (cdkDropListDropped)="reorder($event)">
+        @for (food of queue_(); track food.id) {
+          <li class="queue__row" cdkDrag>
+            <button
+              type="button"
+              class="queue__handle"
+              cdkDragHandle
+              [attr.aria-label]="t.queueReorder"
+            >
+              <span aria-hidden="true">⠿</span>
+            </button>
+            <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+            <span class="food__name">{{ food.name }}</span>
+            <button
+              type="button"
+              class="queue__remove"
+              [attr.aria-label]="t.queueRemove + ' ' + food.name"
+              (click)="toggleQueue(food)"
+            >
+              <span aria-hidden="true">✕</span>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+
+    @for (group of groups_(); track group.category) {
+      <h3 class="foods__group">{{ group.label }}</h3>
+      <ul class="foods__list">
+        @for (food of group.foods; track food.id) {
+          <li class="row">
+            <a class="food" [routerLink]="['/foods', food.id]">
+              <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+              <span class="food__name">{{ food.name }}</span>
+              @if (allergenName(food); as name) {
+                <app-chip tone="accent">{{ name }}</app-chip>
+              }
+              @if (food.warning) {
+                <span class="food__warning" aria-hidden="true">{{ t.warningIcon }}</span>
+              }
+              @if (food.locked) {
+                <span class="food__lock" [attr.aria-label]="lockT.locked" role="img">{{
+                  lockT.badge
+                }}</span>
+              }
+              <span class="food__status">{{ statusText(food) }}</span>
+            </a>
+            @if (food.foodLocked) {
+              <app-icon-button
+                icon="🔓"
+                [ariaLabel]="lockT.release + ' ' + food.name"
+                (pressed)="release(food)"
+              />
+            }
+            <button
+              type="button"
+              class="row__queue"
+              [class.row__queue--on]="food.queuePosition !== null"
+              [attr.aria-label]="t.queueToggle"
+              [attr.aria-pressed]="food.queuePosition !== null"
+              (click)="toggleQueue(food)"
+            >
+              <span aria-hidden="true">{{ food.queuePosition !== null ? '✓' : '➕' }}</span>
+            </button>
+          </li>
+        }
+      </ul>
+    } @empty {
+      <p class="foods__none">{{ t.noMatch }}</p>
+    }
+
+    <div class="foods__actions">
+      <app-button [fullWidth]="true" (pressed)="add()">{{ t.add }}</app-button>
+      <a class="foods__link" routerLink="/foods/allergens">{{ t.manageAllergens }}</a>
+    </div>
+  }
+</section>

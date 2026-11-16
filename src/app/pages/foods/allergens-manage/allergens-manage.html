@@ -1,0 +1,65 @@
+<section class="allergens">
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state (retry)="load()" />
+  } @else {
+    <h2 class="allergens__title">{{ t.title }}</h2>
+    <a class="allergens__back" routerLink="/foods">{{ t.back }}</a>
+
+    <div class="allergens__row">
+      <input
+        class="allergens__input"
+        type="text"
+        maxlength="40"
+        [attr.aria-label]="t.add"
+        [placeholder]="t.add"
+        [value]="newName_()"
+        (input)="onNew($event)"
+        (keydown.enter)="add()"
+      />
+      <app-button variant="secondary" (pressed)="add()">{{ t.addButton }}</app-button>
+    </div>
+
+    @if (error_()) {
+      <p class="allergens__error" role="alert">{{ error_() }}</p>
+    }
+
+    <ul class="allergens__list">
+      @for (allergen of active_(); track allergen.id) {
+        <li class="allergens__row">
+          <input
+            class="allergens__input"
+            type="text"
+            maxlength="40"
+            [attr.aria-label]="allergen.name"
+            [value]="draft(allergen)"
+            (input)="onDraft(allergen, $event)"
+            (keydown.enter)="rename(allergen)"
+          />
+          <span class="allergens__count"
+            >{{ counts_().get(allergen.id) ?? 0 }} {{ t.foodsCount }}</span
+          >
+          @if (isChanged(allergen)) {
+            <app-button variant="secondary" (pressed)="rename(allergen)">{{ t.rename }}</app-button>
+          }
+          <app-button variant="ghost" (pressed)="archive(allergen)">{{ t.archive }}</app-button>
+        </li>
+      }
+    </ul>
+
+    <app-button variant="ghost" (pressed)="toggleArchived()">{{ t.showArchived }}</app-button>
+    @if (showArchived_()) {
+      <ul class="allergens__list">
+        @for (allergen of archived_(); track allergen.id) {
+          <li class="allergens__row">
+            <span class="allergens__name">{{ allergen.name }}</span>
+            <app-button variant="secondary" (pressed)="restore(allergen)">{{
+              t.restore
+            }}</app-button>
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>

@@ -1,0 +1,33 @@
+<section class="rules">
+  <h2 class="rules__title">{{ t.rulesTitle }}</h2>
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state [message]="t.loadFailed" (retry)="load()" />
+  } @else {
+    <form class="rules__form" (ngSubmit)="submit()">
+      @for (field of fields_(); track field.key) {
+        <app-text-field
+          type="number"
+          [name]="field.key"
+          [label]="field.label"
+          [hint]="field.hint"
+          [error]="field.error"
+          [ngModel]="field.value"
+          (ngModelChange)="setValue(field.key, $event)"
+        />
+      }
+      <app-button
+        type="submit"
+        [fullWidth]="true"
+        [loading]="saving_()"
+        [disabled]="!changed_() || !allValid_()"
+      >
+        {{ t.rulesSave }}
+      </app-button>
+      <app-button variant="ghost" [fullWidth]="true" (pressed)="reset()">{{
+        t.rulesReset
+      }}</app-button>
+    </form>
+  }
+</section>

@@ -1,0 +1,71 @@
+:host {
+  display: block;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+
+    touch-action: pan-y;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-bold);
+  }
+
+  &__suggest {
+    display: flex;
+  }
+
+  &__controls {
+    display: flex;
+    gap: var(--space-2);
+  }
+}
+
+.suggest-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+
+  padding: var(--space-2) var(--space-3);
+  border: 1px dashed var(--color-accent);
+  border-radius: var(--radius-card);
+
+  &__count {
+    flex: 1;
+
+    font-weight: var(--fw-bold);
+  }
+}
+
+.suggestion-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  &__reason {
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+}

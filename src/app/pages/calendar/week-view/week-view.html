@@ -1,0 +1,62 @@
+<div class="week">
+  <div class="grid" cdkDropListGroup>
+    <div class="corner"></div>
+    @for (day of days(); track day) {
+      <div class="head" [class.head--today]="day === today()" [attr.data-head]="day">
+        <span>{{ letter(day) }}</span>
+        <span class="head__date">{{ dom(day) }}</span>
+      </div>
+    }
+    @for (meal of meals; track meal) {
+      <div class="label">{{ t.meal }} {{ meal }}</div>
+      @for (day of days(); track day) {
+        <div
+          class="cell"
+          [class.cell--today]="day === today()"
+          cdkDropList
+          [cdkDropListData]="{ date: day, meal: meal }"
+          [cdkDropListSortingDisabled]="true"
+          (cdkDropListDropped)="dropped($event)"
+          [attr.data-date]="day"
+          [attr.data-meal]="meal"
+        >
+          @for (item of itemsOf(day, meal); track item.id) {
+            <div
+              class="cell__item"
+              cdkDrag
+              [cdkDragData]="item"
+              [cdkDragStartDelay]="dragDelay"
+              (cdkDragStarted)="dragStarted()"
+              (cdkDragEnded)="dragEnded()"
+              (click)="open(item)"
+            >
+              <app-item-tile
+                [item]="item"
+                [food]="foodById().get(item.foodId)"
+                [badge]="badgeFor()(item)"
+              />
+            </div>
+          }
+          @for (s of suggestionsOf(day, meal); track s.id) {
+            <button
+              type="button"
+              class="suggested"
+              [attr.aria-label]="foodById().get(s.foodId)?.name"
+              (click)="suggestionOpened.emit(s)"
+            >
+              <span aria-hidden="true">{{ foodById().get(s.foodId)?.emoji }}</span>
+            </button>
+          }
+          <button
+            type="button"
+            class="cell__add"
+            [attr.aria-label]="t.addToMeal + ' ' + meal + ' · ' + day"
+            (click)="addRequested.emit({ date: day, meal: meal })"
+          >
+            +
+          </button>
+        </div>
+      }
+    }
+  </div>
+</div>

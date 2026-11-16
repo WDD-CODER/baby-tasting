@@ -1,0 +1,10 @@
+<section class="settings">
+  <h2 class="settings__title">{{ t.section }}</h2>
+  <app-baby-form />
+  <app-rules-form />
+  <app-activity-log />
+  <p class="settings__disclaimer">{{ disclaimer }}</p>
+  <app-button class="settings__logout" variant="secondary" [fullWidth]="true" (pressed)="logout()">
+    {{ logoutLabel }}
+  </app-button>
+</section>

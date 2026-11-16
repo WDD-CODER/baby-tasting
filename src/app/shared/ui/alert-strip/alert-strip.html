@@ -1,0 +1,31 @@
+@if (alerts().length) {
+  <div class="strip" [class.strip--column]="limit() !== null" role="list">
+    @for (alert of visible(); track alert.id) {
+      @if (alert.tappable) {
+        <button
+          type="button"
+          [class]="'alert alert--row alert--' + alert.tone"
+          role="listitem"
+          (click)="act.emit(alert.id)"
+        >
+          <span class="alert__text">{{ alert.text }}</span>
+          <span class="alert__chevron" aria-hidden="true">‹</span>
+        </button>
+      } @else {
+        <div [class]="'alert alert--' + alert.tone" role="listitem">
+          <span class="alert__text">{{ alert.text }}</span>
+          @if (alert.actionLabel) {
+            <button type="button" class="alert__action" (click)="act.emit(alert.id)">
+              {{ alert.actionLabel }}
+            </button>
+          }
+        </div>
+      }
+    }
+    @if (hidden() > 0) {
+      <button type="button" class="strip__more" (click)="toggle()">{{ moreText() }}</button>
+    } @else if (canCollapse()) {
+      <button type="button" class="strip__more" (click)="toggle()">{{ lessLabel() }}</button>
+    }
+  </div>
+}

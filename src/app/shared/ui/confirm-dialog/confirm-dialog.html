@@ -1,0 +1,21 @@
+<div class="backdrop" (click)="cancelled.emit()"></div>
+<div
+  class="dialog"
+  role="alertdialog"
+  aria-modal="true"
+  [attr.aria-label]="title()"
+  cdkTrapFocus
+  [cdkTrapFocusAutoCapture]="true"
+  (keydown)="onKeydown($event)"
+>
+  <h2 class="dialog__title">{{ title() }}</h2>
+  @if (body()) {
+    <p class="dialog__body">{{ body() }}</p>
+  }
+  <div class="dialog__actions">
+    <app-button variant="secondary" (pressed)="cancelled.emit()">{{ cancelLabel() }}</app-button>
+    <app-button [variant]="destructive() ? 'danger' : 'primary'" (pressed)="confirmed.emit()">{{
+      confirmLabel()
+    }}</app-button>
+  </div>
+</div>

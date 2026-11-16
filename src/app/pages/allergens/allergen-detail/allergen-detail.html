@@ -1,0 +1,35 @@
+<section class="detail">
+  <a class="detail__back" routerLink="/allergens">{{ t.back }}</a>
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state [message]="t.notFound" (retry)="load()" />
+  } @else {
+    <header class="detail__head">
+      <h2 class="detail__name">{{ name() }}</h2>
+      <app-chip [tone]="tone()">{{ stateLabel() }}</app-chip>
+    </header>
+
+    <h3 class="detail__title">{{ t.historyTitle }}</h3>
+    <ul class="detail__days">
+      @for (day of days_(); track day.date) {
+        <li class="day">
+          <span class="day__date">{{ date(day.date) }}</span>
+          <ul class="day__items">
+            @for (item of day.items; track item.itemId) {
+              <li>
+                <span aria-hidden="true">{{ item.emoji }}</span>
+                {{ item.foodName }}
+                @if (item.amount) {
+                  <span class="day__amount">· {{ amounts[item.amount] }}</span>
+                }
+              </li>
+            }
+          </ul>
+        </li>
+      } @empty {
+        <li class="detail__none">{{ t.noHistory }}</li>
+      }
+    </ul>
+  }
+</section>

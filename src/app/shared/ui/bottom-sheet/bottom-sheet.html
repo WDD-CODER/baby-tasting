@@ -1,0 +1,27 @@
+@if (open()) {
+  <div class="backdrop" (click)="closed.emit()"></div>
+  <div
+    class="sheet"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="title()"
+    cdkTrapFocus
+    [cdkTrapFocusAutoCapture]="true"
+    (keydown)="onKeydown($event)"
+  >
+    <header class="sheet__header">
+      <h2 class="sheet__title">{{ title() }}</h2>
+      <button
+        type="button"
+        class="sheet__close"
+        [attr.aria-label]="t.close"
+        (click)="closed.emit()"
+      >
+        <span aria-hidden="true">✕</span>
+      </button>
+    </header>
+    <div class="sheet__body">
+      <ng-content />
+    </div>
+  </div>
+}

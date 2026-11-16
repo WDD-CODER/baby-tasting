@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}

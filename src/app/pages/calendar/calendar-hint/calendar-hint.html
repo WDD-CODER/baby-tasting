@@ -1,0 +1,10 @@
+@if (visible_()) {
+  <div class="hint" role="note">
+    <ul class="hint__list">
+      <li>{{ t.add }}</li>
+      <li>{{ t.drag }}</li>
+      <li>{{ t.tap }}</li>
+    </ul>
+    <app-button (pressed)="dismiss()">{{ t.dismiss }}</app-button>
+  </div>
+}

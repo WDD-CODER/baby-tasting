@@ -1,0 +1,105 @@
+<h2 class="demo__title">{{ t.dev.componentsTitle }}</h2>
+
+<section class="demo__section" data-component="button">
+  <h3>button</h3>
+  <div class="demo__row">
+    <app-button variant="primary">{{ t.common.save }}</app-button>
+    <app-button variant="secondary">{{ t.common.cancel }}</app-button>
+    <app-button variant="ghost">{{ t.common.close }}</app-button>
+    <app-button variant="danger">{{ t.common.delete }}</app-button>
+    <app-button size="lg">{{ t.common.confirm }}</app-button>
+    <app-button [disabled]="true">{{ t.common.save }}</app-button>
+    <app-button [loading]="true">{{ t.common.save }}</app-button>
+    <app-button [fullWidth]="true">{{ t.common.save }}</app-button>
+  </div>
+</section>
+
+<section class="demo__section" data-component="icon-button">
+  <h3>icon-button</h3>
+  <div class="demo__row">
+    <app-icon-button icon="✏️" [ariaLabel]="t.common.save" />
+    <app-icon-button icon="✏️" variant="secondary" [ariaLabel]="t.common.save" />
+    <app-icon-button icon="🗑️" variant="danger" [ariaLabel]="t.common.delete" />
+  </div>
+</section>
+
+<section class="demo__section" data-component="card">
+  <h3>card</h3>
+  <app-card>{{ t.dev.sampleLabel }}</app-card>
+  <app-card [raised]="true">{{ t.dev.sampleLabel }}</app-card>
+</section>
+
+<section class="demo__section" data-component="chip">
+  <h3>chip</h3>
+  <div class="demo__row">
+    <app-chip>{{ t.dev.sampleLabel }}</app-chip>
+    <app-chip tone="accent" [selected]="true">{{ t.dev.sampleLabel }}</app-chip>
+    <app-chip tone="okay">{{ t.dev.sampleLabel }}</app-chip>
+    <app-chip tone="good">{{ t.dev.sampleLabel }}</app-chip>
+    <app-chip tone="bad" [removable]="true">{{ t.dev.sampleLabel }}</app-chip>
+  </div>
+</section>
+
+<section class="demo__section" data-component="alert-strip">
+  <h3>alert-strip</h3>
+  <app-alert-strip [alerts]="alerts" />
+</section>
+
+<section class="demo__section" data-component="bottom-sheet">
+  <h3>bottom-sheet</h3>
+  <app-button variant="secondary" (pressed)="openSheet()">{{ t.dev.sampleSheetOpen }}</app-button>
+  <app-bottom-sheet
+    [open]="isSheetOpen_()"
+    [title]="t.dev.sampleSheetTitle"
+    (closed)="closeSheet()"
+  >
+    {{ t.dev.sampleLabel }}
+  </app-bottom-sheet>
+</section>
+
+<section class="demo__section" data-component="confirm-dialog">
+  <h3>confirm-dialog</h3>
+  <app-button variant="secondary" (pressed)="openConfirm()">{{
+    t.dev.sampleConfirmOpen
+  }}</app-button>
+</section>
+
+<section class="demo__section" data-component="empty-state">
+  <h3>empty-state</h3>
+  <app-empty-state [title]="t.common.empty" [actionLabel]="t.pages.foods.emptyAction" />
+</section>
+
+<section class="demo__section" data-component="loading-state">
+  <h3>loading-state</h3>
+  <app-loading-state />
+</section>
+
+<section class="demo__section" data-component="error-state">
+  <h3>error-state</h3>
+  <app-error-state />
+</section>
+
+<section class="demo__section" data-component="text-field">
+  <h3>text-field</h3>
+  <app-text-field
+    [label]="t.dev.sampleLabel"
+    [hint]="t.dev.sampleHint"
+    [formControl]="textControl"
+  />
+  <app-text-field [label]="t.dev.sampleLabel" [error]="t.dev.sampleError" />
+</section>
+
+<section class="demo__section" data-component="select">
+  <h3>select</h3>
+  <app-select [label]="t.dev.sampleLabel" [options]="options" [formControl]="selectControl" />
+</section>
+
+<section class="demo__section" data-component="toast">
+  <h3>toast</h3>
+  <app-button variant="secondary" (pressed)="showToast()">{{ t.dev.sampleToast }}</app-button>
+</section>
+
+<section class="demo__section" data-component="emoji-picker">
+  <h3>emoji-picker</h3>
+  <app-emoji-picker [(value)]="emoji_" />
+</section>

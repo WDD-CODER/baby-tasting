@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: baby-tasting
+    runtime: node
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --dir server install --frozen-lockfile && pnpm run build
+    startCommand: node server/index.js
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: APP_USERS
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

@@ -1,4 +1,88 @@
 import { Routes } from '@angular/router'
-import { Placeholder } from './pages/placeholder/placeholder'
+import { environment } from '../environments/environment'
+import { authGuard } from './core/guards/auth.guard'
+import { babyGuard } from './core/guards/baby.guard'
+import { unsavedChangesGuard } from './core/guards/unsaved-changes.guard'
 
-export const routes: Routes = [{ path: '', component: Placeholder }]
+export const routes: Routes = [
+  { path: 'login', loadComponent: () => import('./pages/login/login').then((m) => m.LoginPage) },
+  {
+    path: 'welcome',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/welcome/welcome').then((m) => m.WelcomePage),
+  },
+  {
+    path: '',
+    canActivate: [authGuard, babyGuard],
+    children: [
+      { path: '', pathMatch: 'full', loadComponent: () => import('./pages/calendar/calendar-page/calendar-page').then((m) => m.CalendarPage) },
+      {
+        path: 'foods',
+        pathMatch: 'full',
+        loadComponent: () => import('./pages/foods/foods-page/foods-page').then((m) => m.FoodsPage),
+      },
+      {
+        path: 'foods/new',
+        canDeactivate: [unsavedChangesGuard],
+        loadComponent: () => import('./pages/foods/food-form/food-form').then((m) => m.FoodForm),
+      },
+      {
+        path: 'foods/allergens',
+        loadComponent: () =>
+          import('./pages/foods/allergens-manage/allergens-manage').then((m) => m.AllergensManage),
+      },
+      {
+        path: 'foods/:id/edit',
+        canDeactivate: [unsavedChangesGuard],
+        loadComponent: () => import('./pages/foods/food-form/food-form').then((m) => m.FoodForm),
+      },
+      {
+        path: 'foods/:id',
+        pathMatch: 'full',
+        loadComponent: () => import('./pages/foods/food-detail/food-detail').then((m) => m.FoodDetail),
+      },
+      {
+        path: 'allergens',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./pages/allergens/allergens-page/allergens-page').then((m) => m.AllergensPage),
+      },
+      {
+        path: 'allergens/reactions',
+        loadComponent: () =>
+          import('./pages/reactions/reactions-list/reactions-list').then((m) => m.ReactionsList),
+      },
+      {
+        path: 'reactions/new',
+        canDeactivate: [unsavedChangesGuard],
+        loadComponent: () =>
+          import('./pages/reactions/reaction-form/reaction-form').then((m) => m.ReactionForm),
+      },
+      {
+        path: 'reactions/:id',
+        canDeactivate: [unsavedChangesGuard],
+        loadComponent: () =>
+          import('./pages/reactions/reaction-form/reaction-form').then((m) => m.ReactionForm),
+      },
+      {
+        path: 'allergens/:id',
+        loadComponent: () =>
+          import('./pages/allergens/allergen-detail/allergen-detail').then((m) => m.AllergenDetail),
+      },
+      {
+        path: 'settings',
+        canDeactivate: [unsavedChangesGuard],
+        loadComponent: () => import('./pages/settings/settings').then((m) => m.SettingsPage),
+      },
+      ...(environment.production
+        ? []
+        : [
+            {
+              path: 'dev/components',
+              loadComponent: () => import('./dev/components-demo/components-demo').then((m) => m.ComponentsDemo),
+            },
+          ]),
+    ],
+  },
+  { path: '**', redirectTo: '' },
+]

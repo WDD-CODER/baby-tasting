@@ -1,0 +1,65 @@
+:host {
+  display: inline-block;
+}
+
+.chip {
+  --chip-color: var(--color-text-secondary);
+
+  display: inline-flex;
+  align-items: center;
+
+  min-block-size: var(--touch-target);
+
+  border: 1px solid var(--chip-color);
+  border-radius: var(--radius-pill);
+
+  color: var(--chip-color);
+
+  &--accent {
+    --chip-color: var(--color-accent);
+  }
+
+  &--okay {
+    --chip-color: var(--color-tier-okay);
+  }
+
+  &--good {
+    --chip-color: var(--color-tier-good);
+  }
+
+  &--bad {
+    --chip-color: var(--color-tier-bad);
+  }
+
+  &--selected {
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+  }
+
+  &__body,
+  &__remove {
+    display: inline-flex;
+    align-items: center;
+
+    min-block-size: var(--touch-target);
+
+    border: 0;
+
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: var(--fs-sm);
+    cursor: pointer;
+  }
+
+  &__body {
+    padding-inline: var(--space-4);
+  }
+
+  &__remove {
+    justify-content: center;
+
+    min-inline-size: var(--touch-target);
+    padding-inline: 0;
+  }
+}

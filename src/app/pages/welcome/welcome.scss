@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-bold);
+  }
+}

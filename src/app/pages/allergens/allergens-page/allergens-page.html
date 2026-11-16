@@ -1,0 +1,42 @@
+<section class="allergens">
+  <a class="allergens__reactions" routerLink="/allergens/reactions">{{ reactionsLink }}</a>
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state [message]="t.loadFailed" (retry)="load()" />
+  } @else if (cards().length === 0) {
+    <app-empty-state [title]="empty" [actionLabel]="emptyAction" (action)="manage()" />
+  } @else {
+    <ul class="allergens__list">
+      @for (card of cards(); track card.id) {
+        <li>
+          <a class="card" [routerLink]="['/allergens', card.id]">
+            <span class="card__head">
+              <span class="card__name">{{ card.name }}</span>
+              <app-chip [tone]="card.tone"
+                >{{ card.locked ? '🔒 ' : '' }}{{ card.stateLabel }}</app-chip
+              >
+            </span>
+            @if (card.progress) {
+              <span class="card__line">{{ card.progress }}</span>
+            }
+            @if (card.lastGiven) {
+              <span class="card__line">{{ card.lastGiven }}</span>
+            }
+            @if (card.week) {
+              <span class="card__line">{{ card.week }}</span>
+            }
+            @if (card.alert) {
+              <span class="card__alert">{{ card.alert }}</span>
+            }
+          </a>
+          @if (card.locked) {
+            <app-button variant="secondary" (pressed)="release(card)">{{
+              lockT.release
+            }}</app-button>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>

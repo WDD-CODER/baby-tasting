@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+.food-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-lg);
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  &__inline {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-2);
+  }
+}

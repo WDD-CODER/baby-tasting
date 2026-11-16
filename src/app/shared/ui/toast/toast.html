@@ -1,0 +1,5 @@
+<div class="toasts" aria-live="polite">
+  @for (message of toasts.messages(); track message.id) {
+    <div [class]="'toast toast--' + message.tone" role="status">{{ message.text }}</div>
+  }
+</div>

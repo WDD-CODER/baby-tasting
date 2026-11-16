@@ -1,0 +1,2002 @@
+{
+  "run": "night-1",
+  "branch": "orch/night-1",
+  "base": "main",
+  "startedAt": "2026-11-15T19:48:39.821Z",
+  "mainShaAtStart": "ebf1b1f24e30f84c61981a4b78904df83e192c8f",
+  "plans": {
+    "001": {
+      "nnn": "001",
+      "title": "Foundation: app shell, design system, server base and Render file",
+      "branch": "feat/001-foundation-shell-design-server",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T19:49:44.859Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-15T20:00:50.751Z"
+        }
+      },
+      "humanItems": [
+        "The look matches Baby Tracker's feel (dark slate, Heebo, indigo accent)."
+      ],
+      "history": [
+        {
+          "at": "2026-11-15T19:49:44.647Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T19:49:44.861Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T19:59:56.015Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T19:59:56.443Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:00:46.805Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:00:50.754Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:01:14.759Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:01:51.096Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 26.5,
+      "sha": "65605d44dc523678ad4c80c22b2afa53cb089396",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 608.4,
+          "tokens": {
+            "input": 2465366,
+            "output": 57046
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 23.5,
+          "tokens": {
+            "input": 327507,
+            "output": 1688
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "`/dev/components` (development build) shows the heading `רכיבים משותפים` and one section per shared component.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "2ee9fd86086e57a8663a79bc7ea4c7d2a7001cca"
+    },
+    "002": {
+      "nnn": "002",
+      "title": "Sign-in with a username, one shared household and the baby profile",
+      "branch": "feat/002-signin-household-baby",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T20:14:36.044Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-15T20:17:31.271Z"
+        }
+      },
+      "humanItems": [
+        "Sign-in feels fast enough to do one-handed on a phone."
+      ],
+      "history": [
+        {
+          "at": "2026-11-15T20:05:48.687Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:05:48.897Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:11:52.219Z",
+          "state": "parked",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:12:21.752Z",
+          "state": "asking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:14:35.861Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:14:36.047Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:16:28.267Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:17:26.454Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:17:31.273Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:17:50.251Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:18:16.411Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "002",
+          "title": "Sign-in with a username, one shared household and the baby profile",
+          "branch": "feat/002-signin-household-baby",
+          "state": "asking",
+          "round": 0,
+          "tier": "build",
+          "models": {
+            "builder": {
+              "model": "sonnet",
+              "tier": "build",
+              "at": "2026-11-15T20:05:48.895Z"
+            }
+          },
+          "tiers": [
+            "build"
+          ],
+          "freeDiskGb": 29.6,
+          "reason": "asking 002-1: replan needed: ESCALATE: scope — src/app/app.spec.ts is outside the plan's Read-Write Scope, and the new auth and baby guards break its 2 router tests (pnpm run test exit 1). The fix is to provide stub AuthService and BabyService in that file's TestBed.",
+          "calls": [
+            {
+              "stage": "builder",
+              "model": "sonnet",
+              "seconds": 362.9,
+              "tokens": {
+                "input": 1574188,
+                "output": 41836
+              },
+              "exit": 0
+            }
+          ],
+          "park": {
+            "at": "2026-11-15T20:12:12.277Z",
+            "reason": "replan needed: ESCALATE: scope — src/app/app.spec.ts is outside the plan's Read-Write Scope, and the new auth and baby guards break its 2 router tests (pnpm run test exit 1). The fix is to provide stub AuthService and BabyService in that file's TestBed."
+          },
+          "parkBranch": "park/night-1-002"
+        }
+      ],
+      "escalations": [
+        {
+          "step": "resumed after: asking 002-1: replan needed: ESCALATE: scope — src/app/app.spec.ts is outside the plan's Read-Write Scope, and the new auth and baby guards break its ",
+          "check": "(not given)"
+        }
+      ],
+      "replan": "no — (not given)",
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 29.6,
+      "sha": "35e7978850bbbcc150a3941a07906b2ddf0ac83c",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 108.6,
+          "tokens": {
+            "input": 153401,
+            "output": 2710
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 18.4,
+          "tokens": {
+            "input": 107967,
+            "output": 1039
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "df6678be3c42b6f6b0777f916c42fbd4d2f53875"
+    },
+    "003": {
+      "nnn": "003",
+      "title": "Food and allergen catalog the parents can extend and edit",
+      "branch": "feat/003-food-allergen-catalog",
+      "state": "merged",
+      "round": 1,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T20:30:24.194Z"
+        },
+        "builder fix": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T20:32:40.003Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-15T20:34:34.820Z"
+        }
+      },
+      "humanItems": [
+        "The emoji and names read well on a phone; the catalog feels complete enough to start."
+      ],
+      "history": [
+        {
+          "at": "2026-11-15T20:12:22.383Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:19:31.235Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:19:31.428Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:27:44.473Z",
+          "state": "parked",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:28:15.064Z",
+          "state": "asking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:30:24.000Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:30:24.196Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:32:39.628Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:32:39.808Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T20:32:40.005Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T20:33:33.028Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T20:34:30.638Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T20:34:34.821Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T20:34:53.945Z",
+          "state": "merging",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T20:35:14.206Z",
+          "state": "merged",
+          "round": 1
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "003",
+          "round": 0,
+          "models": {},
+          "state": "queued",
+          "reason": "waits on the answer to ask 002-1",
+          "freeDiskGb": 29.6
+        },
+        {
+          "nnn": "003",
+          "title": "Food and allergen catalog the parents can extend and edit",
+          "branch": "feat/003-food-allergen-catalog",
+          "state": "asking",
+          "round": 0,
+          "tier": "build",
+          "models": {
+            "builder": {
+              "model": "sonnet",
+              "tier": "build",
+              "at": "2026-11-15T20:19:31.426Z"
+            }
+          },
+          "tiers": [
+            "build"
+          ],
+          "freeDiskGb": 29.5,
+          "reason": "asking 003-1: ESCALATE scope: ESCALATE: scope src/app/app.spec.ts — `pnpm run test` exits 1: 'App renders the foods empty state on /foods' still expects the old placeholder page and now sees the loading state of the new foods page; the file is not in the plan's Read-Write Scope.",
+          "calls": [
+            {
+              "stage": "builder",
+              "model": "sonnet",
+              "seconds": 492.7,
+              "tokens": {
+                "input": 3357799,
+                "output": 62063
+              },
+              "exit": 0
+            }
+          ],
+          "parkBranch": "park/night-1-003",
+          "park": {
+            "at": "2026-11-15T20:28:09.431Z",
+            "reason": "ESCALATE scope: ESCALATE: scope src/app/app.spec.ts — `pnpm run test` exits 1: 'App renders the foods empty state on /foods' still expects the old placeholder page and now sees the loading state of the new foods page; the file is not in the plan's Read-Write Scope.",
+            "branch": "park/night-1-003"
+          }
+        }
+      ],
+      "escalations": [
+        {
+          "step": "resumed after: asking 003-1: ESCALATE scope: ESCALATE: scope src/app/app.spec.ts — `pnpm run test` exits 1: 'App renders the foods empty state on /foods' still expec",
+          "check": "(not given)"
+        }
+      ],
+      "replan": "no — (not given)",
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 29.5,
+      "roundCauses": [
+        "round 1: builder left uncommitted files: rc/app/app.spec.ts"
+      ],
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 134.9,
+          "tokens": {
+            "input": 188827,
+            "output": 3086
+          },
+          "exit": 0
+        },
+        {
+          "stage": "builder fix",
+          "model": "sonnet",
+          "seconds": 50.5,
+          "tokens": {
+            "input": 67696,
+            "output": 1044
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 18.6,
+          "tokens": {
+            "input": 103315,
+            "output": 1306
+          },
+          "exit": 0
+        }
+      ],
+      "sha": "85c7391fcb78bb9624fc966e4a60ca1cfc171bac",
+      "checkedHead": "7de2484e50f616583c32c552894283d4097bce9f"
+    },
+    "004": {
+      "nnn": "004",
+      "title": "Calendar core: the home screen where parents plan and record every meal",
+      "branch": "feat/004-calendar-core",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T20:36:30.269Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-15T20:53:04.692Z"
+        }
+      },
+      "humanItems": [
+        "Dragging on a real phone feels reliable; the week is readable at a glance; allergens stand out."
+      ],
+      "history": [
+        {
+          "at": "2026-11-15T20:12:22.531Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:28:16.048Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:36:30.088Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:36:30.272Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:51:59.301Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:53:00.541Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:53:04.694Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:53:27.055Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:53:47.668Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "004",
+          "round": 0,
+          "models": {},
+          "state": "queued",
+          "reason": "waits on the answer to ask 003-1",
+          "freeDiskGb": 29.5
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 29.4,
+      "sha": "e4e963f34d5b11a3a39261838abb8f8d0cbc6dda",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 926.3,
+          "tokens": {
+            "input": 164167,
+            "output": 1312
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 21.9,
+          "tokens": {
+            "input": 211598,
+            "output": 1459
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "bc28a284be2155ace41c96b525d57ef490c5a85d"
+    },
+    "005": {
+      "nnn": "005",
+      "title": "Allergen rules engine, alerts on the calendar and the allergens page",
+      "branch": "feat/005-allergen-engine-alerts",
+      "state": "merged",
+      "round": 1,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T21:07:19.842Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-15T21:09:43.204Z"
+        }
+      },
+      "humanItems": [
+        "The alerts are helpful and not nagging; the `אלרגנים` page answers \"where are we\" in five seconds."
+      ],
+      "history": [
+        {
+          "at": "2026-11-15T20:12:22.679Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:28:16.376Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:55:02.779Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:55:02.977Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:03:53.551Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:03:53.986Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:03:54.171Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:03:54.373Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:03:54.550Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:04:24.426Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:04:24.903Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:04:25.091Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:04:25.351Z",
+          "state": "parked",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:04:51.909Z",
+          "state": "asking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:07:19.658Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:07:19.844Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:08:47.286Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:09:39.872Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:09:43.205Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:09:59.459Z",
+          "state": "merging",
+          "round": 1
+        },
+        {
+          "at": "2026-11-15T21:10:16.821Z",
+          "state": "merged",
+          "round": 1
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "005",
+          "round": 0,
+          "models": {},
+          "state": "queued",
+          "reason": "waits on the answer to ask 003-1",
+          "freeDiskGb": 29.5
+        },
+        {
+          "nnn": "005",
+          "title": "Allergen rules engine, alerts on the calendar and the allergens page",
+          "branch": "feat/005-allergen-engine-alerts",
+          "state": "asking",
+          "round": 1,
+          "tier": "build",
+          "models": {
+            "builder": {
+              "model": "sonnet",
+              "tier": "build",
+              "at": "2026-11-15T20:55:02.975Z"
+            },
+            "builder fix": {
+              "model": "sonnet",
+              "tier": "build",
+              "at": "2026-11-15T21:03:54.548Z"
+            }
+          },
+          "tiers": [
+            "build"
+          ],
+          "freeDiskGb": 29.4,
+          "sha": "dfebc18fb4e96ebd2df994e710b45554c640e484",
+          "calls": [
+            {
+              "stage": "builder",
+              "model": "sonnet",
+              "seconds": 527.7,
+              "tokens": {
+                "input": 5084075,
+                "output": 60552
+              },
+              "exit": 0
+            },
+            {
+              "stage": "builder fix",
+              "model": "sonnet",
+              "seconds": 27.3,
+              "tokens": {
+                "input": 81312,
+                "output": 1916
+              },
+              "exit": 0
+            }
+          ],
+          "uiCards": [
+            {
+              "card": "With `שומשום` introducing, adding `ביצה קשה` to today's meal 1 asks `שומשום עדיין בחשיפה. להתחיל גם ביצה?`.",
+              "status": "unchecked",
+              "via": "none",
+              "page": "",
+              "screenshots": [],
+              "round": 1
+            }
+          ],
+          "roundCauses": [
+            "round 1: Done-when item left undone: [auto] `node --test server/domain/allergen-engine.test.js server/domain/settings.test.js` exits 0, covering: given on days 1, 2, 3 → `maintenance` from day 3; given on days 1 and 3 only → on day 4 sti",
+            "round 2: Done-when item left undone: [auto] `node --test server/domain/allergen-engine.test.js server/domain/settings.test.js` exits 0, covering: given on days 1, 2, 3 → `maintenance` from day 3; given on days 1 and 3 only → on day 4 sti"
+          ],
+          "reason": "asking 005-1: same reason twice: Done-when item left undone: [auto] `node --test server/domain/allergen-engine.test.js server/domain/settings.test.js` exits 0, covering: given on days 1, 2, 3 → `maintenance` from day 3; given on days 1 and 3 only → on day 4 sti",
+          "park": {
+            "at": "2026-11-15T21:04:43.377Z",
+            "reason": "same reason twice: Done-when item left undone: [auto] `node --test server/domain/allergen-engine.test.js server/domain/settings.test.js` exits 0, covering: given on days 1, 2, 3 → `maintenance` from day 3; given on days 1 and 3 only → on day 4 sti"
+          },
+          "parkBranch": "park/night-1-005"
+        }
+      ],
+      "escalations": [
+        {
+          "step": "resumed after: asking 005-1: same reason twice: Done-when item left undone: [auto] `node --test server/domain/allergen-engine.test.js server/domain/settings.test.js`",
+          "check": "(not given)"
+        }
+      ],
+      "replan": "no — (not given)",
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 29.4,
+      "sha": "500701b2ebd90ec34370a50df10ecb7fe7abef88",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 85.2,
+          "tokens": {
+            "input": 41158,
+            "output": 1140
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 15.9,
+          "tokens": {
+            "input": 99723,
+            "output": 1024
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "dfebc18fb4e96ebd2df994e710b45554c640e484"
+    },
+    "006": {
+      "nnn": "006",
+      "title": "Week suggestions: which queued food and allergen on which day",
+      "branch": "feat/006-week-suggestions",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T21:11:25.182Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-15T21:20:34.925Z"
+        }
+      },
+      "humanItems": [
+        "The proposed week looks like something the parents would plan themselves."
+      ],
+      "history": [
+        {
+          "at": "2026-11-15T20:12:22.819Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:28:16.684Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:04:52.486Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:11:25.043Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:11:25.183Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:19:20.115Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:20:30.575Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:20:34.927Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:20:56.346Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:21:17.675Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "006",
+          "round": 0,
+          "models": {},
+          "state": "queued",
+          "reason": "waits on the answer to ask 005-1",
+          "freeDiskGb": 29.4
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 29.4,
+      "sha": "563a64bca2a6280830b245cdf590da30e2f6c8a4",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 472,
+          "tokens": {
+            "input": 3700882,
+            "output": 51993
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 20.9,
+          "tokens": {
+            "input": 164521,
+            "output": 1453
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "922817963d5c295e0bbe7984808ab353f9e3b2be"
+    },
+    "007": {
+      "nnn": "007",
+      "title": "Reactions with photos, and locks on the suspected foods until a parent releases them",
+      "branch": "feat/007-reactions-photos-locks",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T21:22:34.966Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-15T21:38:40.847Z"
+        }
+      },
+      "humanItems": [
+        "With the Cloudinary keys in `server/.env`, a reaction with one photo from the phone camera saves, shows the photo, and the whole recording takes under a minute."
+      ],
+      "history": [
+        {
+          "at": "2026-11-15T20:12:22.956Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:28:16.855Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:04:52.668Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:22:34.798Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:22:34.968Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:37:12.636Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:37:13.083Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:38:36.260Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:38:40.849Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:39:07.120Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:39:30.915Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "007",
+          "round": 0,
+          "models": {},
+          "state": "queued",
+          "reason": "waits on the answer to ask 005-1",
+          "freeDiskGb": 29.4
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 29.1,
+      "sha": "250d772d719be21218d7dda557cc96f7d6fa75a6",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 874.8,
+          "tokens": {
+            "input": 8706276,
+            "output": 95763
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 25.9,
+          "tokens": {
+            "input": 328962,
+            "output": 1762
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "Adding `חביתה` to the calendar then shows `חביתה נעול בעקבות תגובה`.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "eaf64802faccd7d8a4cc4ae35ff67f4caa8f5854"
+    },
+    "008": {
+      "nnn": "008",
+      "title": "Food detail, progress summary, the settings page and the activity log",
+      "branch": "feat/008-status-pages-settings",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-15T21:40:46.628Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-15T21:50:53.770Z"
+        }
+      },
+      "humanItems": [
+        "The settings explanations are clear to a parent who did not build the app."
+      ],
+      "history": [
+        {
+          "at": "2026-11-15T20:12:23.091Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T20:28:17.031Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:04:52.864Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:40:46.417Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:40:46.630Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:49:31.271Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:49:31.680Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:49:32.056Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:50:49.232Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:50:53.773Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:51:19.881Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-15T21:51:42.180Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "008",
+          "round": 0,
+          "models": {},
+          "state": "queued",
+          "reason": "waits on the answer to ask 005-1",
+          "freeDiskGb": 29.4
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 29,
+      "sha": "e44b5c9b73f6311e5127e0c3b8e75358d1243178",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 521.8,
+          "tokens": {
+            "input": 4392613,
+            "output": 59906
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 25.6,
+          "tokens": {
+            "input": 317637,
+            "output": 1962
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "On `/foods/:id` for `בננה`, each given date is listed; `הוספה ליומן` opens the add-food sheet on `/` with `בננה` preselected.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        },
+        {
+          "card": "On `/settings`, the activity log's first row names the user `parent-a` and the change just made.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "e72cea4f2156e6a7bee1baa1975910700ef886f6"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-15T19:49:44.444Z",
+      "plan": "001",
+      "text": "the folder baby-tasting-orch-night-1-001 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T19:59:53.466Z",
+      "plan": "001",
+      "text": "builder left undone (round 0): [ui] At 360px the shell shows the top bar and four tabs, and /foods shows its empty state: written, not run (e2e/001-1-shell.spec.ts); [ui] /dev/components shows the heading and one section per component: written, not run (e2e/001-2-components.spec.ts); [human] The look matches Baby Tracker's feel:"
+    },
+    {
+      "at": "2026-11-15T19:59:56.257Z",
+      "plan": "001",
+      "text": "[ui] `/dev/components` (development build) shows the heading `רכיבים משותפים` and one section per shared component.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-15T20:00:00.256Z",
+      "plan": "001",
+      "text": "the folder baby-tasting-orch-night-1-001 was installed (root, server)"
+    },
+    {
+      "at": "2026-11-15T20:01:29.303Z",
+      "plan": "001",
+      "text": "the folder baby-tasting-orch-merge-night-1 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T20:05:48.473Z",
+      "plan": "002",
+      "text": "the folder baby-tasting-orch-night-1-002 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T20:11:51.949Z",
+      "plan": "002",
+      "text": "builder left undone (round 0): src/app/app.spec.ts: add stub AuthService and BabyService providers to its TestBed so the 2 failing router tests pass (needs scope approval); 002-1: written, not run; 002-2: written, not run; 002-3: written, not run; Never ran the full e2e suite or pnpm run e2e"
+    },
+    {
+      "at": "2026-11-15T20:11:53.653Z",
+      "plan": "002",
+      "text": "the folder baby-tasting-orch-night-1-002 was installed (server)"
+    },
+    {
+      "at": "2026-11-15T20:12:21.520Z",
+      "plan": "002",
+      "text": "parked: nothing to save (nothing uncommitted)"
+    },
+    {
+      "at": "2026-11-15T20:12:21.923Z",
+      "plan": "002",
+      "text": "ask 002-1 (scope, the Human or the advisor answers): May the builder edit src/app/app.spec.ts to provide stub AuthService and BabyService, so the router tests pass with the new guards?"
+    },
+    {
+      "at": "2026-11-15T20:12:23.235Z",
+      "text": "plan 002 asks 002-1 — 003, 004, 005, 006, 007, 008 wait on the answer; the rest go on"
+    },
+    {
+      "at": "2026-11-15T20:13:23.407Z",
+      "plan": "002",
+      "text": "ask 002-1 answered by the human: approved: src/app/app.spec.ts"
+    },
+    {
+      "at": "2026-11-15T20:13:34.227Z",
+      "plan": "002",
+      "text": "scope of plan 002 extended on orch/night-1 by the answer to 002-1: src/app/app.spec.ts"
+    },
+    {
+      "at": "2026-11-15T20:14:30.022Z",
+      "plan": "002",
+      "text": "resumed from park/night-1-002: round 0, tier build, after: asking 002-1: replan needed: ESCALATE: scope — src/app/app.spec.ts is outside the plan's Read-Write Scope, and the new auth and baby guards break its 2 router t"
+    },
+    {
+      "at": "2026-11-15T20:14:35.699Z",
+      "plan": "002",
+      "text": "the folder baby-tasting-orch-night-1-002 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T20:16:24.889Z",
+      "plan": "002",
+      "text": "builder left undone (round 0): [ui] 002-1 login: written, not run; [ui] 002-2 welcome: written, not run; [ui] 002-3 unsaved changes: written, not run"
+    },
+    {
+      "at": "2026-11-15T20:17:58.266Z",
+      "plan": "002",
+      "text": "the folder baby-tasting-orch-merge-night-1 was installed (server)"
+    },
+    {
+      "at": "2026-11-15T20:19:31.065Z",
+      "plan": "003",
+      "text": "the folder baby-tasting-orch-night-1-003 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T20:27:44.258Z",
+      "plan": "003",
+      "text": "builder left undone (round 0): src/app/app.spec.ts: the 'foods empty state on /foods' test needs updating (stub CatalogService, or expect the new page); the file is outside the plan's scope, so `pnpm run test` fails until it is approved.; 003-1 (the `אלרגנים בלבד` filter): written, not run; 003-2 (add `קוסקוס` with new allergen `"
+    },
+    {
+      "at": "2026-11-15T20:28:14.869Z",
+      "plan": "003",
+      "text": "parked: saved on park/night-1-003 (8ec3992) and pushed"
+    },
+    {
+      "at": "2026-11-15T20:28:15.276Z",
+      "plan": "003",
+      "text": "ask 003-1 (scope, the Human or the advisor answers): May I update the existing test src/app/app.spec.ts ('renders the foods empty state on /foods') so it stubs CatalogService and checks the new foods page?"
+    },
+    {
+      "at": "2026-11-15T20:29:17.239Z",
+      "plan": "003",
+      "text": "ask 003-1 answered by the human: approved: src/app/app.spec.ts"
+    },
+    {
+      "at": "2026-11-15T20:29:27.859Z",
+      "plan": "003",
+      "text": "scope of plan 003 extended on orch/night-1 by the answer to 003-1: src/app/app.spec.ts"
+    },
+    {
+      "at": "2026-11-15T20:30:18.290Z",
+      "plan": "003",
+      "text": "resumed from park/night-1-003: round 0, tier build, after: asking 003-1: ESCALATE scope: ESCALATE: scope src/app/app.spec.ts — `pnpm run test` exits 1: 'App renders the foods empty state on /foods' still expects the old"
+    },
+    {
+      "at": "2026-11-15T20:30:23.816Z",
+      "plan": "003",
+      "text": "the folder baby-tasting-orch-night-1-003 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T20:32:39.360Z",
+      "plan": "003",
+      "text": "builder left undone (round 0): [ui] 003-1: written, not run; [ui] 003-2: written, not run; [ui] 003-3: written, not run"
+    },
+    {
+      "at": "2026-11-15T20:36:29.897Z",
+      "plan": "004",
+      "text": "the folder baby-tasting-orch-night-1-004 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T20:51:56.716Z",
+      "plan": "004",
+      "text": "builder left undone (round 0): [ui] 004-1 … 004-5: written, not run; [human] Dragging on a real phone, readability of the week and allergens standing out: not mine to mark"
+    },
+    {
+      "at": "2026-11-15T20:55:02.570Z",
+      "plan": "005",
+      "text": "the folder baby-tasting-orch-night-1-005 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T21:03:50.866Z",
+      "plan": "005",
+      "text": "builder left undone (round 0): [ui] 005-1: טחינה shows 2/3 on yesterday and the alert text — written, not run; [ui] 005-2: tapping the alert opens the add-food sheet for today, meal 1, with טחינה suggested — written, not run; [ui] 005-3: starting ביצה קשה while שומשום is introducing asks the confirmation — written, not run; [huma"
+    },
+    {
+      "at": "2026-11-15T21:03:53.794Z",
+      "plan": "005",
+      "text": "[ui] With `שומשום` introducing, adding `ביצה קשה` to today's meal 1 asks `שומשום עדיין בחשיפה. להתחיל גם ביצה?`.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-15T21:04:22.015Z",
+      "plan": "005",
+      "text": "builder left undone (round 1): [ui] 005-1: written, not run (e2e/005-1-badge-alert.spec.ts); [ui] 005-2: written, not run (e2e/005-2-alert-action.spec.ts); [ui] 005-3: starting ביצה קשה while שומשום is introducing asks the confirmation: written, not run"
+    },
+    {
+      "at": "2026-11-15T21:04:24.683Z",
+      "plan": "005",
+      "text": "[ui] With `שומשום` introducing, adding `ביצה קשה` to today's meal 1 asks `שומשום עדיין בחשיפה. להתחיל גם ביצה?`.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-15T21:04:51.749Z",
+      "plan": "005",
+      "text": "parked: nothing to save (nothing uncommitted)"
+    },
+    {
+      "at": "2026-11-15T21:04:52.065Z",
+      "plan": "005",
+      "text": "ask 005-1 (technical, the Human or the advisor answers): Plan 005 failed twice for the same reason (Done-when item left undone: [auto] `node --test server/domain/allergen-engine.test.js server/domain/settings.test.js` exits 0, covering: given on days 1, 2, 3 → `maintenance` from day 3; given on days). Leave it parked, or retry it?"
+    },
+    {
+      "at": "2026-11-15T21:06:23.038Z",
+      "plan": "005",
+      "text": "ask 005-1 answered by the human: Retry. The [auto] check passes: on park/night-1-005, node --test server/domain/allergen-engine.test.js server/domain/settings.test.js gives 20 pass, 0 fail (checked by the Planner). The failure is a false match in the runner: your notDone entry for 005-3 contained the word 'introducing', which matches the backticked `introducing` inside that [auto] item. Change no"
+    },
+    {
+      "at": "2026-11-15T21:07:12.360Z",
+      "plan": "005",
+      "text": "resumed from park/night-1-005: round 1, tier build, after: asking 005-1: same reason twice: Done-when item left undone: [auto] `node --test server/domain/allergen-engine.test.js server/domain/settings.test.js` exits 0,"
+    },
+    {
+      "at": "2026-11-15T21:07:19.488Z",
+      "plan": "005",
+      "text": "the folder baby-tasting-orch-night-1-005 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T21:08:45.140Z",
+      "plan": "005",
+      "text": "builder left undone (round 1): [ui] 005-1: written, not run (e2e/005-1-badge-alert.spec.ts); [ui] 005-2: written, not run (e2e/005-2-alert-action.spec.ts); [ui] 005-3: written, not run (e2e/005-3-second-intro.spec.ts)"
+    },
+    {
+      "at": "2026-11-15T21:11:24.911Z",
+      "plan": "006",
+      "text": "the folder baby-tasting-orch-night-1-006 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T21:19:17.329Z",
+      "plan": "006",
+      "text": "builder left undone (round 0): 006-1 suggest and accept all: written, not run; 006-2 dismiss one: written, not run; [human] The proposed week looks like something the parents would plan themselves: for the Human"
+    },
+    {
+      "at": "2026-11-15T21:22:34.634Z",
+      "plan": "007",
+      "text": "the folder baby-tasting-orch-night-1-007 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T21:37:09.957Z",
+      "plan": "007",
+      "text": "builder left undone (round 0): [ui] 007-1 reaction listed and egg locked: written, not run; [ui] 007-2 adding חביתה shows 'חביתה נעול בעקבות תגובה': written, not run; [ui] 007-3 release asks, confirms, then חביתה can be added: written, not run; [ui] 007-4 breathing difficulty shows the 101 notice: written, not run; [human] a reac"
+    },
+    {
+      "at": "2026-11-15T21:37:12.902Z",
+      "plan": "007",
+      "text": "[ui] Adding `חביתה` to the calendar then shows `חביתה נעול בעקבות תגובה`.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-15T21:37:14.480Z",
+      "plan": "007",
+      "text": "the folder baby-tasting-orch-night-1-007 was installed (server)"
+    },
+    {
+      "at": "2026-11-15T21:39:13.263Z",
+      "plan": "007",
+      "text": "the folder baby-tasting-orch-merge-night-1 was installed (server)"
+    },
+    {
+      "at": "2026-11-15T21:40:46.219Z",
+      "plan": "008",
+      "text": "the folder baby-tasting-orch-night-1-008 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-15T21:49:28.625Z",
+      "plan": "008",
+      "text": "builder left undone (round 0): [ui] intro-days 3/3 to 3/4: written, not run (e2e/008-1-intro-days.spec.ts); [ui] banana detail lists dates and הוספה ליומן preselects it: written, not run (e2e/008-2-food-detail.spec.ts); [ui] activity log first row names parent-a and the change just made: written, not run (e2e/008-3-activity.spec."
+    },
+    {
+      "at": "2026-11-15T21:49:31.506Z",
+      "plan": "008",
+      "text": "[ui] On `/foods/:id` for `בננה`, each given date is listed; `הוספה ליומן` opens the add-food sheet on `/` with `בננה` preselected.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-15T21:49:31.867Z",
+      "plan": "008",
+      "text": "[ui] On `/settings`, the activity log's first row names the user `parent-a` and the change just made.: written, not run — checked by the run's [ui] step / the Human"
+    }
+  ],
+  "attempts": 2,
+  "phase": "finished",
+  "freeDiskGb": 29,
+  "updatedAt": "2026-11-15T21:53:18.406Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: added INV-1..6 lines to the plan's own Architecture Impact (the arch check required them; the plan file is always writable) — reverse: restore the single INV-none line",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: the unsaved-changes prompt uses the destructive confirm style for the 'leave' button (DESIGN.md D-7) — reverse: pass destructive: false in unsaved-changes.guard.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: the baby slot in the top bar stays empty until a later plan fills ShellService.babyLabel (DESIGN.md D-8) — reverse: none needed",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: the health route reports db 'down' with HTTP 200 when the ping fails, rather than a 5xx — reverse: return 503 in server/routes/health.js",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D5",
+      "plan": "001",
+      "type": "behaviour",
+      "text": "behaviour: the Hebrew copy for the four empty-state action buttons is my own wording, since the plan left it open — reverse: edit HE.pages in he.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D6",
+      "plan": "001",
+      "type": "seen",
+      "text": "seen: mongodb-memory-server's postinstall build script is ignored by pnpm (server install prints 'Ignored build scripts'); the tests passed in this run, but a fresh machine may need to download the mongod binary on first use",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D7",
+      "plan": "002",
+      "type": "behaviour",
+      "text": "behaviour: logout also clears the baby kept in memory and the top-bar label, with no dialog — reverse: drop BabyService.reset() from SettingsPage.logout",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D8",
+      "plan": "002",
+      "type": "behaviour",
+      "text": "behaviour: createIndexes runs from createApp (fire-and-forget) because server/index.js is outside scope — reverse: call it from index.js after connect",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D9",
+      "plan": "002",
+      "type": "behaviour",
+      "text": "behaviour: a server-rejected baby save shows one generic message, HE.baby.invalid, on the name field — reverse: edit that string",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D10",
+      "plan": "002",
+      "type": "behaviour",
+      "text": "behaviour: requireAuth is mounted per resource (/api/v1/baby) rather than on all of /api/v1, so an unknown /api/v1 path stays 404 for anonymous callers — reverse: mount it on /api/v1 before the routers",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D11",
+      "plan": "002",
+      "type": "behaviour",
+      "text": "behaviour: the e2e specs for plan 001 now sign in and save a baby first, since the guards need that — reverse: revert the e2e/001-*.spec.ts edits",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D12",
+      "plan": "002",
+      "type": "behaviour",
+      "text": "behaviour: the shell hides the bottom nav on /login and /welcome using the router URL — reverse: revert the showNav_ condition in shell.ts",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D13",
+      "plan": "003",
+      "type": "behaviour",
+      "text": "behaviour: the catalog middleware seeds the built-ins on every catalog request (two cheap queries) and answers 409 no_baby when the household has no baby — reverse: seed only on the first GET and drop the check in server/routes/catalog-helpers.js",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D14",
+      "plan": "003",
+      "type": "behaviour",
+      "text": "behaviour: DELETE of a built-in food or allergen archives it, and DELETE of an allergen that any food references (archived foods included) archives it — reverse: change the checks in server/routes/foods.js and server/routes/allergens.js",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D15",
+      "plan": "003",
+      "type": "behaviour",
+      "text": "behaviour: after saving or archiving a food the app returns to /foods with no toast, and the unsaved-changes prompt is skipped on those exits — reverse: drop the leaving_ flag in food-form.ts",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D16",
+      "plan": "003",
+      "type": "behaviour",
+      "text": "behaviour: the new-food form starts with category `ירקות` and no emoji, and the save button stays disabled until an emoji is chosen — reverse: change the EMPTY defaults in food-form.ts",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D17",
+      "plan": "003",
+      "type": "behaviour",
+      "text": "behaviour: a warning with empty text is stored as no warning, even if an age is filled in — reverse: change parseWarning in server/lib/catalog-validation.js",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D18",
+      "plan": "003",
+      "type": "behaviour",
+      "text": "behaviour: allergens are renamed inline with a `שמירת שם` button or Enter, with no confirmation — reverse: remove the button and the keydown handler in allergens-manage.html",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D19",
+      "plan": "003",
+      "type": "seen",
+      "text": "seen: src/app/pages/allergens/allergens.ts — the old `אלרגנים` nav tab still shows a placeholder page next to the new /foods/allergens page; plan 003 does not touch it",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D20",
+      "plan": "005",
+      "type": "behaviour",
+      "text": "behaviour: the engine adds intro.givenDates (the counted given days) so the badge shows the true n/N ordinal even when earlier days are off-screen — reverse: drop the field and count from the loaded calendar items",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D21",
+      "plan": "005",
+      "type": "behaviour",
+      "text": "behaviour: tapping an alert shows the suggested food first in the add-food sheet under 'מוצע' with an accent outline, and adds nothing until the parent taps it — reverse: add it directly on the alert tap",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D22",
+      "plan": "005",
+      "type": "behaviour",
+      "text": "behaviour: the alert strip is rewritten so a tappable alert is one row (text and chevron, 4px bad-colour bar at the inline-start) that collapses to 3 rows with '+N נוספות'; the old action-button rows still work — reverse: restore the previous alert-strip files from git",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D23",
+      "plan": "005",
+      "type": "behaviour",
+      "text": "behaviour: on /allergens with no allergens, the empty state's action opens /foods/allergens — reverse: remove manage() in allergens-page.ts",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D24",
+      "plan": "005",
+      "type": "behaviour",
+      "text": "behaviour: PUT /api/v1/settings refuses unknown keys with 400 invalid and merges accepted values over the previously stored ones — reverse: ignore unknown keys in validateSettings",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D25",
+      "plan": "005",
+      "type": "removes",
+      "text": "removes: the placeholder src/app/pages/allergens/allergens.{ts,html} empty-state page is replaced by the real allergens page (the plan names the route change) — reverse: git revert this commit",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D26",
+      "plan": "005",
+      "type": "seen",
+      "text": "seen: src/app/core/i18n/he.ts — HE.pages.allergens is now only used for emptyAction; the other keys there are unused placeholders",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D27",
+      "plan": "006",
+      "type": "behaviour",
+      "text": "behaviour: the old inline accept and ✕ buttons on a suggested tile are replaced by one dashed tile that opens the reason sheet, as the UI notes say — reverse: restore the two buttons in week-view.html",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D28",
+      "plan": "006",
+      "type": "behaviour",
+      "text": "behaviour: PUT /foods/queue must list every queued food exactly once, otherwise 400 — reverse: relax the check in routes/foods.js",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D29",
+      "plan": "006",
+      "type": "behaviour",
+      "text": "behaviour: suggestions are cleared when the visible week or the view changes — reverse: drop the effect in calendar-page.ts",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D30",
+      "plan": "006",
+      "type": "behaviour",
+      "text": "behaviour: rule 3 (start the next allergen) is skipped when a not_started allergen already has planned items; it runs before the maintenance rule so the start days take priority — reverse: change the order or condition in suggestions.js",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D31",
+      "plan": "006",
+      "type": "behaviour",
+      "text": "behaviour: an archived food cannot be added to the queue (400); removing it from the queue is still allowed — reverse: drop the check in the queue route",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D32",
+      "plan": "007",
+      "type": "behaviour",
+      "text": "behaviour: editing a reaction never changes its locks, and a photo removed in the edit form is not deleted from Cloudinary (photos are deleted only when the whole reaction is deleted) — reverse: destroy the removed photos in the PATCH route in server/routes/reactions.js",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D33",
+      "plan": "007",
+      "type": "behaviour",
+      "text": "behaviour: a food locked through its allergen shows 🔒 on /foods with no release button; it is released from /allergens — reverse: show the 🔓 button for any locked food in foods-page.html and let the foods release route fall back to the allergen lock",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D34",
+      "plan": "007",
+      "type": "behaviour",
+      "text": "behaviour: the item-tile badge now also shows for non-allergen foods when the food is locked (🔒 on a bad-colour fill) — reverse: restrict the badge to allergen foods in item-tile.html",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D35",
+      "plan": "007",
+      "type": "behaviour",
+      "text": "behaviour: the reaction time field is a datetime-local input, so app-text-field accepts that type — reverse: drop the type from text-field.ts and use a date field plus a time field",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D36",
+      "plan": "007",
+      "type": "behaviour",
+      "text": "behaviour: the reactions list shows a plain empty message with no action button (the shared empty-state needs an action) — reverse: add an action to the empty state",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D37",
+      "plan": "007",
+      "type": "seen",
+      "text": "seen: server/test/reactions.test.js and the other server tests print 'index creation failed MongoClientClosedError' at teardown (createIndexes in server/app.js:25 races with the DB close). The tests pass; the message is noise from before this plan",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D38",
+      "plan": "008",
+      "type": "behaviour",
+      "text": "behaviour: POST /api/v1/settings/reset answers { settings: {...defaults} } like GET and PUT, not the bare object — reverse: return withDefaults({}) directly in server/routes/settings.js",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D39",
+      "plan": "008",
+      "type": "behaviour",
+      "text": "behaviour: the activity log leaves out seeded catalog entries (updatedBy 'system') and shows each document once with its latest change, per the planner decision — reverse: drop the updatedBy filter in activity-repository.js",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D40",
+      "plan": "008",
+      "type": "behaviour",
+      "text": "behaviour: a failed progress or hint request shows nothing extra: the foods list still loads and the hint stays hidden — reverse: show an error state in foods-page or calendar-hint",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D41",
+      "plan": "008",
+      "type": "behaviour",
+      "text": "behaviour: /?add=<foodId> opens the add sheet once the catalog loads, then removes the param from the URL — reverse: keep the param in openAddFromQuery()",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D42",
+      "plan": "008",
+      "type": "seen",
+      "text": "seen: server activity shows usernames as stored (e.g. 'Parent-A' for APP_USERS casing); the [ui] item expects 'parent-a' — check E2E_USERNAME and APP_USERS casing before running e2e/008-3 (server/test/helpers.js:7)",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-15T21:53:18.403Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-15T21:53:18.405Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}

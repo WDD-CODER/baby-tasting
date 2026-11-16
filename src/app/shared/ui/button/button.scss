@@ -1,0 +1,71 @@
+:host {
+  display: inline-block;
+}
+
+:host(:has(.btn--full)) {
+  display: block;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-block-size: var(--touch-target);
+
+  border: 1px solid transparent;
+  border-radius: var(--radius-card);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-5);
+
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+
+  &--lg {
+    min-block-size: 52px;
+    font-size: var(--fs-lg);
+  }
+
+  &--primary {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  &--secondary {
+    border-color: var(--color-border);
+    background: transparent;
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--color-text-secondary);
+  }
+
+  &--danger {
+    background: var(--color-tier-bad);
+    color: var(--color-on-accent);
+  }
+
+  &--full {
+    inline-size: 100%;
+  }
+
+  &--loading {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-border);
+    outline-offset: 2px;
+  }
+}

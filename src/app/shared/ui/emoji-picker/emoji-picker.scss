@@ -1,0 +1,47 @@
+:host {
+  display: block;
+}
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &__label {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--touch-target), 1fr));
+    gap: var(--space-1);
+  }
+
+  &__item {
+    min-block-size: var(--touch-target);
+
+    border: 1px solid transparent;
+    border-radius: var(--radius-card);
+
+    background: var(--color-surface);
+    font-size: 24px;
+
+    &--selected {
+      border-color: var(--color-accent);
+    }
+  }
+
+  &__free {
+    min-block-size: var(--touch-target);
+
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: var(--fs-md);
+  }
+}

@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+.reactions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+
+    min-block-size: var(--touch-target);
+
+    color: var(--color-accent);
+  }
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-lg);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+  &__none {
+    color: var(--color-text-secondary);
+  }
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  min-block-size: var(--touch-target);
+
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+
+  &__thumb {
+    flex: none;
+
+    inline-size: 56px;
+    block-size: 56px;
+
+    border-radius: var(--radius-card);
+
+    object-fit: cover;
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  &__date {
+    font-weight: var(--fw-bold);
+  }
+
+  &__foods,
+  &__symptoms {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+}

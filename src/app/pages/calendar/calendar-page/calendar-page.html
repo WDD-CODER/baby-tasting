@@ -1,0 +1,132 @@
+<section class="calendar">
+  <app-calendar-hint />
+
+  <app-alert-strip
+    [alerts]="extensions.alerts()"
+    [limit]="3"
+    [moreLabel]="alertsT.more"
+    [lessLabel]="alertsT.less"
+    (act)="extensions.onAlertAction()($event)"
+  />
+
+  <header
+    class="calendar__header"
+    (pointerdown)="swipeStart($event)"
+    (pointerup)="swipeEnd($event)"
+  >
+    <div class="calendar__nav">
+      <app-icon-button icon="›" [ariaLabel]="t.previous" (pressed)="step(-1)" />
+      <h2 class="calendar__title">{{ title() }}</h2>
+      <app-icon-button icon="‹" [ariaLabel]="t.next" (pressed)="step(1)" />
+    </div>
+    <div class="calendar__controls">
+      <app-chip (pressed)="goToday()">{{ t.today }}</app-chip>
+      <app-chip [selected]="view_() === 'week'" (pressed)="setView('week')">{{ t.week }}</app-chip>
+      <app-chip [selected]="view_() === 'month'" (pressed)="setView('month')">{{
+        t.month
+      }}</app-chip>
+    </div>
+  </header>
+
+  @if (view_() === 'week') {
+    <div class="calendar__suggest">
+      <app-button variant="secondary" [loading]="suggesting_()" (pressed)="suggestWeek()">{{
+        suggestT.suggestWeek
+      }}</app-button>
+    </div>
+    @if (extensions.suggested().length > 0) {
+      <div class="suggest-bar" role="status">
+        <span class="suggest-bar__count">{{ suggestionBarText() }}</span>
+        <app-button (pressed)="acceptSuggestions(extensions.suggested())">{{
+          suggestT.acceptAll
+        }}</app-button>
+        <app-button variant="ghost" (pressed)="dismissAllSuggestions()">{{
+          suggestT.dismissAll
+        }}</app-button>
+      </div>
+    }
+  }
+
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (failed_()) {
+    <app-error-state [message]="t.loadFailed" (retry)="load()" />
+  } @else if (view_() === 'week') {
+    <app-week-view
+      [weekStart]="weekStart()"
+      [today]="today()"
+      [items]="items()"
+      [foods]="foods()"
+      [suggested]="extensions.suggested()"
+      [badgeFor]="extensions.badgeFor()"
+      (itemOpened)="openItem($event)"
+      (addRequested)="requestAdd($event)"
+      (moveRequested)="moveItem($event)"
+      (suggestionOpened)="openSuggestion($event)"
+    />
+  } @else {
+    <app-month-view
+      [month]="anchor_()"
+      [today]="today()"
+      [items]="items()"
+      [foods]="foods()"
+      (dayOpened)="openDay($event)"
+    />
+  }
+
+  @if (daySheet_(); as date) {
+    <app-day-sheet
+      [open]="true"
+      [date]="date"
+      [items]="items()"
+      [foods]="foods()"
+      [badgeFor]="extensions.badgeFor()"
+      (closed)="daySheet_.set(null)"
+      (itemOpened)="openItem($event)"
+      (addRequested)="requestAdd($event)"
+      (moveRequested)="moveItem($event)"
+    />
+  }
+
+  <app-add-food-sheet
+    [open]="addFor_() !== null"
+    [foods]="foods()"
+    [recentIds]="recentIds()"
+    [preselectFoodId]="preselect_()"
+    (closed)="closeAdd()"
+    (picked)="pickFood($event)"
+    (newFoodRequested)="newFood()"
+  />
+
+  <app-bottom-sheet
+    [open]="openedSuggestion() !== null"
+    [title]="openedSuggestionFood()?.name ?? ''"
+    (closed)="closeSuggestion()"
+  >
+    @if (openedSuggestion(); as s) {
+      <div class="suggestion-sheet">
+        <p class="suggestion-sheet__reason">{{ reasonText(s) }}</p>
+        <div class="suggestion-sheet__actions">
+          <app-button (pressed)="extensions.onSuggestionAccept()(s)">{{
+            suggestT.accept
+          }}</app-button>
+          <app-button variant="ghost" (pressed)="extensions.onSuggestionDismiss()(s)">{{
+            suggestT.dismiss
+          }}</app-button>
+        </div>
+      </div>
+    }
+  </app-bottom-sheet>
+
+  <app-item-actions-sheet
+    [open]="actionsId_() !== null"
+    [item]="actionsItem()"
+    [food]="actionsFood()"
+    (closed)="actionsId_.set(null)"
+    (patched)="patchItem($event)"
+    (moved)="moveFromActions($event)"
+    (removed)="removeItem()"
+    (reactionRequested)="openReaction()"
+    (detailsRequested)="openDetails()"
+  />
+</section>

@@ -1,0 +1,71 @@
+<section class="food-form">
+  @if (loading_()) {
+    <app-loading-state />
+  } @else if (loadFailed_()) {
+    <app-error-state [message]="t.notFound" (retry)="init()" />
+  } @else {
+    <h2 class="food-form__title">{{ isEdit ? t.editTitle : t.addTitle }}</h2>
+    <form class="food-form__fields" (ngSubmit)="submit()">
+      <app-text-field
+        name="foodName"
+        [label]="t.name"
+        [error]="error_()"
+        [ngModel]="name_()"
+        (ngModelChange)="name_.set($event)"
+      />
+      <app-select
+        name="foodCategory"
+        [label]="t.category"
+        [options]="categoryOptions"
+        [ngModel]="category_()"
+        (ngModelChange)="category_.set($event)"
+      />
+      <app-emoji-picker [(value)]="emoji_" />
+      <app-select
+        name="foodAllergen"
+        [label]="t.allergen"
+        [options]="allergenOptions_()"
+        [ngModel]="allergenId_()"
+        (ngModelChange)="allergenId_.set($event)"
+      />
+      @if (isNewAllergen_()) {
+        <div class="food-form__inline">
+          <app-text-field
+            name="newAllergenName"
+            [label]="t.allergenNewName"
+            [error]="newAllergenError_()"
+            [ngModel]="newAllergenName_()"
+            (ngModelChange)="newAllergenName_.set($event)"
+          />
+          <app-button variant="secondary" (pressed)="addAllergen()">{{ t.allergenAdd }}</app-button>
+        </div>
+      }
+      <app-text-field
+        name="foodWarning"
+        [label]="t.warning"
+        [ngModel]="warningText_()"
+        (ngModelChange)="warningText_.set($event)"
+      />
+      <app-text-field
+        name="foodWarningMonths"
+        type="number"
+        [label]="t.warningMonths"
+        [hint]="t.warningMonthsHint"
+        [error]="monthsValid_() ? '' : t.invalid"
+        [ngModel]="warningMonths_()"
+        (ngModelChange)="warningMonths_.set($event)"
+      />
+      <app-button type="submit" [fullWidth]="true" [loading]="saving_()" [disabled]="!ready_()">
+        {{ t.save }}
+      </app-button>
+      <app-button variant="secondary" [fullWidth]="true" (pressed)="cancel()">{{
+        t.cancel
+      }}</app-button>
+      @if (isEdit) {
+        <app-button variant="danger" [fullWidth]="true" (pressed)="archive()">{{
+          t.archive
+        }}</app-button>
+      }
+    </form>
+  }
+</section>

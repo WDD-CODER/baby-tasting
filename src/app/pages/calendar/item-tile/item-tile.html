@@ -1,0 +1,24 @@
+<button
+  type="button"
+  class="tile"
+  [class.tile--planned]="item().status === 'planned'"
+  [class.tile--given]="item().status === 'given'"
+  [class.tile--skipped]="item().status === 'skipped'"
+  [class.tile--allergen]="isAllergen()"
+  [attr.aria-label]="label()"
+>
+  <span class="tile__emoji" aria-hidden="true">{{ food()?.emoji }}</span>
+  @if (item().status === 'given') {
+    <span class="tile__check" aria-hidden="true">✓</span>
+  }
+  @if (isAllergen() || badge()) {
+    <span
+      class="tile__badge"
+      [class.tile__badge--okay]="badge()?.tone === 'okay'"
+      [class.tile__badge--good]="badge()?.tone === 'good'"
+      [class.tile__badge--bad]="badge()?.tone === 'bad'"
+      aria-hidden="true"
+      >{{ badge()?.text ?? '' }}</span
+    >
+  }
+</button>

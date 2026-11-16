@@ -1,0 +1,16 @@
+<label class="field" [attr.for]="id">
+  <span class="field__label">{{ label() }}</span>
+  <select
+    class="field__select"
+    [id]="id"
+    [disabled]="isDisabled_()"
+    (change)="onSelect($event)"
+    (blur)="onBlur()"
+  >
+    @for (option of options(); track option.value) {
+      <option [value]="option.value" [selected]="option.value === value_()">
+        {{ option.label }}
+      </option>
+    }
+  </select>
+</label>

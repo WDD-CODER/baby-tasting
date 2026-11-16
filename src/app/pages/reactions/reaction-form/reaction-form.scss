@@ -1,0 +1,138 @@
+:host {
+  display: block;
+}
+
+.reaction {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  &__notice {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+
+    padding: var(--space-3);
+    border: 2px solid var(--color-tier-bad);
+    border-radius: var(--radius-card);
+
+    background: var(--color-surface);
+    color: var(--color-tier-bad);
+    font-weight: var(--fw-bold);
+  }
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-lg);
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  &__legend {
+    padding: 0;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  &__check {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    min-block-size: var(--touch-target);
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  &__textarea {
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+
+    background: var(--color-canvas);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: var(--fs-md);
+  }
+
+  &__photos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  &__file {
+    display: none;
+  }
+
+  &__hint {
+    margin: 0;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
+  &__error {
+    margin: 0;
+
+    color: var(--color-tier-bad);
+  }
+}
+
+.thumb {
+  position: relative;
+
+  inline-size: 72px;
+  block-size: 72px;
+
+  &__img {
+    inline-size: 100%;
+    block-size: 100%;
+
+    border-radius: var(--radius-card);
+
+    object-fit: cover;
+  }
+
+  &__remove {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+
+    inline-size: 28px;
+    block-size: 28px;
+
+    border: 0;
+    border-radius: var(--radius-pill);
+
+    background: var(--color-backdrop);
+    color: var(--color-text);
+  }
+}
