@@ -1,5 +1,5 @@
 <section class="allergens">
-  <a class="allergens__reactions" routerLink="/allergens/reactions">{{ reactionsLink }}</a>
+  <a class="allergens__reactions" routerLink="/tasting/allergens/reactions">{{ reactionsLink }}</a>
   @if (loading_()) {
     <app-loading-state />
   } @else if (failed_()) {
@@ -10,7 +10,7 @@
     <ul class="allergens__list">
       @for (card of cards(); track card.id) {
         <li>
-          <a class="card" [routerLink]="['/allergens', card.id]">
+          <a class="card" [routerLink]="['/tasting/allergens', card.id]">
             <span class="card__head">
               <span class="card__name">{{ card.name }}</span>
               <app-chip [tone]="card.tone"

@@ -2,6 +2,9 @@
   <header class="shell__top">
     <h1 class="shell__title">{{ appName }}</h1>
     <span class="shell__baby">{{ shell.babyLabel() }}</span>
+    @if (parentName_()) {
+      <span class="shell__parent">{{ parentName_() }}</span>
+    }
   </header>
 
   <main class="shell__main">
@@ -16,8 +19,9 @@
           [routerLink]="tab.path"
           routerLinkActive="tab--active"
           [routerLinkActiveOptions]="{ exact: tab.exact }"
+          ariaCurrentWhenActive="page"
         >
-          <span class="tab__icon" aria-hidden="true">{{ tab.icon }}</span>
+          <app-icon class="tab__icon" [slot]="tab.slot" [size]="24" />
           <span class="tab__label">{{ tab.label }}</span>
         </a>
       }

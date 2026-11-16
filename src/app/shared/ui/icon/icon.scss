@@ -1,0 +1,16 @@
+:host {
+  display: inline-block;
+
+  inline-size: 1em;
+  block-size: 1em;
+
+  font-size: var(--icon-size, 24px);
+  font-variation-settings: 'FILL' 0;
+  line-height: 1;
+
+  user-select: none;
+}
+
+:host(.icon--filled) {
+  font-variation-settings: 'FILL' 1;
+}

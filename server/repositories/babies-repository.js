@@ -9,9 +9,10 @@ export class BabiesRepository extends BaseRepository {
     return this.findOne(householdId, {})
   }
 
-  async upsert(householdId, { name, birthDate }, user) {
+  // fields: name, birthDate and, when given, birthWeightGrams (grams or null).
+  async upsert(householdId, fields, user) {
     const existing = await this.getForHousehold(householdId)
-    if (existing) return this.updateOne(householdId, existing._id, { name, birthDate }, user)
-    return this.insertOne(householdId, { name, birthDate }, user)
+    if (existing) return this.updateOne(householdId, existing._id, fields, user)
+    return this.insertOne(householdId, fields, user)
   }
 }

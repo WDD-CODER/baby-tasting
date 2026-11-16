@@ -44,6 +44,30 @@ test('two allowed usernames read and write the same baby', async () => {
   assert.equal(back.body.baby.name, 'מיה')
 })
 
+test('the baby accepts birthWeightGrams from 100 to 7000 and keeps it when a save leaves it out', async () => {
+  const app = ctx.newApp()
+  const a = await signedInAgent(app)
+  const birthDate = addDays(todayIso(), -100)
+  const noWeight = await a.put('/api/v1/baby').send({ name: 'נועה', birthDate })
+  assert.equal(noWeight.status, 200)
+  assert.equal(noWeight.body.baby.birthWeightGrams, null)
+  for (const grams of [100, 3250, 7000]) {
+    const res = await a.put('/api/v1/baby').send({ name: 'נועה', birthDate, birthWeightGrams: grams })
+    assert.equal(res.status, 200)
+    assert.equal(res.body.baby.birthWeightGrams, grams)
+  }
+  const kept = await a.put('/api/v1/baby').send({ name: 'נועה', birthDate })
+  assert.equal(kept.body.baby.birthWeightGrams, 7000)
+  assert.equal((await a.get('/api/v1/baby')).body.baby.birthWeightGrams, 7000)
+  const cleared = await a.put('/api/v1/baby').send({ name: 'נועה', birthDate, birthWeightGrams: null })
+  assert.equal(cleared.body.baby.birthWeightGrams, null)
+  for (const bad of [99, 7001, 3250.5, '3250', -1]) {
+    const res = await a.put('/api/v1/baby').send({ name: 'נועה', birthDate, birthWeightGrams: bad })
+    assert.equal(res.status, 400, String(bad))
+    assert.equal(res.body.error.code, 'invalid')
+  }
+})
+
 test('PUT baby refuses an empty name, a future date, a bad date and a too old date', async () => {
   const app = ctx.newApp()
   const a = await signedInAgent(app)

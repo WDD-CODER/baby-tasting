@@ -13,7 +13,7 @@ test('005-1: טחינה given 3 days ago and yesterday shows 2/3 and the missing
   const today = todayIso()
   await giveFood(page, 'טחינה', addDaysIso(today, -3))
   await giveFood(page, 'טחינה', addDaysIso(today, -1))
-  await page.goto('/')
+  await page.goto('/tasting')
   await expect(page.getByText('חסר יום ברצף — כדאי לתת היום שומשום')).toBeVisible()
   const yesterday = cell(page, addDaysIso(today, -1), 1)
   if ((await yesterday.count()) === 0) await page.getByRole('button', { name: 'הקודם' }).click()

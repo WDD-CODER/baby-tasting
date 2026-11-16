@@ -8,7 +8,7 @@ test('006-2: dismissing one dashed suggestion removes only that one', async ({ p
   await signIn(page)
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(8) })
   await seedSuggestionWeek(page)
-  await page.goto('/')
+  await page.goto('/tasting')
   await page.getByRole('button', { name: 'הצע לי שבוע' }).click()
   await expect(page.locator('.suggested')).toHaveCount(3)
   await page.locator('.suggested[aria-label="אגס"]').click()

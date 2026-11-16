@@ -185,6 +185,6 @@ export class FoodsPage {
   }
 
   protected add(): void {
-    void this.router.navigateByUrl('/foods/new')
+    void this.router.navigateByUrl('/tasting/foods/new')
   }
 }

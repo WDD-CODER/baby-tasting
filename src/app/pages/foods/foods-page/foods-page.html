@@ -87,7 +87,7 @@
       <ul class="foods__list">
         @for (food of group.foods; track food.id) {
           <li class="row">
-            <a class="food" [routerLink]="['/foods', food.id]">
+            <a class="food" [routerLink]="['/tasting/foods', food.id]">
               <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
               <span class="food__name">{{ food.name }}</span>
               @if (allergenName(food); as name) {
@@ -129,7 +129,7 @@
 
     <div class="foods__actions">
       <app-button [fullWidth]="true" (pressed)="add()">{{ t.add }}</app-button>
-      <a class="foods__link" routerLink="/foods/allergens">{{ t.manageAllergens }}</a>
+      <a class="foods__link" routerLink="/tasting/foods/allergens">{{ t.manageAllergens }}</a>
     </div>
   }
 </section>

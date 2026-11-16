@@ -1,7 +1,14 @@
 <section class="settings">
-  <h2 class="settings__title">{{ t.section }}</h2>
-  <app-baby-form />
-  <app-rules-form />
+  <section class="settings__area">
+    <h2 class="settings__heading">{{ tracker.title }}</h2>
+    <app-tracker-form />
+    <h3 class="settings__title">{{ t.section }}</h3>
+    <app-baby-form />
+  </section>
+  <section class="settings__area">
+    <h2 class="settings__heading">{{ tracker.tastingTitle }}</h2>
+    <app-rules-form />
+  </section>
   <app-activity-log />
   <p class="settings__disclaimer">{{ disclaimer }}</p>
   <app-button class="settings__logout" variant="secondary" [fullWidth]="true" (pressed)="logout()">

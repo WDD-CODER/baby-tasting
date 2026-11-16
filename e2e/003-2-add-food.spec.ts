@@ -8,7 +8,7 @@ test('003-2: saving קוסקוס with a new allergen כוסמין shows it in th
   await resetHousehold(request)
   await signIn(page)
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(5) })
-  await page.goto('/foods/new')
+  await page.goto('/tasting/foods/new')
   await page.getByLabel('שם', { exact: true }).fill('קוסקוס')
   await page.getByLabel('קטגוריה').selectOption({ label: 'דגנים' })
   await page.getByRole('button', { name: '🍚' }).first().click()

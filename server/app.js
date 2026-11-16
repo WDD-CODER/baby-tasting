@@ -26,12 +26,13 @@ import { createUsersRouter } from './routes/users.js'
 import { createSettingsRouter } from './routes/settings.js'
 import { createSuggestionsRouter } from './routes/suggestions.js'
 import { createTestResetRouter } from './routes/test-reset.js'
+import { createTrackerSettingsRouter } from './routes/tracker-settings.js'
 
 export function createApp({ config, db, photoStore = createPhotoStore(config.cloudinary ?? null) }) {
   const app = express()
   const repos = createRepos(db)
-  const requireAuth = createRequireAuth({ repos })
   const authConfig = { ...config, appUsers: config.appUsers ?? [] }
+  const requireAuth = createRequireAuth({ repos, config: authConfig })
   createIndexes(db).catch((err) => console.error('index creation failed', err))
 
   if (config.nodeEnv === 'production') app.set('trust proxy', 1)
@@ -74,6 +75,7 @@ export function createApp({ config, db, photoStore = createPhotoStore(config.clo
   app.use('/api/v1/activity', requireAuth, createActivityRouter({ repos }))
   app.use('/api/v1/users', requireAuth, createUsersRouter({ repos }))
   app.use('/api/v1/settings', requireAuth, createSettingsRouter({ repos }))
+  app.use('/api/v1/tracker/settings', requireAuth, createTrackerSettingsRouter({ repos }))
   app.use('/api/v1/allergens', requireAuth, catalogContext, createAllergensRouter({ repos }))
   app.use('/api/v1/foods', requireAuth, catalogContext, createFoodsRouter({ repos }))
   app.use('/api/v1/calendar', requireAuth, catalogContext, createCalendarRouter({ repos }))

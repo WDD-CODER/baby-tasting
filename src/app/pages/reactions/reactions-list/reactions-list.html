@@ -1,5 +1,5 @@
 <section class="reactions">
-  <a class="reactions__back" routerLink="/allergens">{{ t.back }}</a>
+  <a class="reactions__back" routerLink="/tasting/allergens">{{ t.back }}</a>
   <h2 class="reactions__title">{{ t.title }}</h2>
   @if (loading_()) {
     <app-loading-state />
@@ -9,7 +9,7 @@
     <ul class="reactions__list">
       @for (row of rows_(); track row.id) {
         <li>
-          <a class="row" [routerLink]="['/reactions', row.id]">
+          <a class="row" [routerLink]="['/tasting/reactions', row.id]">
             @if (row.thumb) {
               <img class="row__thumb" [src]="row.thumb" alt="" />
             }

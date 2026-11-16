@@ -9,7 +9,7 @@ test('005-3: starting egg while sesame is introducing asks first', async ({ page
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(8) })
   const today = todayIso()
   await giveFood(page, 'טחינה', addDaysIso(today, -1))
-  await page.goto('/')
+  await page.goto('/tasting')
   await addFood(page, today, 1, 'ביצה קשה')
   await expect(page.getByText('שומשום עדיין בחשיפה. להתחיל גם ביצה?')).toBeVisible()
   await page.screenshot({ path: 'e2e/screens/005-3.png' })

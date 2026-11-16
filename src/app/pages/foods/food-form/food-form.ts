@@ -58,7 +58,9 @@ export class FoodForm implements HasUnsavedChanges {
   /** Where to go after saving; only an app-internal path is accepted. */
   private readonly returnTo = ((): string => {
     const value = this.route.snapshot.queryParamMap.get('returnTo')
-    return value !== null && value.startsWith('/') && !value.startsWith('//') ? value : '/foods'
+    return value !== null && value.startsWith('/') && !value.startsWith('//')
+      ? value
+      : '/tasting/foods'
   })()
 
   protected readonly t = HE.foods.form
@@ -192,7 +194,7 @@ export class FoodForm implements HasUnsavedChanges {
     try {
       await this.catalog.archiveFood(this.foodId)
       this.leaving_ = true
-      await this.router.navigateByUrl('/foods')
+      await this.router.navigateByUrl('/tasting/foods')
     } catch (err) {
       this.error_.set(this.messageFor(err))
     }

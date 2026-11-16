@@ -26,6 +26,16 @@ export class SessionsRepository {
     return this.collection.findOne({ tokenHash: hashToken(token), expiresAt: { $gt: now } })
   }
 
+  // Moves the expiry to now + maxAgeMs; false when the session is gone.
+  async renew(token, now, maxAgeMs) {
+    if (typeof token !== 'string' || !token) return false
+    const { matchedCount } = await this.collection.updateOne(
+      { tokenHash: hashToken(token), expiresAt: { $gt: now } },
+      { $set: { expiresAt: new Date(now.getTime() + maxAgeMs), renewedAt: now } },
+    )
+    return matchedCount > 0
+  }
+
   async delete(token) {
     if (typeof token !== 'string' || !token) return false
     const { deletedCount } = await this.collection.deleteOne({ tokenHash: hashToken(token) })

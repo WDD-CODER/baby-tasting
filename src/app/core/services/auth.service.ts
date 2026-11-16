@@ -23,11 +23,17 @@ export class AuthService {
     return this.user_()
   }
 
-  async login(username: string): Promise<User> {
-    const user = await firstValueFrom(this.api.post<User>('/auth/login', { username }))
+  async login(username: string, password: string): Promise<User> {
+    const user = await firstValueFrom(this.api.post<User>('/auth/login', { username, password }))
     this.user_.set(user)
     this.loaded_ = true
     return user
+  }
+
+  /** Shows a renamed parent at once (after the Tracker settings load or save). */
+  setParentName(parentName: string): void {
+    const user = this.user_()
+    if (user && user.parentName !== parentName) this.user_.set({ ...user, parentName })
   }
 
   async logout(): Promise<void> {

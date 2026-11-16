@@ -1,0 +1,37 @@
+@if (loading_()) {
+  <app-loading-state />
+} @else if (failed_()) {
+  <app-error-state [message]="loadFailed" (retry)="load()" />
+} @else if (values_(); as v) {
+  <form class="tracker-form" (ngSubmit)="submit()">
+    <app-text-field
+      name="parentAName"
+      [label]="t.parentA"
+      [error]="errorA_()"
+      [ngModel]="v.parentAName"
+      (ngModelChange)="set('parentAName', $event)"
+    />
+    <app-text-field
+      name="parentBName"
+      [label]="t.parentB"
+      [error]="errorB_()"
+      [ngModel]="v.parentBName"
+      (ngModelChange)="set('parentBName', $event)"
+    />
+    <app-select
+      name="defaultBottleType"
+      [label]="t.bottle"
+      [options]="bottleOptions"
+      [ngModel]="v.defaultBottleType"
+      (ngModelChange)="set('defaultBottleType', $event)"
+    />
+    <app-button
+      type="submit"
+      [fullWidth]="true"
+      [loading]="saving_()"
+      [disabled]="!changed_() || !valid_()"
+    >
+      {{ t.save }}
+    </app-button>
+  </form>
+}

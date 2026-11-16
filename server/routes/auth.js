@@ -1,13 +1,21 @@
+import bcrypt from 'bcryptjs'
 import { Router } from 'express'
 import rateLimit from 'express-rate-limit'
-import { SESSION_COOKIE } from '../middleware/auth.js'
+import { parentNameFor, withTrackerDefaults } from '../domain/tracker/settings.js'
+import { SESSION_COOKIE, SESSION_MAX_AGE_MS, sessionCookieOptions } from '../middleware/auth.js'
 
-const MAX_AGE_MS = 180 * 24 * 60 * 60 * 1000
+// Compared when the name is unknown so a wrong name and a wrong password take the same time.
+const DUMMY_HASH = bcrypt.hashSync('not-a-password', 10)
 
 export function createAuthRouter({ repos, config, requireAuth }) {
   const router = Router()
-  const allowed = new Map(config.appUsers.map((u) => [u.trim().toLowerCase(), u.trim()]))
-  const secure = config.nodeEnv === 'production'
+  const users = (config.appUsers ?? []).map((u, index) => ({
+    username: u.username,
+    hash: u.hash,
+    parentType: index === 0 ? 'PARENT_A' : 'PARENT_B',
+  }))
+  const byName = new Map(users.map((u) => [u.username.toLowerCase(), u]))
+  const cookieOptions = sessionCookieOptions(config)
 
   const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -26,25 +34,22 @@ export function createAuthRouter({ repos, config, requireAuth }) {
   router.post('/auth/login', loginLimiter, async (req, res, next) => {
     try {
       const raw = req.body?.username
-      if (typeof raw !== 'string') return fail(res)
-      const username = allowed.get(raw.trim().toLowerCase())
-      if (!username) return fail(res)
+      const password = req.body?.password
+      if (typeof raw !== 'string' || typeof password !== 'string' || !password) return fail(res)
+      const user = byName.get(raw.trim().toLowerCase())
+      const match = await bcrypt.compare(password, user?.hash ?? DUMMY_HASH)
+      if (!user || !match) return fail(res)
       const now = new Date()
-      const household = await repos.households.ensureDefault(username, now)
+      const household = await repos.households.ensureDefault(user.username, now)
       const token = await repos.sessions.create({
-        username,
+        username: user.username,
         householdId: String(household._id),
         now,
-        maxAgeMs: MAX_AGE_MS,
+        maxAgeMs: SESSION_MAX_AGE_MS,
       })
-      res.cookie(SESSION_COOKIE, token, {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure,
-        maxAge: MAX_AGE_MS,
-        path: '/',
-      })
-      res.json({ username })
+      res.cookie(SESSION_COOKIE, token, { ...cookieOptions, maxAge: SESSION_MAX_AGE_MS })
+      const tracker = withTrackerDefaults(await repos.settings.getTracker(String(household._id)))
+      res.json({ username: user.username, parentType: user.parentType, parentName: parentNameFor(tracker, user.parentType) })
     } catch (err) {
       next(err)
     }
@@ -53,15 +58,24 @@ export function createAuthRouter({ repos, config, requireAuth }) {
   router.post('/auth/logout', async (req, res, next) => {
     try {
       await repos.sessions.delete(req.cookies?.[SESSION_COOKIE])
-      res.clearCookie(SESSION_COOKIE, { httpOnly: true, sameSite: 'lax', secure, path: '/' })
+      res.clearCookie(SESSION_COOKIE, cookieOptions)
       res.json({ ok: true })
     } catch (err) {
       next(err)
     }
   })
 
-  router.get('/auth/me', requireAuth, (req, res) => {
-    res.json({ username: req.user.username })
+  router.get('/auth/me', requireAuth, async (req, res, next) => {
+    try {
+      const tracker = withTrackerDefaults(await repos.settings.getTracker(req.householdId))
+      res.json({
+        username: req.user.username,
+        parentType: req.user.parentType,
+        parentName: parentNameFor(tracker, req.user.parentType),
+      })
+    } catch (err) {
+      next(err)
+    }
   })
 
   return router
