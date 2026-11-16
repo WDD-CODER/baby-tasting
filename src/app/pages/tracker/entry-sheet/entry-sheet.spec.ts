@@ -131,3 +131,88 @@ describe('EntrySheet', () => {
     expect(guard.isDuplicate('X', 11001)).toBeFalse()
   })
 })
+
+describe('EntrySheet in edit mode', () => {
+  const quickBottle: TrackerEvent = {
+    id: 'q1',
+    eventType: 'NUTRITION',
+    timestamp: '2026-07-05T09:30:00.000Z',
+    loggedBy: 'PARENT_A',
+    note: 'סירב לסיים',
+    quickRecorded: true,
+    nutrition: { feedType: 'BOTTLE' },
+  }
+
+  function setup(event: TrackerEvent) {
+    const updates: { id: string; body: Partial<NewTrackerEvent> }[] = []
+    const removed: string[] = []
+    const events = {
+      events: signal<TrackerEvent[]>([]).asReadonly(),
+      openSleep: signal<TrackerEvent | null>(null).asReadonly(),
+      update: (id: string, body: Partial<NewTrackerEvent>) => {
+        updates.push({ id, body })
+        return Promise.resolve(event)
+      },
+      remove: (id: string) => {
+        removed.push(id)
+        return Promise.resolve()
+      },
+      create: () => Promise.resolve(event),
+    }
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: TrackerEventsService, useValue: events },
+        {
+          provide: TrackerSettingsService,
+          useValue: { settings: signal(settings('EXPRESSED_MILK')).asReadonly() },
+        },
+      ],
+    })
+    const fixture = TestBed.createComponent(EntrySheet)
+    fixture.componentRef.setInput('editing', event)
+    fixture.detectChanges()
+    const root = fixture.nativeElement as HTMLElement
+    const type = (id: string, value: string): void => {
+      const input = root.querySelector<HTMLInputElement>('#' + id)
+      if (!input) throw new Error('no input ' + id)
+      input.value = value
+      input.dispatchEvent(new Event('input'))
+      fixture.detectChanges()
+    }
+    return { fixture, root, updates, removed, type }
+  }
+
+  it('F5: a quick-recorded bottle keeps its feed type when only the amount changes', async () => {
+    const { fixture, updates, type } = setup(quickBottle)
+    type('es-offered', '100')
+    type('es-consumed', '100')
+    await fixture.componentInstance.submit()
+    expect(updates.length).toBe(1)
+    expect(updates[0].id).toBe('q1')
+    expect(updates[0].body.nutrition?.feedType).toBe('BOTTLE')
+    expect(updates[0].body.nutrition?.amountConsumedMl).toBe(100)
+  })
+
+  it('F10: clearing the note sends an empty note so the server removes it', async () => {
+    const { fixture, root, updates } = setup(quickBottle)
+    const note = root.querySelector<HTMLInputElement>('#es-note')
+    expect(note?.value).toBe('סירב לסיים')
+    if (!note) throw new Error('no note')
+    note.value = ''
+    note.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
+    await fixture.componentInstance.submit()
+    expect(updates[0].body.note).toBe('')
+  })
+
+  it('delete asks first and removes only after the confirmation', async () => {
+    const { fixture, root, removed } = setup(quickBottle)
+    root.querySelector<HTMLButtonElement>('[data-testid="edit-delete"]')?.click()
+    fixture.detectChanges()
+    expect(removed.length).toBe(0)
+    expect(root.textContent).toContain('האם למחוק את האירוע הזה?')
+    root.querySelector<HTMLButtonElement>('[data-testid="edit-delete-yes"]')?.click()
+    await fixture.whenStable()
+    expect(removed).toEqual(['q1'])
+  })
+})

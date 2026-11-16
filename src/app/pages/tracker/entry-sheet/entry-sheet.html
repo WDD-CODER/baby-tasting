@@ -1,6 +1,11 @@
-<app-bottom-sheet [open]="!!type()" [title]="title()" (closed)="closed.emit()">
-  @if (type(); as kind) {
+<app-bottom-sheet [open]="!!activeKind()" [title]="title()" (closed)="closed.emit()">
+  @if (activeKind(); as kind) {
     <form class="es" (submit)="onSubmit($event)" novalidate>
+      @if (editing()) {
+        <p class="es__info">
+          <strong>{{ e.info }}</strong><br />{{ typeLine() }}
+        </p>
+      }
       @switch (kind) {
         @case ('bottle') {
           <button
@@ -407,24 +412,26 @@
         }
 
         @case ('sleep') {
-          <div class="es__seg">
-            <button
-              type="button"
-              class="es__opt"
-              [class.es__opt--on]="sleepMode() === 'TIMER'"
-              (click)="sleepMode.set('TIMER')"
-            >
-              {{ s.sleepTimerMode }}
-            </button>
-            <button
-              type="button"
-              class="es__opt"
-              [class.es__opt--on]="sleepMode() === 'MANUAL'"
-              (click)="sleepMode.set('MANUAL')"
-            >
-              {{ s.sleepManualMode }}
-            </button>
-          </div>
+          @if (!editing()) {
+            <div class="es__seg">
+              <button
+                type="button"
+                class="es__opt"
+                [class.es__opt--on]="sleepMode() === 'TIMER'"
+                (click)="sleepMode.set('TIMER')"
+              >
+                {{ s.sleepTimerMode }}
+              </button>
+              <button
+                type="button"
+                class="es__opt"
+                [class.es__opt--on]="sleepMode() === 'MANUAL'"
+                (click)="sleepMode.set('MANUAL')"
+              >
+                {{ s.sleepManualMode }}
+              </button>
+            </div>
+          }
 
           @if (sleepMode() === 'TIMER') {
             <p class="es__info">{{ openSleep() ? s.sleepOpenInfo : s.sleepTimerInfo }}</p>
@@ -497,7 +504,7 @@
               <p class="es__error" role="alert">{{ error() }}</p>
             }
             <button type="submit" class="es__submit" [disabled]="submitting()">
-              {{ submitting() ? s.submitting : s.sleepSubmit }}
+              {{ editing() ? submitLabel() : submitting() ? s.submitting : s.sleepSubmit }}
             </button>
           }
         }
@@ -522,8 +529,38 @@
           <p class="es__error" role="alert">{{ error() }}</p>
         }
         <button type="submit" class="es__submit" [disabled]="submitting()">
-          {{ submitting() ? s.submitting : s.submit }}
+          {{ submitLabel() }}
         </button>
+      }
+
+      @if (editing()) {
+        <button
+          type="button"
+          class="es__delete"
+          data-testid="edit-delete"
+          [disabled]="submitting()"
+          (click)="askDelete()"
+        >
+          {{ e.delete }}
+        </button>
+        @if (deleteAsk()) {
+          <div class="es__confirm" role="alertdialog" [attr.aria-label]="t.deleteStrip">
+            <p class="es__confirmText">{{ t.deleteStrip }}</p>
+            <div class="es__confirmRow">
+              <button
+                type="button"
+                class="es__confirmYes"
+                data-testid="edit-delete-yes"
+                (click)="confirmDelete()"
+              >
+                {{ t.deleteYes }}
+              </button>
+              <button type="button" class="es__confirmNo" (click)="cancelDelete()">
+                {{ t.deleteNo }}
+              </button>
+            </div>
+          </div>
+        }
       }
     </form>
   }

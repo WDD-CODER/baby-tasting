@@ -24,6 +24,7 @@ import {
   PooTexture,
   SleepLocation,
   SpitUp,
+  TrackerEvent,
   VomitingSize,
 } from '../../../core/models/tracker-event'
 import { BottleType } from '../../../core/models/tracker-settings'
@@ -31,7 +32,12 @@ import { DoubleSubmitService } from '../../../core/services/double-submit.servic
 import { ToastService } from '../../../core/services/toast.service'
 import { TrackerEventsService } from '../../../core/services/tracker-events.service'
 import { TrackerSettingsService } from '../../../core/services/tracker-settings.service'
-import { israelToIso, nowInIsrael, addWallMinutes } from '../../../core/utils/israel-time'
+import {
+  israelToIso,
+  nowInIsrael,
+  addWallMinutes,
+  toIsraelString,
+} from '../../../core/utils/israel-time'
 import { BottomSheet } from '../../../shared/ui/bottom-sheet/bottom-sheet'
 import { DateTime24 } from '../../../shared/ui/datetime24/datetime24'
 import { QuickLogService } from '../quick-log.service'
@@ -56,11 +62,25 @@ const GUARD_KEY: Record<SheetType, string> = {
   sleep: 'SLEEP',
 }
 
+/** The sheet an existing event opens: its type's form, or time and note only (supplement). */
+type Kind = SheetType | 'supplement'
+
+const KIND_OF: Record<TrackerEvent['eventType'], Kind> = {
+  NUTRITION: 'bottle',
+  DIAPER: 'diaper',
+  SLEEP: 'sleep',
+  ACTIVITY: 'activity',
+  WEIGHT: 'weight',
+  PUMPING: 'pumping',
+  VOMITING: 'vomiting',
+  SUPPLEMENT: 'supplement',
+}
+
 type Built = { body: NewTrackerEvent; error?: undefined } | { error: string; body?: undefined }
 
 const num = (text: string): number => (text.trim() === '' ? Number.NaN : Number(text))
 
-/** One sheet for every kind of entry; the form shown depends on `type` (spec §6.1-§6.8). */
+/** One sheet for every kind of entry; the form shown depends on `type` (spec §6.1-§6.8). With `editing` it edits and deletes that event instead (spec-timeline-dashboards §4). */
 @Component({
   selector: 'app-entry-sheet',
   imports: [BottomSheet, DateTime24],
@@ -77,6 +97,8 @@ export class EntrySheet {
 
   /** The sheet to show; null keeps it closed. */
   readonly type = input<SheetType | null>(null)
+  /** An existing event to edit; takes the place of `type`. */
+  readonly editing = input<TrackerEvent | null>(null)
   readonly closed = output<void>()
 
   protected readonly t = HE.tracker.log
@@ -187,9 +209,29 @@ export class EntrySheet {
 
   protected readonly activities = computed(() => this.settings.settings()?.customActivities ?? [])
   protected readonly openSleep = this.events.openSleep
+  protected readonly activeKind = computed<Kind | null>(() => {
+    const event = this.editing()
+    return event ? KIND_OF[event.eventType] : this.type()
+  })
   protected readonly title = computed(() => {
+    if (this.editing()) return HE.tracker.edit.title
     const type = this.type()
     return type ? s.titles[type] : ''
+  })
+  protected readonly e = HE.tracker.edit
+  protected readonly deleteAsk = signal(false)
+  protected readonly typeLine = computed(() => {
+    const event = this.editing()
+    if (!event) return ''
+    const settings = this.settings.settings()
+    const name = event.loggedBy === 'PARENT_B' ? settings?.parentBName : settings?.parentAName
+    return this.e.typeLine
+      .replace('{type}', this.e.types[event.eventType])
+      .replace('{name}', name ?? '')
+  })
+  protected readonly submitLabel = computed(() => {
+    if (this.submitting()) return this.editing() ? this.e.saving : s.submitting
+    return this.editing() ? this.e.save : s.submit
   })
   protected readonly kg = computed(() => (num(this.grams()) / 1000).toFixed(3))
   protected readonly showPee = computed(() => this.contains() !== 'POO')
@@ -198,7 +240,9 @@ export class EntrySheet {
   constructor() {
     // Opening a sheet starts from the defaults (spec §6.2), with the settings' default bottle type (F3).
     effect(() => {
-      if (this.type()) untracked(() => this.reset())
+      const event = this.editing()
+      if (event) untracked(() => this.load(event))
+      else if (this.type()) untracked(() => this.reset())
     })
   }
 
@@ -241,8 +285,68 @@ export class EntrySheet {
     this.sleepLocation.set('CRIB')
   }
 
+  /** Fills the form from an existing event: every field it has, with the form's defaults for the rest (spec-timeline-dashboards §4.1). */
+  private load(event: TrackerEvent): void {
+    this.reset()
+    this.deleteAsk.set(false)
+    this.note.set(event.note ?? '')
+    this.timestamp.set(toIsraelString(Date.parse(event.timestamp)))
+    const n = event.nutrition
+    if (n) {
+      this.feedType.set(n.feedType)
+      this.swallowing.set(!!n.swallowingNoises)
+      this.spitUp.set(n.spitUp ?? 'NONE')
+      if (n.feedType === 'BOTTLE') {
+        const offered = n.amountOfferedMl || 120
+        const consumed = n.amountConsumedMl ?? offered
+        this.liquid.set(n.bottleLiquidType ?? 'EXPRESSED_MILK')
+        this.offered.set(String(offered))
+        this.consumed.set(String(consumed))
+        this.consumedManual_ = consumed !== offered
+      } else {
+        this.side.set(n.breastSide ?? 'BOTH')
+        this.duration.set(n.durationMinutes || 15)
+        if (n.topUp) {
+          this.showTopUp.set(true)
+          this.topUpLiquid.set(n.topUp.liquidType)
+          this.topUpMl.set(n.topUp.consumedMl)
+        }
+      }
+    }
+    const d = event.diaper
+    if (d) {
+      this.contains.set(d.contains)
+      if (d.peeVolume) this.peeVolume.set(d.peeVolume)
+      if (d.pooAmount) this.pooAmount.set(d.pooAmount)
+      if (d.pooColor) this.pooColor.set(d.pooColor)
+      if (d.pooTexture) this.pooTexture.set(d.pooTexture)
+    }
+    if (event.activity) {
+      this.activityName.set(event.activity.activityName)
+      this.intensity.set(event.activity.cryingIntensity ?? 0)
+    }
+    if (event.weight) {
+      this.grams.set(String(event.weight.weightGrams))
+      this.percentile.set(event.weight.percentile ? String(event.weight.percentile) : '')
+    }
+    if (event.pumping) {
+      this.pumpLeft.set(event.pumping.leftAmountMl)
+      this.pumpRight.set(event.pumping.rightAmountMl)
+    }
+    if (event.vomiting) this.vomitSize.set(event.vomiting.size)
+    const sl = event.sleep
+    if (sl) {
+      this.sleepMode.set('MANUAL')
+      this.sleepStart.set(toIsraelString(Date.parse(sl.startAt)))
+      this.sleepEnd.set(sl.endAt ? toIsraelString(Date.parse(sl.endAt)) : '')
+      this.sleepLocation.set(sl.startLocation ?? 'CRIB')
+    }
+  }
+
   /** Saves the sheet's entry. Validation comes first; the 10 s double-submit guard starts only after it passes (F4). */
   async submit(): Promise<void> {
+    const editing = this.editing()
+    if (editing) return this.update(editing)
     const type = this.type()
     if (!type || this.submitting()) return
     const built = this.build(type)
@@ -265,6 +369,86 @@ export class EntrySheet {
       this.toast.show(saveErrorText(err, this.t.saveFailed), 'bad')
     } finally {
       this.submitting.set(false)
+    }
+  }
+
+  /** Edit mode: validates, then PUTs every field (an emptied note is sent as '' so the server removes it). */
+  private async update(event: TrackerEvent): Promise<void> {
+    if (this.submitting()) return
+    const kind = KIND_OF[event.eventType]
+    const built: Built =
+      kind === 'supplement'
+        ? {
+            body: {
+              eventType: 'SUPPLEMENT',
+              timestamp: israelToIso(this.timestamp()) ?? undefined,
+              supplement: event.supplement,
+            },
+          }
+        : this.build(kind)
+    if (built.error !== undefined) {
+      this.error.set(built.error)
+      if (built.error === this.t.consumedTooBig) this.toast.show(built.error, 'bad')
+      return
+    }
+    this.error.set('')
+    this.submitting.set(true)
+    try {
+      await this.events.update(event.id, { ...built.body, note: this.note().trim() })
+      this.toast.show(this.e.updated, 'good')
+      this.closed.emit()
+    } catch (err) {
+      this.toast.show(saveErrorText(err, this.e.updateFailed), 'bad')
+    } finally {
+      this.submitting.set(false)
+    }
+  }
+
+  protected askDelete(): void {
+    this.deleteAsk.set(true)
+  }
+
+  protected cancelDelete(): void {
+    this.deleteAsk.set(false)
+  }
+
+  /** Deletes the event after the confirmation strip; the toast's undo puts it back as a new event. */
+  protected async confirmDelete(): Promise<void> {
+    const event = this.editing()
+    if (!event || this.submitting()) return
+    this.deleteAsk.set(false)
+    this.submitting.set(true)
+    try {
+      await this.events.remove(event.id)
+      this.toast.show(this.e.deleted, 'good', {
+        label: this.e.deleteUndo,
+        run: () => void this.restore(event),
+      })
+      this.closed.emit()
+    } catch (err) {
+      this.toast.show(saveErrorText(err, this.e.deleteFailed), 'bad')
+    } finally {
+      this.submitting.set(false)
+    }
+  }
+
+  private async restore(event: TrackerEvent): Promise<void> {
+    const body = Object.fromEntries(
+      Object.entries(event).filter(([key]) => key !== 'id' && key !== 'loggedBy'),
+    ) as Record<string, unknown>
+    // The server sets these on a sleep; it rejects them from a client.
+    const sleep = body['sleep']
+    if (sleep && typeof sleep === 'object') {
+      const { startAt, endAt, startLocation } = sleep as Record<string, unknown>
+      body['sleep'] = Object.fromEntries(
+        Object.entries({ startAt, endAt, startLocation }).filter(([, v]) => v !== undefined),
+      )
+    }
+    try {
+      await this.events.create(body as unknown as NewTrackerEvent)
+      this.toast.show(this.e.restored, 'good')
+    } catch (err) {
+      this.toast.show(saveErrorText(err, this.e.restoreFailed), 'bad')
     }
   }
 
@@ -415,8 +599,10 @@ export class EntrySheet {
         }
       case 'sleep': {
         const startAt = israelToIso(this.sleepStart())
-        const endAt = israelToIso(this.sleepEnd())
-        if (!startAt || !endAt || Date.parse(endAt) < Date.parse(startAt))
+        // an edited sleep that is still running keeps an empty end
+        const running = this.editing() !== null && this.sleepEnd() === ''
+        const endAt = running ? null : israelToIso(this.sleepEnd())
+        if (!startAt || (!running && !endAt) || (endAt && Date.parse(endAt) < Date.parse(startAt)))
           return { error: this.t.sleepEndTimeBeforeStart }
         return {
           body: {

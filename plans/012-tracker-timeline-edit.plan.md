@@ -79,9 +79,9 @@ line or file this plan names was removed, renamed or rewritten).
 
 ## Atomic Sub-tasks
 
-- [ ] N1: Build the timeline page — `src/app/pages/tracker/timeline-page/` with `timeline-row/` (per-type rendering, tier accent, big-nap badge, memo `!`, `⚡ מהיר`), the filter (resets to `היום` on app open), pinned `ישן עכשיו` card, empty and loading states; route `timeline` already exists from plan 009 (replace its empty state) — src/app/pages/tracker/timeline-page/**
-- [ ] N2: Build one edit sheet for every event type — `src/app/pages/tracker/edit-sheet/` reusing the entry-sheet forms of plan 011 in edit mode with every field (spit-up, liquid type, activity, supplement included); save via `PUT`, delete via the confirmation strip, error toast on failure; opened by `EditSheetService.open(event)` so plan 013 can open it from cards — src/app/pages/tracker/**, src/app/core/services/**
-- [ ] N3: Write the UI checks — `e2e/012-1-filter.spec.ts` … `e2e/012-4-delete.spec.ts`, screenshots `e2e/screens/012-<n>.png`; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
+- [x] N1: Build the timeline page — `src/app/pages/tracker/timeline-page/` with `timeline-row/` (per-type rendering, tier accent, big-nap badge, memo `!`, `⚡ מהיר`), the filter (resets to `היום` on app open), pinned `ישן עכשיו` card, empty and loading states; route `timeline` already exists from plan 009 (replace its empty state) — src/app/pages/tracker/timeline-page/**
+- [x] N2: Build one edit sheet for every event type — `src/app/pages/tracker/edit-sheet/` reusing the entry-sheet forms of plan 011 in edit mode with every field (spit-up, liquid type, activity, supplement included); save via `PUT`, delete via the confirmation strip, error toast on failure; opened by `EditSheetService.open(event)` so plan 013 can open it from cards — src/app/pages/tracker/**, src/app/core/services/**
+- [x] N3: Write the UI checks — `e2e/012-1-filter.spec.ts` … `e2e/012-4-delete.spec.ts`, screenshots `e2e/screens/012-<n>.png`; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
 
 ## Technical Considerations
 - Backend / API: none new.
@@ -93,4 +93,7 @@ Statistics, settings, export.
 - none
 
 ## Execution Notes
-- none yet
+- pnpm run build -> exit 0; pnpm run lint -> exit 0; pnpm run test -> exit 0 (Karma 69 SUCCESS, server tests pass)
+- scope-check --diff=origin/orch/tracker-1 -> SCOPE: ok; override-check -> ok
+- e2e/012-1..4 written, not run (no running app here)
+- behaviour: undo of a delete re-creates the event with POST (no restore endpoint), so it gets a new id and the current parent as logger
