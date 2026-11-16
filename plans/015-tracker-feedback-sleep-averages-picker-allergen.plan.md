@@ -24,7 +24,7 @@ The parents validated the Tracker rebuild and found four things to change: holdi
 - [auto] `pnpm run lint` exits 0.
 - [auto] `pnpm run test` exits 0 (Karma and every server test).
 - [auto] `node --test server/domain/tracker/stats.test.js server/domain/tracker/sleep.test.js server/domain/calendar-rules.test.js server/test/tracker-stats.test.js server/test/tracker-sleep.test.js server/test/calendar.test.js` exits 0, covering: averages with data only today give the same value for ranges 1, 3, 7, 14 and `daysWithData` 1; a gap day inside the data counts; empty range gives 0; moving the open sleep's start keeps it open and refuses a future start or an overlap; a recorded past sleep overlapping the open one gets 409 `sleep_overlap`; an allergen food in meal 2 or 3 is accepted (no `allergen_meal_1`).
-- [auto] `datetime24.spec.ts` (or the new picker's spec): typing `0730` gives `07:30`; `25:10` shows the error; `−15` from 10:05 gives 09:50; `dateMode: 'none'` renders no date chips.
+- [auto] `src/app/shared/ui/datetime24/datetime24.spec.ts`: typing `0730` gives `07:30`; `25:10` shows the error; `−15` from 10:05 gives 09:50; `dateMode: 'none'` renders no date chips.
 - [ui] During a running sleep, holding the sleep button and setting the start 20 minutes earlier keeps `שינה פעילה` and the timer shows at least 20 minutes.
 - [ui] During a running sleep, recording a past sleep from 2 hours ago to 1 hour ago and choosing `להשאיר פעילה` leaves the running sleep open, and the timeline shows both.
 - [ui] On `/stats`, with events from today only, switching from `היום` to `7 ימים` leaves the nutrition average unchanged.
@@ -57,6 +57,9 @@ src/app/pages/**
 e2e/**
 docs/briefs/00-program.md
 docs/brain/invariants.md
+docs/brain/decisions/0016-allergen-any-meal.md
+src/app/shared/ui/datetime24/datetime24.spec.ts
+e2e/015-*.spec.ts
 DESIGN.md
 docs/project/current-state.md
 ```
@@ -79,7 +82,7 @@ append the path to the scope block above and retry.
 - INV-3: preserves — no auth change.
 - INV-4: preserves — any new route or field stays under `/api/v1/tracker/*`.
 - INV-5: preserves — the picker and the note use tokens only.
-- INV-6: changes — by the Human's decision D-015-4: allergen foods may be in any meal; the rule text in `docs/brain/invariants.md` and R4 in `docs/briefs/00-program.md` are rewritten in this plan; the server and the UI mirror (`server/domain/calendar-rules.js`, `src/app/core/utils/calendar-rules.ts`) drop the meal check together.
+- INV-6: changes — ADR docs/brain/decisions/0016-allergen-any-meal.md (Human decision D-015-4, Arch-approved: Human): allergen foods may be in any meal; the rule text in `docs/brain/invariants.md` and R4 in `docs/briefs/00-program.md` are rewritten in this plan; the server and the UI mirror (`server/domain/calendar-rules.js`, `src/app/core/utils/calendar-rules.ts`) drop the meal check together.
 
 ## Step 0 — Reality Check
 
@@ -115,7 +118,7 @@ line or file this plan names was removed, renamed or rewritten).
 - [ ] O2: Sleep start fix and past sleep beside an open one — `server/domain/tracker/sleep.js` + route (move the open sleep's start; overlap refusal against the open sleep), tests — server/**
 - [ ] O3: The shared typed time picker — rebuild `src/app/shared/ui/datetime24/` per D-015-3 (keep the selector or rename and update every user), spec, demo page — src/app/shared/**, src/app/dev/**, src/app/pages/**
 - [ ] O4: Sleep sheet modes and the end-or-keep question — `src/app/pages/tracker/entry-sheet/**`, the edit sheet for the open sleep (time only), Hebrew texts in `src/app/core/i18n/he.ts` — src/app/pages/tracker/**, src/app/core/**
-- [ ] O5: Allergen in any meal — `server/domain/calendar-rules.js`, `server/lib/calendar-create.js`, `server/routes/calendar.js`, `src/app/core/utils/calendar-rules.ts`, the calendar page note, tests; rewrite R4 in `docs/briefs/00-program.md` and INV-6 in `docs/brain/invariants.md` — server/**, src/app/**, docs/briefs/00-program.md, docs/brain/invariants.md
+- [ ] O5: Allergen in any meal — `server/domain/calendar-rules.js`, `server/lib/calendar-create.js`, `server/routes/calendar.js`, `src/app/core/utils/calendar-rules.ts`, the calendar page note, tests; rewrite R4 in `docs/briefs/00-program.md` and INV-6 in `docs/brain/invariants.md`, write the ADR `docs/brain/decisions/0016-allergen-any-meal.md` (context, decision D-015-4, consequences) — server/**, src/app/**, docs/briefs/00-program.md, docs/brain/invariants.md
 - [ ] O6: UI checks — `e2e/015-1-sleep-start-fix.spec.ts`, `e2e/015-2-past-sleep-keep.spec.ts`, `e2e/015-3-averages.spec.ts`, `e2e/015-4-allergen-any-meal.spec.ts`; update 001-1, 003-2, 003-3, 008-1 and any spec that used the old picker; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
 
 ## Technical Considerations
