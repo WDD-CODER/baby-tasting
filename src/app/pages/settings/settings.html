@@ -1,17 +1,43 @@
 <section class="settings">
-  <section class="settings__area">
-    <h2 class="settings__heading">{{ tracker.title }}</h2>
-    <app-tracker-form />
-    <h3 class="settings__title">{{ t.section }}</h3>
-    <app-baby-form />
-  </section>
-  <section class="settings__area">
-    <h2 class="settings__heading">{{ tracker.tastingTitle }}</h2>
-    <app-rules-form />
-  </section>
-  <app-activity-log />
-  <p class="settings__disclaimer">{{ disclaimer }}</p>
-  <app-button class="settings__logout" variant="secondary" [fullWidth]="true" (pressed)="logout()">
-    {{ logoutLabel }}
-  </app-button>
+  @if (legend_()) {
+    <app-legend (back)="legend_.set(false)" />
+  } @else {
+    <section class="settings__area">
+      <h2 class="settings__heading">{{ tracker.title }}</h2>
+      <app-install-card />
+      <button
+        type="button"
+        class="settings__link"
+        data-testid="legend-link"
+        (click)="legend_.set(true)"
+      >
+        <span>{{ tracker.legendLink }}</span>
+        <span aria-hidden="true">›</span>
+      </button>
+      <a class="settings__link" routerLink="/settings/icons" data-testid="icons-link">
+        <span>{{ tracker.iconsLink }}</span>
+        <span aria-hidden="true">›</span>
+      </a>
+      <app-export-card />
+      <app-tracker-form />
+      <h3 class="settings__title">{{ t.section }}</h3>
+      <app-baby-form />
+      <app-custom-activities />
+      <app-data-management />
+    </section>
+    <section class="settings__area">
+      <h2 class="settings__heading">{{ tracker.tastingTitle }}</h2>
+      <app-rules-form />
+    </section>
+    <app-activity-log />
+    <p class="settings__disclaimer">{{ disclaimer }}</p>
+    <app-button
+      class="settings__logout"
+      variant="secondary"
+      [fullWidth]="true"
+      (pressed)="logout()"
+    >
+      {{ logoutLabel }}
+    </app-button>
+  }
 </section>

@@ -1,0 +1,15 @@
+<app-card>
+  <div class="install" data-testid="install-card">
+    @if (pwa.installed()) {
+      <h3 class="install__title">📱 {{ t.installedTitle }}</h3>
+      <p class="install__text">{{ t.installedText }}</p>
+    } @else if (pwa.canInstall()) {
+      <h3 class="install__title">{{ t.title }}</h3>
+      <p class="install__text">{{ t.promptText }}</p>
+      <app-button [fullWidth]="true" (pressed)="install()">{{ t.button }}</app-button>
+    } @else {
+      <h3 class="install__title">{{ t.title }}</h3>
+      <p class="install__text">{{ t.manualText }}</p>
+    }
+  </div>
+</app-card>

@@ -96,6 +96,15 @@ export class TrackerEventsService {
     await this.refresh(true)
   }
 
+  /** Deletes every event on `date` (YYYY-MM-DD, inclusive) and before it; no date deletes everything. */
+  async clearUpTo(date: string | null): Promise<void> {
+    // the server clears up to the end of the given day, so the far date takes every event
+    await firstValueFrom(
+      this.api.post<{ deleted: number }>('/tracker/events/clear', { before: date ?? '9999-12-31' }),
+    )
+    await this.refresh(true)
+  }
+
   /** Starts or ends the open sleep. `at` is an ISO moment (default: now on the server). */
   async toggleSleep(
     body: { location?: SleepLocation; at?: string } = {},

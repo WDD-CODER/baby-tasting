@@ -10,6 +10,12 @@ import {
 import { ICON_NAMES, ICON_SLOT_KEYS } from '../domain/tracker/icon-names.js'
 import { signedInAgent, startTestApp } from './helpers.js'
 
+test('every slot of the app and a real icon name are accepted as an override', () => {
+  const overrides = { 'quick.sleep': 'nightlight', 'location.crib': 'crib', 'card.biogaya': 'water_drop' }
+  const check = validateTrackerSettings({ iconOverrides: overrides })
+  assert.equal(check.ok, true, JSON.stringify(check.errors))
+})
+
 let ctx
 
 before(async () => {

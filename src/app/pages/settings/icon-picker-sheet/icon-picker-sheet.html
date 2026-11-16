@@ -1,0 +1,50 @@
+<app-bottom-sheet [open]="slot() !== null" [title]="title_()" (closed)="closed.emit()">
+  <div class="picker">
+    <app-text-field
+      name="iconSearch"
+      autocapitalize="none"
+      [label]="t.search"
+      [ngModel]="query_()"
+      (ngModelChange)="query_.set($event)"
+    />
+    <div class="picker__chips">
+      @for (word of keywords_(); track word) {
+        @if (isLatin(word)) {
+          <app-chip [selected]="query_() === word" (pressed)="query_.set(word)">{{
+            word
+          }}</app-chip>
+        }
+      }
+    </div>
+    @if (rows_().length === 0) {
+      <p class="picker__empty">{{ t.empty }}</p>
+    } @else {
+      <cdk-virtual-scroll-viewport class="picker__grid" itemSize="56" dir="ltr">
+        <div *cdkVirtualFor="let row of rows_()" class="picker__row">
+          @for (name of row; track name) {
+            <button
+              type="button"
+              class="picker__cell"
+              [class.picker__cell--on]="name === chosen_()"
+              [attr.aria-label]="name"
+              [attr.aria-pressed]="name === chosen_()"
+              [title]="name"
+              (click)="chosen_.set(name)"
+            >
+              <app-icon [name]="name" [size]="24" />
+            </button>
+          }
+        </div>
+      </cdk-virtual-scroll-viewport>
+    }
+    <p class="picker__current">
+      {{ t.current }}: <app-icon [name]="chosen_()" [size]="20" /> {{ chosen_() }}
+    </p>
+    <app-button [fullWidth]="true" [loading]="saving_()" (pressed)="save()">{{
+      t.save
+    }}</app-button>
+    <app-button variant="secondary" [fullWidth]="true" [disabled]="saving_()" (pressed)="reset()">
+      {{ t.reset }}
+    </app-button>
+  </div>
+</app-bottom-sheet>
