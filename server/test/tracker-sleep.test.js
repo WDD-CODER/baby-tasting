@@ -24,6 +24,59 @@ test('open is null when nothing is open', async () => {
   assert.equal(res.body, null)
 })
 
+// D-015-1. Runs before the other sleeps of this file exist (an open sleep overlaps every later sleep).
+test('fixing the open sleep start keeps it open; a future start or an overlap is refused; a past sleep may sit beside it', async () => {
+  assert.equal((await request(ctx.newApp()).post('/api/v1/tracker/sleep/open/start').send({})).status, 401)
+  const a = await signedInAgent(ctx.newApp(), 'parent-a')
+  assert.equal((await a.post('/api/v1/tracker/sleep/open/start').send({ startAt: '2019-02-01T09:00:00.000Z' })).status, 404)
+  const earlier = await a.post('/api/v1/tracker/events').send({
+    eventType: 'SLEEP',
+    sleep: { startAt: '2019-02-01T07:00:00.000Z', endAt: '2019-02-01T08:00:00.000Z' },
+  })
+  assert.equal(earlier.status, 201)
+  const start = await a.post('/api/v1/tracker/sleep/toggle').send({ at: '2019-02-01T10:00:00.000Z', location: 'CRIB' })
+  assert.equal(start.body.action, 'start')
+  const id = start.body.event.id
+
+  const moved = await a.post('/api/v1/tracker/sleep/open/start').send({ startAt: '2019-02-01T09:40:00.000Z' })
+  assert.equal(moved.status, 200)
+  assert.equal(moved.body.event.id, id)
+  assert.equal(moved.body.event.sleep.startAt, '2019-02-01T09:40:00.000Z')
+  assert.equal(moved.body.event.sleep.endAt, null)
+  assert.equal(moved.body.event.sleep.startLocation, 'CRIB')
+  assert.equal(moved.body.event.timestamp, '2019-02-01T09:40:00.000Z')
+  assert.equal((await a.get('/api/v1/tracker/sleep/open')).body.id, id)
+
+  const future = await a.post('/api/v1/tracker/sleep/open/start').send({ startAt: new Date(Date.now() + 600000).toISOString() })
+  assert.equal(future.status, 400)
+  assert.equal(future.body.error.code, 'start_in_future')
+  const putFuture = await a.put(`/api/v1/tracker/events/${id}`).send({ sleep: { startAt: new Date(Date.now() + 600000).toISOString() } })
+  assert.equal(putFuture.status, 400)
+  const clash = await a.post('/api/v1/tracker/sleep/open/start').send({ startAt: '2019-02-01T07:30:00.000Z' })
+  assert.equal(clash.status, 409)
+  assert.equal(clash.body.error.code, 'sleep_overlap')
+  assert.equal((await a.post('/api/v1/tracker/sleep/open/start').send({ startAt: 'soon' })).status, 400)
+
+  // Mode 2: a recorded sleep that overlaps the open one is 409; one that ends before it is saved and the open one stays.
+  const over = await a.post('/api/v1/tracker/events').send({
+    eventType: 'SLEEP',
+    sleep: { startAt: '2019-02-01T09:00:00.000Z', endAt: '2019-02-01T09:50:00.000Z' },
+  })
+  assert.equal(over.status, 409)
+  assert.equal(over.body.error.code, 'sleep_overlap')
+  const past = await a.post('/api/v1/tracker/events').send({
+    eventType: 'SLEEP',
+    sleep: { startAt: '2019-02-01T08:10:00.000Z', endAt: '2019-02-01T09:00:00.000Z' },
+  })
+  assert.equal(past.status, 201)
+  const still = await a.get('/api/v1/tracker/sleep/open')
+  assert.equal(still.body.id, id)
+  assert.equal(still.body.sleep.startAt, '2019-02-01T09:40:00.000Z')
+
+  const end = await a.post('/api/v1/tracker/sleep/toggle').send({ at: '2019-02-01T11:00:00.000Z' })
+  assert.equal(end.body.action, 'end')
+})
+
 test('toggle opens then closes a sleep with the duration; the parent comes from the session', async () => {
   const app = ctx.newApp()
   const a = await signedInAgent(app, 'parent-a')

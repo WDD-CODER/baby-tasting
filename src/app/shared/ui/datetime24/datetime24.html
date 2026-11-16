@@ -1,13 +1,42 @@
 <div class="dt">
+  <div class="dt__typed-row" dir="ltr">
+    <input
+      type="text"
+      class="dt__typed"
+      inputmode="numeric"
+      autocomplete="off"
+      maxlength="5"
+      placeholder="HH:MM"
+      [class.dt__typed--bad]="invalid()"
+      [attr.aria-label]="t.typeTime"
+      [attr.aria-invalid]="invalid()"
+      [value]="typed()"
+      (input)="onType($event)"
+      (blur)="onTypedBlur()"
+    />
+  </div>
+  @if (invalid()) {
+    <p class="dt__error" role="alert">{{ t.timeInvalid }}</p>
+  }
+
   <div class="dt__presets">
     <button type="button" class="dt__chip" [class.dt__chip--on]="isNow()" (click)="setNow()">
       {{ t.now }}
     </button>
-    <button type="button" class="dt__chip" (click)="setAgo(15)">{{ t.ago15 }}</button>
-    <button type="button" class="dt__chip" (click)="setAgo(60)">{{ t.ago60 }}</button>
+    @for (step of steps; track step.n) {
+      <button
+        type="button"
+        class="dt__chip"
+        dir="ltr"
+        [attr.aria-label]="step.label"
+        (click)="nudge(-step.n)"
+      >
+        −{{ step.n }}
+      </button>
+    }
   </div>
 
-  <div class="dt__fine">
+  @if (withDate()) {
     <div class="dt__date">
       <button type="button" class="dt__chip" [class.dt__chip--on]="isToday()" (click)="setDay(0)">
         {{ t.today }}
@@ -30,11 +59,14 @@
         <app-icon name="calendar_month" [size]="20" />
       </button>
     </div>
+  }
 
+  <button type="button" class="dt__link" [attr.aria-expanded]="listOpen()" (click)="toggleList()">
+    {{ t.fromList }}
+  </button>
+
+  @if (listOpen()) {
     <div class="dt__time" dir="ltr">
-      <button type="button" class="dt__nudge" [attr.aria-label]="t.minus5" (click)="nudge(-5)">
-        <app-icon name="chevron_left" [size]="20" />
-      </button>
       <span class="dt__slot">
         <button type="button" class="dt__num" [attr.aria-label]="t.hour" (click)="toggle('hour')">
           {{ hh() }}
@@ -83,17 +115,14 @@
           </div>
         }
       </span>
-      <button type="button" class="dt__nudge" [attr.aria-label]="t.plus5" (click)="nudge(5)">
-        <app-icon name="chevron_right" [size]="20" />
-      </button>
     </div>
-  </div>
+  }
 
   @if (popover()) {
     <div class="dt__backdrop" (click)="closePopover()"></div>
   }
 
-  @if (dateOpen()) {
+  @if (withDate() && dateOpen()) {
     <input
       type="date"
       class="dt__native"

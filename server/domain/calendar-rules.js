@@ -1,8 +1,9 @@
 // Calendar rules (INV-1, R4, R9): pure functions; "today" is always an argument.
 
-export function checkPlacement({ food, meal }) {
-  if (food?.allergenId && meal !== 1) return 'allergen_meal_1'
-  return null
+// R4 / INV-6 (ADR 0016, D-015-4): an allergen food may be in any meal. Outside meal 1 the UI shows a soft note;
+// nothing is refused. The limits across days (introduction days, how many allergens, 3-day windows) are unchanged.
+export function isAllergenOutsideMeal1({ food, meal }) {
+  return Boolean(food?.allergenId) && meal !== 1
 }
 
 export function checkDuplicate({ items, date, meal, foodId, excludeId = null }) {

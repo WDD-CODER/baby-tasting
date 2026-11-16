@@ -21,7 +21,11 @@ import { SuggestionsService } from '../../../core/services/suggestions.service'
 import { ToastService } from '../../../core/services/toast.service'
 import { ageParts } from '../../../core/utils/age'
 import { alertText } from '../../../core/utils/alerts'
-import { refusalFor, refusalMessage } from '../../../core/utils/calendar-rules'
+import {
+  isAllergenOutsideMeal1,
+  refusalFor,
+  refusalMessage,
+} from '../../../core/utils/calendar-rules'
 import {
   addDays,
   addMonths,
@@ -344,7 +348,8 @@ export class CalendarPage {
     }
     if (!(await this.confirmStartAnother(food))) return
     this.closeAdd()
-    await this.calendar.add(cell.date, cell.meal, food.id)
+    const saved = await this.calendar.add(cell.date, cell.meal, food.id)
+    if (saved) this.noteAllergenMeal(food, cell.meal)
   }
 
   protected newFood(): void {
@@ -379,7 +384,13 @@ export class CalendarPage {
       this.toast.show(refusalMessage(refusal, movedFood?.name ?? ''), 'bad')
       return
     }
-    await this.calendar.move(request.item.id, request.date, request.meal)
+    const saved = await this.calendar.move(request.item.id, request.date, request.meal)
+    if (saved) this.noteAllergenMeal(movedFood, request.meal)
+  }
+
+  /** D-015-4: a soft note (never a refusal) when an allergen food ends up in meal 2 or 3. */
+  private noteAllergenMeal(food: Food | undefined, meal: Meal): void {
+    if (isAllergenOutsideMeal1(food, meal)) this.toast.show(HE.calendar.errors.allergenOutsideMeal1)
   }
 
   protected openReaction(): void {

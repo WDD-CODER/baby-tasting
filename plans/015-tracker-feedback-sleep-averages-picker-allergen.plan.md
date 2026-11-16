@@ -114,12 +114,12 @@ line or file this plan names was removed, renamed or rewritten).
 
 ## Atomic Sub-tasks
 
-- [ ] O1: Average over days with data — `server/domain/tracker/stats.js` (`daysWithData`, every per-day figure), the repository method for the first event date in a range, `server/routes/tracker-stats.js`, tests; the stats page texts use `daysWithData` — server/**, src/app/pages/tracker/**
-- [ ] O2: Sleep start fix and past sleep beside an open one — `server/domain/tracker/sleep.js` + route (move the open sleep's start; overlap refusal against the open sleep), tests — server/**
-- [ ] O3: The shared typed time picker — rebuild `src/app/shared/ui/datetime24/` per D-015-3 (keep the selector or rename and update every user), spec, demo page — src/app/shared/**, src/app/dev/**, src/app/pages/**
-- [ ] O4: Sleep sheet modes and the end-or-keep question — `src/app/pages/tracker/entry-sheet/**`, the edit sheet for the open sleep (time only), Hebrew texts in `src/app/core/i18n/he.ts` — src/app/pages/tracker/**, src/app/core/**
-- [ ] O5: Allergen in any meal — `server/domain/calendar-rules.js`, `server/lib/calendar-create.js`, `server/routes/calendar.js`, `src/app/core/utils/calendar-rules.ts`, the calendar page note, tests; rewrite R4 in `docs/briefs/00-program.md` and INV-6 in `docs/brain/invariants.md`, write the ADR `docs/brain/decisions/0016-allergen-any-meal.md` (context, decision D-015-4, consequences) — server/**, src/app/**, docs/briefs/00-program.md, docs/brain/invariants.md
-- [ ] O6: UI checks — `e2e/015-1-sleep-start-fix.spec.ts`, `e2e/015-2-past-sleep-keep.spec.ts`, `e2e/015-3-averages.spec.ts`, `e2e/015-4-allergen-any-meal.spec.ts`; update 001-1, 003-2, 003-3, 008-1 and any spec that used the old picker; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
+- [x] O1: Average over days with data — `server/domain/tracker/stats.js` (`daysWithData`, every per-day figure), the repository method for the first event date in a range, `server/routes/tracker-stats.js`, tests; the stats page texts use `daysWithData` — server/**, src/app/pages/tracker/**
+- [x] O2: Sleep start fix and past sleep beside an open one — `server/domain/tracker/sleep.js` + route (move the open sleep's start; overlap refusal against the open sleep), tests — server/**
+- [x] O3: The shared typed time picker — rebuild `src/app/shared/ui/datetime24/` per D-015-3 (keep the selector or rename and update every user), spec, demo page — src/app/shared/**, src/app/dev/**, src/app/pages/**
+- [x] O4: Sleep sheet modes and the end-or-keep question — `src/app/pages/tracker/entry-sheet/**`, the edit sheet for the open sleep (time only), Hebrew texts in `src/app/core/i18n/he.ts` — src/app/pages/tracker/**, src/app/core/**
+- [x] O5: Allergen in any meal — `server/domain/calendar-rules.js`, `server/lib/calendar-create.js`, `server/routes/calendar.js`, `src/app/core/utils/calendar-rules.ts`, the calendar page note, tests; rewrite R4 in `docs/briefs/00-program.md` and INV-6 in `docs/brain/invariants.md`, write the ADR `docs/brain/decisions/0016-allergen-any-meal.md` (context, decision D-015-4, consequences) — server/**, src/app/**, docs/briefs/00-program.md, docs/brain/invariants.md
+- [x] O6: UI checks — `e2e/015-1-sleep-start-fix.spec.ts`, `e2e/015-2-past-sleep-keep.spec.ts`, `e2e/015-3-averages.spec.ts`, `e2e/015-4-allergen-any-meal.spec.ts`; update 001-1, 003-2, 003-3, 008-1 and any spec that used the old picker; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
 
 ## Technical Considerations
 - Tests: mind the login rate limit (10 per 15 min) when running e2e — one spec file at a time.
@@ -132,4 +132,14 @@ Deploy, the Firestore copy (T7), changes to the export.
 - none
 
 ## Execution Notes
-- none yet
+- Builder (orch tracker-2, round 0, branch feat/015-tracker-feedback-sleep-averages). `scope-check --drift` → `REALITY: clean`, no Step 0.
+- O1: `daysWithData(events, opts)` + `rangeBounds(opts)` in `server/domain/tracker/stats.js`; every average divides by it (0 with no events); `TrackerEventsRepository.firstTimestamp` gives the first event of any type in the exact 06:00 range and the route passes it as `firstEventAt`. Weight totals carry `rangeDays` / `daysWithData` too. No `/stats` text names a day count today, so the page needed only the model field.
+- O2: `moveOpenSleepStart` (pure) + `POST /api/v1/tracker/sleep/open/start`; `PUT /tracker/events/:id` refuses a future start of an open sleep. A recorded sleep overlapping the open one was already 409 `sleep_overlap` (open = runs to infinity); covered by tests.
+- O3: `app-datetime24` kept its selector; new `dateMode` input, typed field, chips −5/−15/−30, `בחירה מרשימה`; spec rewritten; demo page shows `dateMode="none"`.
+- O4: with a sleep open the TIMER segment reads `⏱️ תיקון שעת ההירדמות`; end-or-keep uses `ConfirmDialogService` (cancel = `להשאיר פעילה` is first, so the dialog's focus trap focuses it).
+- O5: `checkPlacement` removed (server and UI mirror); `isAllergenOutsideMeal1` drives the toast; `server/test/suggestions.test.js` accept expectation updated (an allergen in meal 2 is now created). R4, INV-6, ADR 0016 written.
+- O6: e2e 015-1…015-4 written, not run (no app in the worktree); 001-1 (foods are seeded, so the list replaces the empty state), 003-3 (archive is on the edit page since plan 008), 008-1 (scoped to the rules form, waits for `נשמר` before leaving), 003-2 (exact button names, waits for the new allergen to be selected), 004-3 (new behaviour) updated. `npx playwright test --list` → 9 tests in 9 files, exit 0. No spec used the old picker controls.
+- `pnpm run build` → exit 0 (existing budget warning on stats-page.scss, untouched).
+- `pnpm run lint` → exit 0, "All files pass linting."
+- `pnpm run test` → exit 0, Karma TOTAL: 77 SUCCESS; server `# pass 207, # fail 0`.
+- `node --test server/domain/tracker/stats.test.js server/domain/tracker/sleep.test.js server/domain/calendar-rules.test.js server/test/tracker-stats.test.js server/test/tracker-sleep.test.js server/test/calendar.test.js` → exit 0, tests 52, pass 52, fail 0.

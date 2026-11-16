@@ -8,6 +8,8 @@ export default defineConfig({
   outputDir: 'e2e/.results',
   fullyParallel: false,
   workers: 1,
+  // a remote database (Atlas) is slower than a local one: E2E_EXPECT_TIMEOUT=15000 gives assertions more time
+  expect: { timeout: Number(process.env['E2E_EXPECT_TIMEOUT'] ?? 5000) },
   reporter: [['list']],
   use: {
     baseURL: process.env['E2E_BASE_URL'] ?? 'http://localhost:4200',

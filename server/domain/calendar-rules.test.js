@@ -1,12 +1,15 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { checkDuplicate, checkPlacement, checkStatus, deriveFoodStatus } from './calendar-rules.js'
+import * as rules from './calendar-rules.js'
+import { checkDuplicate, checkStatus, deriveFoodStatus, isAllergenOutsideMeal1 } from './calendar-rules.js'
 import { isoAddDays, weekStartSunday } from './dates.js'
 
-test('checkPlacement keeps allergen foods in meal 1', () => {
-  assert.equal(checkPlacement({ food: { allergenId: 'a' }, meal: 1 }), null)
-  assert.equal(checkPlacement({ food: { allergenId: 'a' }, meal: 2 }), 'allergen_meal_1')
-  assert.equal(checkPlacement({ food: { allergenId: null }, meal: 3 }), null)
+test('D-015-4: an allergen food may be in any meal; outside meal 1 is only flagged for the soft note', () => {
+  assert.equal('checkPlacement' in rules, false, 'no meal-1 refusal is left')
+  assert.equal(isAllergenOutsideMeal1({ food: { allergenId: 'a' }, meal: 1 }), false)
+  assert.equal(isAllergenOutsideMeal1({ food: { allergenId: 'a' }, meal: 2 }), true)
+  assert.equal(isAllergenOutsideMeal1({ food: { allergenId: 'a' }, meal: 3 }), true)
+  assert.equal(isAllergenOutsideMeal1({ food: { allergenId: null }, meal: 3 }), false)
 })
 
 test('checkDuplicate finds the same food in the same meal, ignoring excludeId', () => {

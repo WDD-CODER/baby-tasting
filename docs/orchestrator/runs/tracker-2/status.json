@@ -1,0 +1,282 @@
+{
+  "run": "tracker-2",
+  "branch": "orch/tracker-2",
+  "base": "main",
+  "startedAt": "2026-11-16T13:37:21.037Z",
+  "mainShaAtStart": "fe41552fe5a7b62a4ecad53cd62670cb91c7d3f4",
+  "plans": {
+    "015": {
+      "nnn": "015",
+      "title": "Validation fixes: sleep sheet modes, averages over days with data, typed time picker, allergen in any meal",
+      "branch": "feat/015-tracker-feedback-sleep-averages",
+      "state": "merged",
+      "round": 0,
+      "tier": "judgment",
+      "models": {
+        "builder": {
+          "model": "opus",
+          "tier": "judgment",
+          "at": "2026-11-16T13:39:00.728Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-16T14:09:55.314Z"
+        }
+      },
+      "humanItems": [
+        "Typing a time on the phone is quick and clear."
+      ],
+      "history": [
+        {
+          "at": "2026-11-16T13:39:00.375Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T13:39:00.730Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T14:07:19.727Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T14:07:20.188Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T14:09:49.166Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T14:09:55.316Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T14:10:24.586Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T14:11:43.991Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "judgment"
+      ],
+      "freeDiskGb": 24.4,
+      "sha": "8d554ff9db75b6b49bc03df4e05026910295458b",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "opus",
+          "seconds": 1695.6,
+          "tokens": {
+            "input": 18014772,
+            "output": 98453
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 28.5,
+          "tokens": {
+            "input": 264076,
+            "output": 1505
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "During a running sleep, recording a past sleep from 2 hours ago to 1 hour ago and choosing `להשאיר פעילה` leaves the running sleep open, and the timeline shows ",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "45036cd828f4444c2c40a847464b2a6f16d86e0f"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-16T13:38:47.863Z",
+      "plan": "015",
+      "text": "starts on the judgment tier: INV-6 changes"
+    },
+    {
+      "at": "2026-11-16T13:39:00.046Z",
+      "plan": "015",
+      "text": "the folder baby-tasting-orch-tracker-2-015 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T14:07:16.594Z",
+      "plan": "015",
+      "text": "builder left undone (round 0): [ui] running sleep, start set 20 minutes earlier, stays active, timer shows 20+ minutes: written, not run (e2e/015-1-sleep-start-fix.spec.ts); [ui] past sleep 2h–1h ago + 'להשאיר פעילה' keeps both: written, not run (e2e/015-2-past-sleep-keep.spec.ts); [ui] /stats nutrition average unchanged from היו"
+    },
+    {
+      "at": "2026-11-16T14:07:19.991Z",
+      "plan": "015",
+      "text": "[ui] During a running sleep, recording a past sleep from 2 hours ago to 1 hour ago and choosing `להשאיר פעילה` leaves the running sleep open, and the timeline s: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-16T14:10:42.879Z",
+      "plan": "015",
+      "text": "the folder baby-tasting-orch-merge-tracker-2 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 24.4,
+  "updatedAt": "2026-11-16T14:18:23.410Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "015",
+      "type": "removes",
+      "text": "removes: ending the running sleep at a chosen earlier time from the hold sheet (F9) — the time field there is now the start (mode 1), so 'סיים שינה נוכחית' ends at now; an earlier end is still possible by editing the closed sleep on the timeline — reverse: give the end button its own time field in mode 1",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "015",
+      "type": "removes",
+      "text": "removes: the end-time field when editing the open sleep from the timeline or banner (it could close the sleep) — D-015-1 says time only — reverse: show the sleepEnd picker again when editingOpenSleep()",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "015",
+      "type": "removes",
+      "text": "removes: the picker's '+5 minutes' arrow and the 'לפני 15 דק׳' / 'לפני שעה' chips (relative to now) — replaced by the chips D-015-3 lists (עכשיו, −5, −15, −30 relative to the value) — reverse: add the chips back in datetime24.html",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "015",
+      "type": "removes",
+      "text": "removes: the API error code allergen_meal_1 (422) on calendar create/move and suggestion accept — reverse: restore checkPlacement in server/domain/calendar-rules.js and its calls",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D5",
+      "plan": "015",
+      "type": "behaviour",
+      "text": "behaviour: a time-only start (mode 1 and editing the open sleep) is read as the latest such time that is not in the future (today, or yesterday when today's would be ahead), so a sleep started before midnight can be set — reverse: use the date part of the field (the old start's date) in saveFixStart() and build()",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D6",
+      "plan": "015",
+      "type": "behaviour",
+      "text": "behaviour: saving mode 1 closes the sheet and shows the toast 'שעת ההירדמות עודכנה'; a future start shows 'שעת ההירדמות לא יכולה להיות בעתיד' — reverse: remove the toast in saveFixStart()",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D7",
+      "plan": "015",
+      "type": "behaviour",
+      "text": "behaviour: the end-or-keep question shows after the sheet closes; Escape or a tap on the backdrop counts as 'להשאיר פעילה' — reverse: close the sheet only after askEndOrKeep() answers",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D8",
+      "plan": "015",
+      "type": "behaviour",
+      "text": "behaviour: typing fewer than 4 digits and leaving the field shows the error and keeps the previous value; 4 digits that are not a real time (25:10) show the error at once — reverse: change onTypedBlur() to revert silently",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D9",
+      "plan": "015",
+      "type": "behaviour",
+      "text": "behaviour: the allergen note also shows after adding an allergen food to meal 2 or 3 through the add-food sheet, not only after a move — reverse: drop the noteAllergenMeal call in pickFood()",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D10",
+      "plan": "015",
+      "type": "behaviour",
+      "text": "behaviour: weight stats totals now carry rangeDays and daysWithData too, so all six kinds match — reverse: remove both fields from weightStats()",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-16T14:18:23.406Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-16T14:18:23.409Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}

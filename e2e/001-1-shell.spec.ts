@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test'
 import { ensureBaby, monthsAgo, resetHousehold, signIn } from './support/session'
 
-test('001-1: the shell shows the top bar, five tabs and the foods empty state', async ({ page, request }) => {
+// The foods list is never empty once a baby exists (the built-in catalog is seeded, brief 3): it lists בננה.
+test('001-1: the shell shows the top bar, five tabs and the foods list', async ({ page, request }) => {
   await resetHousehold(request)
   await signIn(page)
   await ensureBaby(page, { name: 'נועה', birthDate: monthsAgo(5) })
@@ -13,8 +14,8 @@ test('001-1: the shell shows the top bar, five tabs and the foods empty state', 
     await expect(nav.getByRole('link', { name: label })).toBeVisible()
   }
   await nav.getByRole('link', { name: 'טעימות' }).click()
-  await page.getByRole('link', { name: 'מזונות' }).click()
+  await page.getByRole('link', { name: 'מזונות', exact: true }).click()
   await expect(page).toHaveURL(/\/tasting\/foods$/)
-  await expect(page.getByText('עוד אין כאן כלום')).toBeVisible()
+  await expect(page.getByRole('link', { name: /בננה/ })).toBeVisible()
   await page.screenshot({ path: 'e2e/screens/001-1.png' })
 })
