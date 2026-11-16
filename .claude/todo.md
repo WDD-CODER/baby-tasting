@@ -117,3 +117,49 @@
 - [ ] H9: Write the UI checks
 - [ ] H10: Note what now exists
 
+### Plan 009 — Tracker base: password sign-in that stays on, five-tab navigation, baby profile, Tracker settings, icon slots
+
+- [ ] K1: Sign in with a password and keep each phone signed in until sign-out
+- [ ] K2: Store the Tracker settings and the baby's birth weight
+- [ ] K3: Give every icon a named slot from one library so parents can change it later
+- [ ] K4: Move Tasting under its own section and add the five-tab navigation
+- [ ] K5: Show who is signed in and add the Tracker section to Settings
+- [ ] K6: Write the UI checks and update the docs
+
+### Plan 010 — Tracker events and sleep: data model, rules and API
+
+- [ ] L1: Write the Tracker event and sleep rules as pure functions
+- [ ] L2: Store events through one repository
+- [ ] L3: Offer the events and sleep API
+- [ ] L4: Note what now exists
+
+### Plan 011 — Tracker log tab: today at a glance, quick actions, entry sheets, sleep timer and daily trackers
+
+- [ ] M1: Load and refresh the Tracker data in one service
+- [ ] M2: Add the per-event colours and icon slots
+- [ ] M3: Build the shared 24-hour date-time picker
+- [ ] M4: Build the log page
+- [ ] M5: Build the entry sheets and the sleep flow
+- [ ] M6: Write the UI checks
+
+### Plan 012 — Tracker timeline and the shared edit and delete sheet
+
+- [ ] N1: Build the timeline page
+- [ ] N2: Build one edit sheet for every event type
+- [ ] N3: Write the UI checks
+
+### Plan 013 — Tracker statistics computed on the server and the six dashboard sections
+
+- [ ] O1: Compute every statistic in pure functions
+- [ ] O2: Serve them
+- [ ] O3: Build the statistics page
+- [ ] O4: Write the UI checks
+
+### Plan 014 — Tracker settings, icon picker, Excel export, data reset and installable app
+
+- [ ] P1: Build the icon picker
+- [ ] P2: Complete the Tracker settings
+- [ ] P3: Export the Excel report
+- [ ] P4: Make the app installable
+- [ ] P5: Write the UI checks
+
