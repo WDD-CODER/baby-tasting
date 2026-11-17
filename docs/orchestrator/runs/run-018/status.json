@@ -1,0 +1,106 @@
+{
+  "run": "run-018",
+  "branch": "orch/run-018",
+  "base": "main",
+  "startedAt": "2026-11-17T07:39:58.139Z",
+  "mainShaAtStart": "653c5b4ae80fc0790cfe16b3b0b14ea3fabda2fd",
+  "plans": {
+    "018": {
+      "nnn": "018",
+      "title": "Sign-up for the two parents with an invite link, so Render needs no user list",
+      "branch": "feat/018-signup-invite-link",
+      "state": "parked",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-17T08:37:33.773Z"
+        }
+      },
+      "humanItems": [
+        "On a local server with no `APP_USERS` and an empty database, the first visitor sees `יצירת חשבון`, creates parent A and lands in the app.",
+        "Parent A taps `יצירת קישור הזמנה` in Settings, opens the link in a private window, creates parent B and lands in the app; opening the same link again shows `הקישור לא בתוקף`.",
+        "With both parents present, the login page shows no create-account option.",
+        "Parent A resets parent B's password: parent B is signed out, and the new link lets parent B sign up again."
+      ],
+      "history": [
+        {
+          "at": "2026-11-17T07:47:32.197Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T07:47:33.841Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T08:07:33.603Z",
+          "state": "env-paused",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T08:37:33.774Z",
+          "state": "env-paused",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T08:37:37.638Z",
+          "state": "parked",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 20.1,
+      "reason": "stopped: rate-limit: claude exited 1: You've hit your 5-hour limit · resets 12:20pm (Asia/Jerusalem)",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 1199.3,
+          "tokens": {
+            "input": 0,
+            "output": 0
+          },
+          "exit": 1,
+          "error": "claude exited 1: You've hit your 5-hour limit · resets 12:20pm (Asia/Jerusalem)"
+        },
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 3.7,
+          "tokens": {
+            "input": 0,
+            "output": 0
+          },
+          "exit": 1,
+          "error": "claude exited 1: You've hit your 5-hour limit · resets 12:20pm (Asia/Jerusalem)"
+        }
+      ]
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-17T07:47:30.140Z",
+      "plan": "018",
+      "text": "the folder baby-tasting-orch-run-018-018 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "stopped",
+  "freeDiskGb": 20.1,
+  "updatedAt": "2026-11-17T08:37:40.355Z",
+  "stopReason": "rate-limit: claude exited 1: You've hit your 5-hour limit · resets 12:20pm (Asia/Jerusalem)",
+  "stops": [
+    {
+      "at": "2026-11-17T08:37:38.007Z",
+      "reason": "rate-limit: claude exited 1: You've hit your 5-hour limit · resets 12:20pm (Asia/Jerusalem)",
+      "attempt": 1
+    }
+  ],
+  "finishedAt": "2026-11-17T08:37:40.353Z"
+}
