@@ -8,4 +8,4 @@ One row per orchestrator run, written by `node scripts/orch-state.mjs finish` fr
 | 2026-11-16 | tracker-1 | 009,010,011,012,013,014 | 6 | 0 | - | 3 | 1 | 1 | ok | 0 | 0 | 0 |
 | 2026-11-16 | tracker-2 | 015 | 1 | 0 | - | 0 | 0 | 0 | ok | 0 | 0 | 0 |
 | 2026-11-16 | tracker-3 | 016 | 1 | 0 | - | 0 | 0 | 0 | ok | 0 | 0 | 0 |
-| 2026-11-17 | run-018 | 018 | 0 | 1 | other | 0 | 0 | 0 | - | - | - | - |
+| 2026-11-17 | run-018 | 018 | 1 | 0 | - | 0 | 0 | 0 | ok | - | - | - |
