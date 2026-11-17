@@ -6,6 +6,7 @@ import { unsavedChangesGuard } from './core/guards/unsaved-changes.guard'
 
 export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./pages/login/login').then((m) => m.LoginPage) },
+  { path: 'join/:token', loadComponent: () => import('./pages/join/join').then((m) => m.JoinPage) },
   {
     path: 'welcome',
     canActivate: [authGuard],

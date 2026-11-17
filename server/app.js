@@ -35,7 +35,8 @@ import { createTrackerStatsRouter } from './routes/tracker-stats.js'
 export function createApp({ config, db, photoStore = createPhotoStore(config.cloudinary ?? null) }) {
   const app = express()
   const repos = createRepos(db)
-  const authConfig = { ...config, appUsers: config.appUsers ?? [] }
+  const appUsers = config.appUsers ?? []
+  const authConfig = { ...config, appUsers, accountsMode: appUsers.length ? 'env' : 'db' }
   const requireAuth = createRequireAuth({ repos, config: authConfig })
   createIndexes(db).catch((err) => console.error('index creation failed', err))
 
