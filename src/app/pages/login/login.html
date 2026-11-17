@@ -1,38 +1,50 @@
-<form class="login" (ngSubmit)="submit()">
-  <app-text-field
-    name="username"
-    [label]="t.username"
-    [autofocus]="true"
-    autocapitalize="none"
-    autocomplete="username"
-    [ngModel]="username_()"
-    (ngModelChange)="username_.set($event)"
-  />
-  <div class="login__password">
+@if (creating_()) {
+  <app-signup-form />
+  <button type="button" class="login__switch" data-testid="to-login" (click)="toggleCreating()">
+    {{ t.haveAccount }}
+  </button>
+} @else {
+  <form class="login" (ngSubmit)="submit()">
     <app-text-field
-      class="login__password-field"
-      name="password"
-      [label]="t.password"
-      [type]="showPassword_() ? 'text' : 'password'"
+      name="username"
+      [label]="t.username"
+      [autofocus]="true"
       autocapitalize="none"
-      autocomplete="current-password"
-      [ngModel]="password_()"
-      (ngModelChange)="password_.set($event)"
+      autocomplete="username"
+      [ngModel]="username_()"
+      (ngModelChange)="username_.set($event)"
     />
-    <button
-      type="button"
-      class="login__reveal"
-      [attr.aria-label]="showPassword_() ? t.hidePassword : t.showPassword"
-      [attr.aria-pressed]="showPassword_()"
-      (click)="toggleShowPassword()"
-    >
-      <app-icon [name]="showPassword_() ? 'visibility_off' : 'visibility'" [size]="24" />
+    <div class="login__password">
+      <app-text-field
+        class="login__password-field"
+        name="password"
+        [label]="t.password"
+        [type]="showPassword_() ? 'text' : 'password'"
+        autocapitalize="none"
+        autocomplete="current-password"
+        [ngModel]="password_()"
+        (ngModelChange)="password_.set($event)"
+      />
+      <button
+        type="button"
+        class="login__reveal"
+        [attr.aria-label]="showPassword_() ? t.hidePassword : t.showPassword"
+        [attr.aria-pressed]="showPassword_()"
+        (click)="toggleShowPassword()"
+      >
+        <app-icon [name]="showPassword_() ? 'visibility_off' : 'visibility'" [size]="24" />
+      </button>
+    </div>
+    @if (error_()) {
+      <p class="login__error" role="alert">{{ error_() }}</p>
+    }
+    <app-button type="submit" size="lg" [fullWidth]="true" [loading]="loading_()">{{
+      t.submit
+    }}</app-button>
+  </form>
+  @if (firstAccountOpen_()) {
+    <button type="button" class="login__switch" data-testid="to-signup" (click)="toggleCreating()">
+      {{ t.createAccount }}
     </button>
-  </div>
-  @if (error_()) {
-    <p class="login__error" role="alert">{{ error_() }}</p>
   }
-  <app-button type="submit" size="lg" [fullWidth]="true" [loading]="loading_()">{{
-    t.submit
-  }}</app-button>
-</form>
+}

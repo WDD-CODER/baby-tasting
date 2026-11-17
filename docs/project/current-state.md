@@ -1,6 +1,7 @@
 # CURRENT STATE — baby-tasting
 > Updated at every end of day. Feeds the Context Capsule "Current State" section.
 - Last completed: plan 001 (foundation) built on branch `feat/001-foundation-shell-design-server`, awaiting review.
+- Accounts (plan 018): without `APP_USERS` the app is in `db` mode: first sign-up is parent A, parent A's single-use invite link makes parent B, then sign-up closes; see `docs/project/accounts.md`.
 - Active plan: 001 — foundation: shell, design system, server base, Render file.
 - Open bugs: —
 - Key files:

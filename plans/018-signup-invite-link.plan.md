@@ -122,16 +122,16 @@ line or file this plan names was removed, renamed or rewritten).
 
 ## Atomic Sub-tasks
 
-- [ ] S1: Let the server start without a user list and choose where accounts come from — `APP_USERS` no longer required in production, `accountsMode` in config, config tests — server/config.js, server/test/config.test.js
-- [ ] S2: Store the parents' accounts and invite links in the database with safe indexes — `users` (unique lower-case username, unique `parentType`), `invites` (token hash, `expiresAt` TTL index, `usedAt`), sessions gain `parentType` and a delete-by-username — server/repositories/**
-- [ ] S3: Check who may sign up and which parent they become in one rule module — first account open while no parent A, invite needed after, closed at two, name and password rules; unit test beside it — server/domain/accounts.js, server/domain/accounts.test.js
-- [ ] S4: Add the sign-up, invite and reset endpoints and make login read accounts from the right place — routes per the API section, rate limits, sessions store parentType, requireAuth reads it with the old fallback — server/routes/auth.js, server/middleware/auth.js, server/app.js
-- [ ] S5: Prove every sign-up rule on the server, including the race and the reset — server/test/signup.test.js, server/test/auth.test.js
-- [ ] S6: Show a create-account form on the login page while the first place is free — AuthService gains signupStatus, signup, checkInvite; password typed twice; Hebrew texts — src/app/core/services/auth.service.ts, src/app/pages/login/**, src/app/core/i18n/he.ts
-- [ ] S7: Let the second parent join from the invite link — new public route join/:token, invalid-link message with a link to sign in — src/app/pages/join/**, src/app/app.routes.ts
-- [ ] S8: Let parent A create, share and renew the invite and reset parent B from Settings — second-parent card, confirm dialog for the reset, copy and share — src/app/pages/settings/**
-- [ ] S9: Document the Render settings and how to recover a lost first-parent password — drop APP_USERS from render.yaml, update .env.example comments, accounts how-to, current state — render.yaml, server/.env.example, docs/project/accounts.md, docs/project/current-state.md, README.md
-- [ ] S10: Make sure the existing sign-in tests still pass with the slots' user list — e2e specs unchanged in env mode; fix any that break — e2e/**
+- [x] S1: Let the server start without a user list and choose where accounts come from — `APP_USERS` no longer required in production, `accountsMode` in config, config tests — server/config.js, server/test/config.test.js
+- [x] S2: Store the parents' accounts and invite links in the database with safe indexes — `users` (unique lower-case username, unique `parentType`), `invites` (token hash, `expiresAt` TTL index, `usedAt`), sessions gain `parentType` and a delete-by-username — server/repositories/**
+- [x] S3: Check who may sign up and which parent they become in one rule module — first account open while no parent A, invite needed after, closed at two, name and password rules; unit test beside it — server/domain/accounts.js, server/domain/accounts.test.js
+- [x] S4: Add the sign-up, invite and reset endpoints and make login read accounts from the right place — routes per the API section, rate limits, sessions store parentType, requireAuth reads it with the old fallback — server/routes/auth.js, server/middleware/auth.js, server/app.js
+- [x] S5: Prove every sign-up rule on the server, including the race and the reset — server/test/signup.test.js, server/test/auth.test.js
+- [x] S6: Show a create-account form on the login page while the first place is free — AuthService gains signupStatus, signup, checkInvite; password typed twice; Hebrew texts — src/app/core/services/auth.service.ts, src/app/pages/login/**, src/app/core/i18n/he.ts
+- [x] S7: Let the second parent join from the invite link — new public route join/:token, invalid-link message with a link to sign in — src/app/pages/join/**, src/app/app.routes.ts
+- [x] S8: Let parent A create, share and renew the invite and reset parent B from Settings — second-parent card, confirm dialog for the reset, copy and share — src/app/pages/settings/**
+- [x] S9: Document the Render settings and how to recover a lost first-parent password — drop APP_USERS from render.yaml, update .env.example comments, accounts how-to, current state — render.yaml, server/.env.example, docs/project/accounts.md, docs/project/current-state.md, README.md
+- [x] S10: Make sure the existing sign-in tests still pass with the slots' user list — e2e specs unchanged in env mode; fix any that break — e2e/**
 
 ## Technical Considerations
 - **Security surface (auth):** invite tokens are 32 random bytes, stored only as SHA-256, compared by hash lookup; single use is enforced atomically (`findOneAndUpdate` with `usedAt: null` → set `usedAt`), not read-then-write. The unique `parentType` index is the real two-user limit; the rule module is the friendly message. Sign-up, invite check and login share the login rate limiter. Error bodies never say whether a name exists except `username_taken` on sign-up (acceptable: two users, sign-up closes). Passwords and tokens never reach logs.
@@ -146,4 +146,6 @@ Email, password reset by email, more than two users, several households, changin
 - none
 
 ## Execution Notes
-- none yet
+- node --test (accounts, signup, auth, config) -> pass; pnpm run build, lint, test -> exit 0 (241 server tests pass); override-check ok.
+- signup.test.js fixed to use one shared in-memory Mongo (a second connect() left a client open and hung the run).
+- S10: no e2e change needed (env mode keeps APP_USERS).

@@ -43,6 +43,23 @@
     }
   }
 
+  &__switch {
+    display: block;
+
+    margin-block-start: var(--space-4);
+    margin-inline: auto;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+    cursor: pointer;
+    text-decoration: underline;
+
+    border: 0;
+    padding: var(--space-2);
+
+    background: none;
+  }
+
   &__error {
     margin: 0;
 

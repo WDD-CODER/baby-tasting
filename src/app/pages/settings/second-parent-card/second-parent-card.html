@@ -1,0 +1,31 @@
+@if (visible_()) {
+  <app-card>
+    <div class="parent" data-testid="second-parent-card">
+      <h3 class="parent__title">{{ t.title }}</h3>
+      @if (partnerExists_()) {
+        <p class="parent__text">{{ t.joined }}</p>
+        <app-button
+          variant="secondary"
+          [fullWidth]="true"
+          [loading]="busy_()"
+          (pressed)="reset()"
+          >{{ t.reset }}</app-button
+        >
+      } @else {
+        <p class="parent__text">{{ t.text }}</p>
+        <app-button [fullWidth]="true" [loading]="busy_()" (pressed)="createInvite()">{{
+          link_() ? t.renew : t.create
+        }}</app-button>
+      }
+      @if (link_()) {
+        <p class="parent__link" dir="ltr" data-testid="invite-link">{{ link_() }}</p>
+        <div class="parent__actions">
+          <app-button variant="secondary" (pressed)="copy()">{{ t.copy }}</app-button>
+          @if (canShare) {
+            <app-button variant="secondary" (pressed)="share()">{{ t.share }}</app-button>
+          }
+        </div>
+      }
+    </div>
+  </app-card>
+}

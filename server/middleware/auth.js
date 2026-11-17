@@ -27,8 +27,10 @@ export function createRequireAuth({ repos, config }) {
         const renewed = await repos.sessions.renew(token, now, SESSION_MAX_AGE_MS)
         if (renewed) res.cookie(SESSION_COOKIE, token, { ...cookieOptions, maxAge: SESSION_MAX_AGE_MS })
       }
+      // a session made before parentType existed falls back to the APP_USERS order
       const index = order.indexOf(String(session.username).toLowerCase())
-      req.user = { username: session.username, parentType: index === 1 ? 'PARENT_B' : 'PARENT_A' }
+      const parentType = session.parentType ?? (index === 1 ? 'PARENT_B' : 'PARENT_A')
+      req.user = { username: session.username, parentType }
       req.householdId = String(session.householdId)
       next()
     } catch (err) {

@@ -1,0 +1,34 @@
+<form class="signup" data-testid="signup-form" (ngSubmit)="submit()">
+  <app-text-field
+    name="username"
+    [label]="t.username"
+    autocapitalize="none"
+    autocomplete="username"
+    [ngModel]="username_()"
+    (ngModelChange)="username_.set($event)"
+  />
+  <app-text-field
+    name="password"
+    type="password"
+    [label]="t.password"
+    autocapitalize="none"
+    autocomplete="new-password"
+    [ngModel]="password_()"
+    (ngModelChange)="password_.set($event)"
+  />
+  <app-text-field
+    name="repeat"
+    type="password"
+    [label]="t.confirmPassword"
+    autocapitalize="none"
+    autocomplete="new-password"
+    [ngModel]="repeat_()"
+    (ngModelChange)="repeat_.set($event)"
+  />
+  @if (error_()) {
+    <p class="signup__error" role="alert">{{ error_() }}</p>
+  }
+  <app-button type="submit" size="lg" [fullWidth]="true" [loading]="loading_()">{{
+    t.createAccount
+  }}</app-button>
+</form>
