@@ -68,9 +68,9 @@ by symbol and print one line per commit: `ok` or `conflict: <what>`. All `ok` �
 
 ## Atomic Sub-tasks
 
-- [ ] F1: Stop the production build from relying on an inline script the security policy blocks — optimization.styles.inlineCritical false in the production configuration — angular.json
-- [ ] F3: Fail the checks when the built page holds an inline script again — reads the built index.html, prints INLINE: none or the count — tools/check-no-inline-script.mjs
-- [ ] F2: Note the build rule so it is not turned back on — one line under the build or deploy notes — docs/project/current-state.md
+- [x] F1: Stop the production build from relying on an inline script the security policy blocks — optimization.styles.inlineCritical false in the production configuration — angular.json
+- [x] F3: Fail the checks when the built page holds an inline script again — reads the built index.html, prints INLINE: none or the count — tools/check-no-inline-script.mjs
+- [x] F2: Note the build rule so it is not turned back on — one line under the build or deploy notes — docs/project/current-state.md
 
 ## Technical Considerations
 - Do not loosen the CSP (`'unsafe-inline'` or a script hash) instead: the hash changes whenever Angular changes the snippet.
@@ -82,4 +82,5 @@ Deploy, other CSP changes.
 - none
 
 ## Execution Notes
-- none yet
+- pnpm run build -> 0; node tools/check-no-inline-script.mjs -> 0, INLINE: none; pnpm run lint -> 0; pnpm run test -> 0, fail 0; override-check -> ok
+- [human] icon check on the served build left to the Human
