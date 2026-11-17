@@ -175,3 +175,8 @@
 - [ ] S8: Let parent A create, share and renew the invite and reset parent B from Settings
 - [ ] S9: Document the Render settings and how to recover a lost first-parent password
 - [ ] S10: Make sure the existing sign-in tests still pass with the slots' user list
+
+### Plan 019 — Production build loads its full stylesheet, so icons and styles work behind the security policy
+
+- [ ] F1: Stop the production build from relying on an inline script the security policy blocks
+- [ ] F2: Note the build rule so it is not turned back on
