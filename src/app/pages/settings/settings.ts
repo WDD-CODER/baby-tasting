@@ -14,6 +14,7 @@ import { ExportCard } from './export-card/export-card'
 import { InstallCard } from './install-card/install-card'
 import { Legend } from './legend/legend'
 import { RulesForm } from './rules-form/rules-form'
+import { SecondParentCard } from './second-parent-card/second-parent-card'
 import { TrackerForm } from './tracker-form/tracker-form'
 
 @Component({
@@ -29,6 +30,7 @@ import { TrackerForm } from './tracker-form/tracker-form'
     Legend,
     RouterLink,
     RulesForm,
+    SecondParentCard,
     TrackerForm,
   ],
   templateUrl: './settings.html',

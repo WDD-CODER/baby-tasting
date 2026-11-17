@@ -1,0 +1,11 @@
+@if (valid_() === true) {
+  <section class="join">
+    <h2 class="join__title">{{ t.joinTitle }}</h2>
+    <app-signup-form [inviteToken]="token" />
+  </section>
+} @else if (valid_() === false) {
+  <section class="join" data-testid="invite-invalid">
+    <p class="join__invalid" role="alert">{{ t.inviteInvalid }}</p>
+    <a class="join__link" routerLink="/login">{{ t.backToLogin }}</a>
+  </section>
+}

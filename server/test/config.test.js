@@ -6,11 +6,19 @@ test('missing MONGODB_URI throws a message naming it', () => {
   assert.throws(() => loadConfig({}), (err) => err instanceof ConfigError && err.message.includes('MONGODB_URI'))
 })
 
-test('production also requires SESSION_SECRET and APP_USERS', () => {
+test('production requires SESSION_SECRET but not APP_USERS', () => {
   assert.throws(
     () => loadConfig({ NODE_ENV: 'production', MONGODB_URI: 'mongodb://x/y' }),
-    (err) => err.message.includes('SESSION_SECRET') && err.message.includes('APP_USERS'),
+    (err) => err.message.includes('SESSION_SECRET') && !err.message.includes('APP_USERS'),
   )
+  const config = loadConfig({ NODE_ENV: 'production', MONGODB_URI: 'mongodb://x/y', SESSION_SECRET: 's' })
+  assert.deepEqual(config.appUsers, [])
+  assert.equal(config.accountsMode, 'db')
+})
+
+test('accountsMode is env when APP_USERS is set', () => {
+  const config = loadConfig({ MONGODB_URI: 'mongodb://x/y', APP_USERS: 'a:$2b$10$hashA' })
+  assert.equal(config.accountsMode, 'env')
 })
 
 test('development config parses lists and defaults', () => {

@@ -9,11 +9,12 @@ export class SessionsRepository {
     this.collection = db.collection('sessions')
   }
 
-  async create({ username, householdId, now = new Date(), maxAgeMs }) {
+  async create({ username, parentType, householdId, now = new Date(), maxAgeMs }) {
     const token = crypto.randomBytes(32).toString('hex')
     await this.collection.insertOne({
       tokenHash: hashToken(token),
       username,
+      parentType,
       householdId,
       createdAt: now,
       expiresAt: new Date(now.getTime() + maxAgeMs),
@@ -34,6 +35,12 @@ export class SessionsRepository {
       { $set: { expiresAt: new Date(now.getTime() + maxAgeMs), renewedAt: now } },
     )
     return matchedCount > 0
+  }
+
+  // Signs a user out everywhere (used when parent B is reset).
+  async deleteByUsername(username) {
+    const { deletedCount } = await this.collection.deleteMany({ username })
+    return deletedCount
   }
 
   async delete(token) {
