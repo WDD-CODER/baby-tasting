@@ -179,4 +179,5 @@
 ### Plan 019 — Production build loads its full stylesheet, so icons and styles work behind the security policy
 
 - [ ] F1: Stop the production build from relying on an inline script the security policy blocks
+- [ ] F3: Fail the checks when the built page holds an inline script again
 - [ ] F2: Note the build rule so it is not turned back on

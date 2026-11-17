@@ -17,7 +17,7 @@ The production build (`ng build --configuration production`) inlines critical CS
 - [auto] `pnpm run build` exits 0.
 - [auto] `pnpm run lint` exits 0.
 - [auto] `pnpm run test` exits 0.
-- [auto] `node -e "const h=require('fs').readFileSync('dist/baby-tasting/browser/index.html','utf8');const bad=[...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>/g)].length+(/data-beasties-media|media=\"print\"/.test(h)?1:0);console.log(bad?'INLINE: '+bad:'INLINE: none');process.exit(bad?1:0)"` prints `INLINE: none` and exits 0.
+- [auto] `node tools/check-no-inline-script.mjs` prints `INLINE: none` and exits 0 (it reads `dist/baby-tasting/browser/index.html` after the build and fails on any `<script>` without `src`, any `data-beasties-media` and any `media="print"` stylesheet).
 - [human] On the production build served by the server, the bottom navigation and the tracker tiles show icons, not words like `settings` or `water_bottle`.
 
 ## Execution Mode
@@ -34,6 +34,7 @@ hotspots (`src/styles.scss, src/app/app.routes.ts` — add to them, never rewrit
 
 ```scope
 angular.json
+tools/check-no-inline-script.mjs
 docs/project/current-state.md
 ```
 
@@ -68,6 +69,7 @@ by symbol and print one line per commit: `ok` or `conflict: <what>`. All `ok` �
 ## Atomic Sub-tasks
 
 - [ ] F1: Stop the production build from relying on an inline script the security policy blocks — optimization.styles.inlineCritical false in the production configuration — angular.json
+- [ ] F3: Fail the checks when the built page holds an inline script again — reads the built index.html, prints INLINE: none or the count — tools/check-no-inline-script.mjs
 - [ ] F2: Note the build rule so it is not turned back on — one line under the build or deploy notes — docs/project/current-state.md
 
 ## Technical Considerations
