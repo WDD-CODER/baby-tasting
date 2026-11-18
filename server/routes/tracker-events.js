@@ -107,6 +107,19 @@ export function createTrackerEventsRouter({ repos }) {
     }),
   )
 
+  // the home screen's events and the running sleep in one answer (before the /:id routes)
+  router.get(
+    '/sync',
+    handle(async (req, res) => {
+      const limit = parseLimit(req.query.limit)
+      const [docs, open] = await Promise.all([
+        repos.trackerEvents.list(req.householdId, { limit }),
+        repos.trackerEvents.findOpenSleep(req.householdId),
+      ])
+      res.json({ events: docs.map(toApiEvent), openSleep: open ? toApiEvent(open) : null })
+    }),
+  )
+
   router.post(
     '/',
     handle(async (req, res) => {

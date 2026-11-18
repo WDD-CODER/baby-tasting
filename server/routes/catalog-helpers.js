@@ -29,12 +29,29 @@ export function handle(fn) {
   }
 }
 
-// Runs on every catalog request: finds the baby and seeds the built-ins when missing (safe to repeat).
+// Each catalog context remembers householdId -> babyId of households whose built-in catalog was already checked
+// (D-020-3). The memories are listed here so clearCatalogMemory() can empty them all.
+const memories = new Set()
+
+export function clearCatalogMemory() {
+  for (const memory of memories) memory.clear()
+}
+
+// Finds the baby and seeds the built-ins when missing (safe to repeat); done once per household, then remembered.
 export function createCatalogContext({ repos }) {
+  const checkedHouseholds = new Map()
+  memories.add(checkedHouseholds)
   return async (req, _res, next) => {
     try {
+      const known = checkedHouseholds.get(req.householdId)
+      if (known) {
+        req.babyId = known
+        next()
+        return
+      }
       req.babyId = await requireBabyId(repos, req.householdId)
       await ensureCatalog(repos, req.householdId, req.babyId)
+      checkedHouseholds.set(req.householdId, req.babyId)
       next()
     } catch (err) {
       next(err)

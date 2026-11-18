@@ -1,5 +1,6 @@
 import path from 'node:path'
 import cookieParser from 'cookie-parser'
+import compression from 'compression'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
@@ -32,6 +33,24 @@ import { createTrackerSettingsRouter } from './routes/tracker-settings.js'
 import { createTrackerSleepRouter } from './routes/tracker-sleep.js'
 import { createTrackerStatsRouter } from './routes/tracker-stats.js'
 
+const HASHED_FILE = /-[A-Za-z0-9_-]{6,}\.(js|css)$/
+const REVALIDATE_FILES = new Set([
+  'index.html',
+  'manifest.webmanifest',
+  'ngsw.json',
+  'ngsw-worker.js',
+  'safety-worker.js',
+  'worker-basic.min.js',
+])
+
+// built files with a hash in the name never change; the page itself and the worker files are always re-checked
+function setStaticHeaders(res, filePath) {
+  const name = path.basename(filePath)
+  const inMedia = filePath.split(/[\\/]/).includes('media')
+  if (REVALIDATE_FILES.has(name)) res.setHeader('Cache-Control', 'no-cache')
+  else if (HASHED_FILE.test(name) || inMedia) res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+}
+
 export function createApp({ config, db, photoStore = createPhotoStore(config.cloudinary ?? null) }) {
   const app = express()
   const repos = createRepos(db)
@@ -57,6 +76,7 @@ export function createApp({ config, db, photoStore = createPhotoStore(config.clo
       },
     }),
   )
+  app.use(compression())
   if (config.allowedOrigins.length) {
     app.use(cors({ origin: config.allowedOrigins, credentials: true }))
   }
@@ -98,8 +118,9 @@ export function createApp({ config, db, photoStore = createPhotoStore(config.clo
     res.setHeader('Cache-Control', 'no-cache')
     next()
   })
-  app.use(express.static(config.staticDir))
+  app.use(express.static(config.staticDir, { setHeaders: setStaticHeaders }))
   app.get(/^(?!\/api(\/|$)).*/, (_req, res) => {
+    res.setHeader('Cache-Control', 'no-cache')
     res.sendFile(path.join(config.staticDir, 'index.html'))
   })
 

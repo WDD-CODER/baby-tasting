@@ -1,6 +1,7 @@
 import { test, before, after } from 'node:test'
 import assert from 'node:assert/strict'
 import request from 'supertest'
+import { createApp } from '../app.js'
 import { hashToken } from '../repositories/sessions-repository.js'
 import { signedInAgent, startTestApp } from './helpers.js'
 
@@ -107,7 +108,9 @@ test('an authenticated request moves the session expiry forward (rolling), at mo
   // pretend the session was last renewed 10 days ago
   const old = new Date(Date.now() + 355 * DAY_MS)
   await sessions.updateOne({ tokenHash }, { $set: { expiresAt: old } })
-  const renewed = await agent.get('/api/v1/auth/me')
+  // a changed row is seen at once only by an app with an empty session memory
+  const cookie = `bt_session=${encodeURIComponent(sessionToken(login))}`
+  const renewed = await request(ctx.newApp()).get('/api/v1/auth/me').set('Cookie', cookie)
   assert.equal(renewed.status, 200)
   assert.match(renewed.headers['set-cookie'].join(';'), /bt_session=.*Max-Age=31536000/i)
   const after = await sessions.findOne({ tokenHash })
@@ -122,9 +125,46 @@ test('a session close to its end is renewed instead of running out', async () =>
   const tokenHash = hashToken(sessionToken(login))
   const sessions = ctx.db.collection('sessions')
   await sessions.updateOne({ tokenHash }, { $set: { expiresAt: new Date(Date.now() + 60 * 1000) } })
-  assert.equal((await agent.get('/api/v1/baby')).status, 200)
+  const cookie = `bt_session=${encodeURIComponent(sessionToken(login))}`
+  assert.equal((await request(ctx.newApp()).get('/api/v1/baby').set('Cookie', cookie)).status, 200)
   const after = await sessions.findOne({ tokenHash })
   assert.ok(after.expiresAt.getTime() > Date.now() + 364 * DAY_MS)
+})
+
+test('two authenticated requests in a row read the sessions collection once', async () => {
+  const app = ctx.newApp()
+  const agent = await signedInAgent(app, 'parent-a')
+  const sessions = ctx.db.collection('sessions')
+  const proto = Object.getPrototypeOf(sessions)
+  const original = proto.findOne
+  let reads = 0
+  // db.collection() makes a new object each time, so the spy sits on the shared prototype
+  proto.findOne = function (...args) {
+    if (this.collectionName === 'sessions') reads++
+    return original.apply(this, args)
+  }
+  try {
+    assert.equal((await agent.get('/api/v1/auth/me')).status, 200)
+    assert.equal((await agent.get('/api/v1/auth/me')).status, 200)
+  } finally {
+    proto.findOne = original
+  }
+  assert.equal(reads, 1)
+})
+
+test('after "reset parent B" parent B gets 401 on the next request', async () => {
+  const config = { allowedOrigins: [], staticDir: process.cwd(), nodeEnv: 'test', appUsers: [], e2eReset: false }
+  for (const name of ['users', 'invites', 'sessions', 'households']) await ctx.db.collection(name).deleteMany({})
+  const app = createApp({ config, db: ctx.db })
+  const a = request.agent(app)
+  assert.equal((await a.post('/api/v1/auth/signup').send({ username: 'mum', password: 'pass1' })).status, 200)
+  const inv = await a.post('/api/v1/auth/invites')
+  const b = request.agent(app)
+  const joined = await b.post('/api/v1/auth/signup').send({ username: 'dad', password: 'pass1', inviteToken: inv.body.token })
+  assert.equal(joined.status, 200, JSON.stringify(joined.body))
+  assert.equal((await b.get('/api/v1/auth/me')).status, 200)
+  assert.equal((await a.post('/api/v1/auth/parent-b/reset')).status, 200)
+  assert.equal((await b.get('/api/v1/auth/me')).status, 401)
 })
 
 test('me without a session is 401; after logout the same cookie gets 401', async () => {
