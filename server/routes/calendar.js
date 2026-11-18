@@ -12,6 +12,7 @@ import {
   STATUSES,
 } from '../lib/calendar-create.js'
 import { todayIso } from '../lib/dates.js'
+import { HttpError } from '../lib/http-error.js'
 import { getLockedIds } from '../lib/locks.js'
 import { handle, notFound } from './catalog-helpers.js'
 
@@ -94,6 +95,20 @@ export function createCalendarRouter({ repos }) {
         today: todayIso(),
       })
       res.status(201).json({ item: toItemDto(saved) })
+    }),
+  )
+
+  // Registered before the `/:id` routes.
+  router.post(
+    '/meal-given',
+    handle(async (req, res) => {
+      const date = parseDate(req.body?.date)
+      const meal = parseMeal(req.body?.meal)
+      const future = checkStatus({ status: 'given', date, today: todayIso() })
+      if (future) throw new HttpError(400, future, 'A future date cannot be marked given')
+      await repos.calendarItems.markMealGiven(req.householdId, date, meal, req.user.username)
+      const day = await repos.calendarItems.listForDay(req.householdId, date)
+      res.json({ items: day.filter((d) => d.meal === meal).map((d) => toItemDto(d)) })
     }),
   )
 

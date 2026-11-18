@@ -1,0 +1,178 @@
+{
+  "run": "run-021",
+  "branch": "orch/run-021",
+  "base": "main",
+  "startedAt": "2026-11-18T11:16:10.131Z",
+  "mainShaAtStart": "03fb0fa3d00d3dff5c9ff915f775f30472502b5b",
+  "plans": {
+    "021": {
+      "nnn": "021",
+      "title": "Mark a whole meal as given in one tap",
+      "branch": "feat/021-mark-whole-meal-given",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-18T11:17:49.570Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-18T11:34:19.753Z"
+        }
+      },
+      "humanItems": [
+        "On the phone, marking a real meal given feels like one step, and opening one of its foods still lets you set the amount, ❤️ and a note."
+      ],
+      "history": [
+        {
+          "at": "2026-11-18T11:17:49.339Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T11:17:49.572Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T11:31:16.327Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T11:31:17.306Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T11:31:18.049Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T11:34:12.139Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T11:34:19.755Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T11:34:27.248Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T11:35:15.739Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 17.1,
+      "sha": "7ec176cf4db4c0f1f15909ae96b8bb5425f4067f",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 802.5,
+          "tokens": {
+            "input": 633763,
+            "output": 11950
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 6.7,
+          "tokens": {
+            "input": 27380,
+            "output": 338
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "On the calendar (`/tasting`), after adding three foods to today's meal 2 and opening one of them, tapping `כל הארוחה ניתנה (3)` shows all three tiles of that ce",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        },
+        {
+          "card": "The add-food multi-select from plan 017 still works on `main`: `e2e/017-2-multi-select.spec.ts` passes unchanged.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "a75fa78d10da81fb7b71d00382faaea6810789c8"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-18T11:17:49.101Z",
+      "plan": "021",
+      "text": "the folder baby-tasting-orch-run-021-021 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-18T11:31:12.417Z",
+      "plan": "021",
+      "text": "builder left undone (round 0): [ui] e2e/021-1-meal-given.spec.ts: written, not run; [ui] e2e/017-2-multi-select.spec.ts: unchanged, not run"
+    },
+    {
+      "at": "2026-11-18T11:31:16.915Z",
+      "plan": "021",
+      "text": "[ui] On the calendar (`/tasting`), after adding three foods to today's meal 2 and opening one of them, tapping `כל הארוחה ניתנה (3)` shows all three tiles of th: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-18T11:31:17.662Z",
+      "plan": "021",
+      "text": "[ui] The add-food multi-select from plan 017 still works on `main`: `e2e/017-2-multi-select.spec.ts` passes unchanged.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-18T11:34:37.982Z",
+      "plan": "021",
+      "text": "the folder baby-tasting-orch-merge-run-021 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 17.1,
+  "updatedAt": "2026-11-18T11:39:27.015Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "021",
+      "type": "behaviour",
+      "text": "behaviour: a future date answers 400 given_in_future as the plan's criteria state, though a single food's future refusal answers 422 — reverse: throw refusal(future) in the meal-given route for 422 and update the test",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-18T11:39:27.012Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-18T11:39:27.015Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}

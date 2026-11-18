@@ -149,3 +149,52 @@ test('an archived food can be listed but not added', async () => {
   const add = await agent.post('/api/v1/calendar').send({ date: today(), meal: 3, foodId: plain.id })
   assert.equal(add.status, 400)
 })
+
+test('POST /calendar/meal-given marks every food of the meal given and touches nothing else', async () => {
+  const { agent, plain, other, allergen } = await setup()
+  const url = '/api/v1/calendar/meal-given'
+  const a = await agent.post('/api/v1/calendar').send({ date: today(), meal: 2, foodId: plain.id })
+  const b = await agent.post('/api/v1/calendar').send({ date: today(), meal: 2, foodId: other.id })
+  const c = await agent.post('/api/v1/calendar').send({ date: today(), meal: 2, foodId: allergen.id })
+  const m1 = await agent.post('/api/v1/calendar').send({ date: today(), meal: 1, foodId: plain.id })
+  await agent.patch(`/api/v1/calendar/${a.body.item.id}`).send({ status: 'given', amount: 'taste' })
+  await agent.patch(`/api/v1/calendar/${b.body.item.id}`).send({ status: 'skipped', amount: 'portion' })
+  const before = await ctx.db.collection('calendarItems').find({}).toArray()
+  const givenAt = before.find((d) => String(d._id) === a.body.item.id).givenAt
+  await ctx.db.collection('calendarItems').insertOne({
+    householdId: 'another-household',
+    date: today(),
+    meal: 2,
+    foodId: plain.id,
+    status: 'planned',
+    amount: null,
+  })
+  const res = await agent.post(url).send({ date: today(), meal: 2 })
+  assert.equal(res.status, 200)
+  assert.equal(res.body.items.length, 3)
+  for (const it of res.body.items) {
+    assert.equal(it.status, 'given')
+    assert.ok(it.givenBy)
+  }
+  assert.equal(res.body.items.find((i) => i.id === b.body.item.id).amount, 'portion')
+  assert.ok(res.body.items.find((i) => i.id === c.body.item.id))
+  const after = await ctx.db.collection('calendarItems').find({}).toArray()
+  assert.equal(after.find((d) => String(d._id) === a.body.item.id).givenAt.getTime(), givenAt.getTime())
+  assert.equal(after.find((d) => String(d._id) === m1.body.item.id).status, 'planned')
+  assert.equal(after.find((d) => d.householdId === 'another-household').status, 'planned')
+})
+
+test('POST /calendar/meal-given refuses a future date and bad input', async () => {
+  const { agent, plain } = await setup()
+  const url = '/api/v1/calendar/meal-given'
+  const future = isoAddDays(today(), 2)
+  const item = await agent.post('/api/v1/calendar').send({ date: future, meal: 2, foodId: plain.id })
+  const res = await agent.post(url).send({ date: future, meal: 2 })
+  assert.equal(res.status, 400)
+  assert.equal(res.body.error.code, 'given_in_future')
+  const list = await agent.get(`/api/v1/calendar?from=${future}&to=${future}`)
+  assert.equal(list.body.items.find((i) => i.id === item.body.item.id).status, 'planned')
+  assert.equal((await agent.post(url).send({ date: 'nope', meal: 2 })).body.error.code, 'invalid')
+  assert.equal((await agent.post(url).send({ date: today(), meal: 4 })).status, 400)
+  assert.equal((await agent.post(url).send({ date: today(), meal: 0 })).body.error.code, 'invalid')
+})

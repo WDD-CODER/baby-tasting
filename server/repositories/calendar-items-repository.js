@@ -1,3 +1,4 @@
+import { withUpdateAudit } from '../lib/audit.js'
 import { BaseRepository } from './base-repository.js'
 
 export class CalendarItemsRepository extends BaseRepository {
@@ -44,6 +45,13 @@ export class CalendarItemsRepository extends BaseRepository {
   // One findOneAndUpdate on the item: date and meal change together.
   move(householdId, id, { date, meal }, user) {
     return this.updateOne(householdId, id, { date, meal }, user)
+  }
+
+  // One updateMany: every food of the meal not yet given becomes given; a given one keeps its givenAt.
+  async markMealGiven(householdId, date, meal, user) {
+    const now = new Date()
+    const patch = withUpdateAudit({ status: 'given', givenBy: user, givenAt: now }, user, now)
+    return this.collection.updateMany({ householdId, date, meal, status: { $ne: 'given' } }, { $set: patch })
   }
 
   remove(householdId, id) {

@@ -133,6 +133,15 @@ export class CalendarPage {
   protected readonly actionsItem = computed(
     () => this.items().find((it) => it.id === this.actionsId_()) ?? null,
   )
+  private readonly actionsMeal = computed(() => {
+    const item = this.actionsItem()
+    if (!item) return []
+    return this.items().filter((it) => it.date === item.date && it.meal === item.meal)
+  })
+  protected readonly actionsMealCount = computed(() => this.actionsMeal().length)
+  protected readonly actionsMealOpen = computed(() =>
+    this.actionsMeal().some((it) => it.status !== 'given'),
+  )
   protected readonly actionsFood = computed(() => {
     const item = this.actionsItem()
     return item ? this.foodById(item.foodId) : undefined
@@ -433,6 +442,17 @@ export class CalendarPage {
       return
     }
     await this.calendar.update(item.id, patch)
+  }
+
+  protected async markMealGiven(): Promise<void> {
+    const item = this.actionsItem()
+    if (!item) return
+    if (item.date > today()) {
+      this.toast.show(refusalMessage('given_in_future'), 'bad')
+      return
+    }
+    this.actionsId_.set(null)
+    await this.calendar.markMealGiven(item.date, item.meal)
   }
 
   protected async moveItem(request: MoveRequest): Promise<void> {

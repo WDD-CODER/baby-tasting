@@ -23,6 +23,10 @@ export class ItemActionsSheet {
   readonly item = input<CalendarItem | null>(null)
   readonly food = input<Food | undefined>(undefined)
 
+  readonly mealCount = input(0)
+  readonly mealOpen = input(false)
+
+  readonly mealGiven = output<void>()
   readonly closed = output<void>()
   readonly patched = output<ItemPatch>()
   readonly moved = output<{ date: string; meal: Meal }>()
@@ -42,6 +46,10 @@ export class ItemActionsSheet {
   protected readonly moving_ = signal(false)
   protected readonly moveDate_ = signal('')
   protected readonly moveMeal_ = signal('1')
+
+  protected readonly mealGivenLabel = computed(() =>
+    HE.calendar.mealGiven.replace('{n}', String(this.mealCount())),
+  )
 
   protected readonly title = computed(() => this.food()?.name ?? '')
 
