@@ -36,14 +36,35 @@ test('the right password for an allowed name (any case, spaces) gives a session 
   assert.equal(maxAge, 365 * 24 * 60 * 60)
   const me = await agent.get('/api/v1/auth/me')
   assert.equal(me.status, 200)
-  assert.deepEqual(me.body, { username: 'Parent-A', parentType: 'PARENT_A', parentName: 'אמא' })
+  assert.deepEqual(me.body, {
+    username: 'Parent-A',
+    parentType: 'PARENT_A',
+    parentName: 'אמא',
+    mode: 'env',
+    partnerExists: true,
+  })
 })
 
 test('me returns PARENT_B and parent B name for the second APP_USERS entry', async () => {
   const app = ctx.newApp()
   const agent = await signedInAgent(app, 'parent-b')
   const me = await agent.get('/api/v1/auth/me')
-  assert.deepEqual(me.body, { username: 'parent-b', parentType: 'PARENT_B', parentName: 'אבא' })
+  assert.deepEqual(me.body, {
+    username: 'parent-b',
+    parentType: 'PARENT_B',
+    parentName: 'אבא',
+    mode: 'env',
+    partnerExists: true,
+  })
+})
+
+test('an old session without parentType still resolves to the right parent', async () => {
+  const app = ctx.newApp()
+  const b = await signedInAgent(app, 'parent-b')
+  const a = await signedInAgent(app, 'parent-a')
+  await ctx.db.collection('sessions').updateMany({}, { $unset: { parentType: '' } })
+  assert.equal((await b.get('/api/v1/auth/me')).body.parentType, 'PARENT_B')
+  assert.equal((await a.get('/api/v1/auth/me')).body.parentType, 'PARENT_A')
 })
 
 test('a wrong password, an unknown name and other failures share one 401 body', async () => {

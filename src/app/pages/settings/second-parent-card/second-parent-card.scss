@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+.parent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &__title {
+    margin: 0;
+
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+  }
+
+  &__text {
+    margin: 0;
+
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+  }
+
+  &__link {
+    margin: 0;
+
+    font-size: var(--fs-sm);
+    overflow-wrap: anywhere;
+    text-align: start;
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+}

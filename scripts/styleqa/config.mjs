@@ -16,7 +16,10 @@ export const SETTINGS = Object.freeze({
   apiOrigin: "",
   signIn: "",
   uiFontToken: "",
-  tokenPrefixes: { color: "", fontSize: "", radius: "" },
+  tokenPrefixes: {
+    color: "", fontSize: "", radius: "",
+    shadow: "", blur: "", spacing: "",
+  },
   tokenFiles: [],
   breakpointPattern: "",
   stylesheets: [],

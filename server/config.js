@@ -38,7 +38,7 @@ export function parseAppUsers(value) {
 export function loadConfig(env = process.env) {
   const nodeEnv = env.NODE_ENV || 'development'
   const required = ['MONGODB_URI']
-  if (nodeEnv === 'production') required.push('SESSION_SECRET', 'APP_USERS')
+  if (nodeEnv === 'production') required.push('SESSION_SECRET')
   const missing = required.filter((key) => !env[key] || !env[key].trim())
   if (missing.length) throw new ConfigError(missing)
 
@@ -51,12 +51,16 @@ export function loadConfig(env = process.env) {
         }
       : null
 
+  const appUsers = parseAppUsers(env.APP_USERS)
+
   return {
     port: Number(env.PORT) || 3000,
     nodeEnv,
     mongodbUri: env.MONGODB_URI,
     sessionSecret: env.SESSION_SECRET ?? '',
-    appUsers: parseAppUsers(env.APP_USERS),
+    appUsers,
+    // env: APP_USERS is the account list and sign-up is off; db: accounts live in the users collection
+    accountsMode: appUsers.length ? 'env' : 'db',
     allowedOrigins: list(env.ALLOWED_ORIGIN),
     staticDir: env.STATIC_DIR || path.join(repoRoot, 'dist', 'baby-tasting', 'browser'),
     cloudinary,

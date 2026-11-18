@@ -1,6 +1,10 @@
 export async function createIndexes(db) {
   await db.collection('sessions').createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })
   await db.collection('sessions').createIndex({ tokenHash: 1 }, { unique: true })
+  await db.collection('users').createIndex({ usernameLower: 1 }, { unique: true })
+  await db.collection('users').createIndex({ parentType: 1 }, { unique: true })
+  await db.collection('invites').createIndex({ tokenHash: 1 }, { unique: true })
+  await db.collection('invites').createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })
   await db.collection('households').createIndex({ key: 1 }, { unique: true })
   await db.collection('babies').createIndex({ householdId: 1 })
   for (const name of ['allergens', 'foods']) {

@@ -1,0 +1,140 @@
+{
+  "run": "run-019",
+  "branch": "orch/run-019",
+  "base": "main",
+  "startedAt": "2026-11-17T12:19:10.437Z",
+  "mainShaAtStart": "422dafc4f5ab9f3ec0b7bf35536420354d739fb1",
+  "plans": {
+    "019": {
+      "nnn": "019",
+      "title": "Production build loads its full stylesheet, so icons and styles work behind the security policy",
+      "branch": "feat/019-prod-stylesheet-csp",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-17T12:22:21.122Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-17T12:32:32.315Z"
+        }
+      },
+      "humanItems": [
+        "On the production build served by the server, the bottom navigation and the tracker tiles show icons, not words like `settings` or `water_bottle`."
+      ],
+      "history": [
+        {
+          "at": "2026-11-17T12:22:20.409Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T12:22:21.125Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T12:28:44.504Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T12:32:22.692Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T12:32:32.317Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T12:32:40.346Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T12:33:46.514Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 19.3,
+      "sha": "f5e3d901116332a62396c5ce53f47586d45dbc4c",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 379.9,
+          "tokens": {
+            "input": 174120,
+            "output": 4220
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 7,
+          "tokens": {
+            "input": 17041,
+            "output": 199
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "bee9ad3be81be661c4607944dc2d6d6dba169020"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-17T12:22:19.782Z",
+      "plan": "019",
+      "text": "the folder baby-tasting-orch-run-019-019 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-17T12:28:41.239Z",
+      "plan": "019",
+      "text": "builder left undone (round 0): [human] icons show on the served production build: left for the Human to check"
+    },
+    {
+      "at": "2026-11-17T12:32:56.232Z",
+      "plan": "019",
+      "text": "the folder baby-tasting-orch-merge-run-019 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 19.3,
+  "updatedAt": "2026-11-17T12:38:49.693Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "019",
+      "type": "seen",
+      "text": "seen: src/app/pages/tracker/stats-page/stats-page.scss — the build warns the component style exceeds its 4 kB budget (5.71 kB)",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-17T12:38:49.690Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-17T12:38:49.693Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}

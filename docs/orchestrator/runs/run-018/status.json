@@ -1,0 +1,221 @@
+{
+  "run": "run-018",
+  "branch": "orch/run-018",
+  "base": "main",
+  "startedAt": "2026-11-17T07:39:58.139Z",
+  "mainShaAtStart": "653c5b4ae80fc0790cfe16b3b0b14ea3fabda2fd",
+  "plans": {
+    "018": {
+      "nnn": "018",
+      "title": "Sign-up for the two parents with an invite link, so Render needs no user list",
+      "branch": "feat/018-signup-invite-link",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-17T10:24:46.845Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-17T10:52:02.971Z"
+        }
+      },
+      "humanItems": [
+        "On a local server with no `APP_USERS` and an empty database, the first visitor sees `יצירת חשבון`, creates parent A and lands in the app.",
+        "Parent A taps `יצירת קישור הזמנה` in Settings, opens the link in a private window, creates parent B and lands in the app; opening the same link again shows `הקישור לא בתוקף`.",
+        "With both parents present, the login page shows no create-account option.",
+        "Parent A resets parent B's password: parent B is signed out, and the new link lets parent B sign up again."
+      ],
+      "history": [
+        {
+          "at": "2026-11-17T07:47:32.197Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T07:47:33.841Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T08:07:33.603Z",
+          "state": "env-paused",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T08:37:33.774Z",
+          "state": "env-paused",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T08:37:37.638Z",
+          "state": "parked",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T10:24:46.545Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T10:24:46.848Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T10:47:07.568Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T10:51:55.042Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T10:52:02.974Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T10:52:19.459Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-17T10:53:19.439Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "018",
+          "title": "Sign-up for the two parents with an invite link, so Render needs no user list",
+          "branch": "feat/018-signup-invite-link",
+          "state": "parked",
+          "round": 0,
+          "tier": "build",
+          "models": {
+            "builder": {
+              "model": "sonnet",
+              "tier": "build",
+              "at": "2026-11-17T08:37:33.773Z"
+            }
+          },
+          "tiers": [
+            "build"
+          ],
+          "freeDiskGb": 20.1,
+          "reason": "stopped: rate-limit: claude exited 1: You've hit your 5-hour limit · resets 12:20pm (Asia/Jerusalem)",
+          "calls": [
+            {
+              "stage": "builder",
+              "model": "sonnet",
+              "seconds": 1199.3,
+              "tokens": {
+                "input": 0,
+                "output": 0
+              },
+              "exit": 1,
+              "error": "claude exited 1: You've hit your 5-hour limit · resets 12:20pm (Asia/Jerusalem)"
+            },
+            {
+              "stage": "builder",
+              "model": "sonnet",
+              "seconds": 3.7,
+              "tokens": {
+                "input": 0,
+                "output": 0
+              },
+              "exit": 1,
+              "error": "claude exited 1: You've hit your 5-hour limit · resets 12:20pm (Asia/Jerusalem)"
+            }
+          ]
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 19.8,
+      "sha": "43c79790dde69950c5873c9e8207a045108ad6bc",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 1335.7,
+          "tokens": {
+            "input": 706013,
+            "output": 8170
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 15.6,
+          "tokens": {
+            "input": 95972,
+            "output": 872
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "93359086877211a81241afc785b12cad51f3d151"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-17T07:47:30.140Z",
+      "plan": "018",
+      "text": "the folder baby-tasting-orch-run-018-018 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-17T10:47:02.955Z",
+      "plan": "018",
+      "text": "builder left undone (round 0): [human] items 1-4 (first sign-up, invite link, closed login page, reset of parent B): not run, they are for the Human; README.md has no account or Render section, so it needed no change"
+    },
+    {
+      "at": "2026-11-17T10:52:35.463Z",
+      "plan": "018",
+      "text": "the folder baby-tasting-orch-merge-run-018 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 2,
+  "phase": "finished",
+  "freeDiskGb": 19.8,
+  "updatedAt": "2026-11-17T10:56:57.882Z",
+  "stops": [
+    {
+      "at": "2026-11-17T08:37:38.007Z",
+      "reason": "rate-limit: claude exited 1: You've hit your 5-hour limit · resets 12:20pm (Asia/Jerusalem)",
+      "attempt": 1
+    }
+  ],
+  "finishedAt": "2026-11-17T10:56:57.878Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "018",
+      "type": "behaviour",
+      "text": "behaviour: S10 changed no e2e spec, because the slots keep APP_USERS and the sign-in specs run in env mode — reverse: add e2e specs for db mode",
+      "alsoFrom": [],
+      "attempt": 2,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-17T10:56:57.881Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}
