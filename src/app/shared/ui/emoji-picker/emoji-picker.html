@@ -18,11 +18,11 @@
     {{ t.emojiNone }}
   </button>
   @if (loading_()) {
-    <p class="picker__note">{{ t.emojiLoading }}</p>
+    <p class="picker__label picker__note">{{ t.emojiLoading }}</p>
   } @else if (failed_()) {
-    <p class="picker__note">{{ t.emojiLoadFailed }}</p>
+    <p class="picker__label picker__note">{{ t.emojiLoadFailed }}</p>
   } @else if (searching_() && options_().length === 0) {
-    <p class="picker__note">{{ t.emojiNoResults }}</p>
+    <p class="picker__label picker__note">{{ t.emojiNoResults }}</p>
   }
   <div class="picker__grid">
     @for (emoji of options_(); track emoji) {
