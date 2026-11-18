@@ -174,6 +174,7 @@ export const HE = {
     addFood: 'הוספת מזון',
     more: '+',
     given: 'ניתן',
+    mealGiven: 'כל הארוחה ניתנה ({n})',
     skipped: 'דילגנו',
     planned: 'מתוכנן',
     unmark: 'ביטול סימון',
