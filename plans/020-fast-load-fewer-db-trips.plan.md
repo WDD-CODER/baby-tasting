@@ -88,6 +88,7 @@ pnpm-lock.yaml
 e2e/**
 docs/project/current-state.md
 src/app/app.spec.ts
+docs/brain/component-families.md
 ```
 
 ## Read Scope
@@ -166,6 +167,9 @@ These are the plan's milestones: a Worker does them in order and ticks each one 
 - Existing e2e tests that wait for the 5 s refresh may need a longer wait (15 s); `e2e/**` is in scope for that only.
 - Project checks: none (`docs/project/plan-checks.md` does not exist).
 
+## Reuse Check
+- Icon font service (src/app/core/icons/icon-font.service.ts) — family: none — rung: 4 — why: no shared piece switches the app between the small and the full icon font; a root service is the one place that sets the --icon-font variable
+
 ## Out of Scope
 - Render dashboard settings (start command, build command, health check) and the Render plan: a free instance sleeps after 15 minutes without visits and takes about a minute to wake, which code cannot fix.
 - Putting the Render service in the same region as the Atlas cluster (a Human action; each database trip costs the distance).
@@ -179,3 +183,4 @@ These are the plan's milestones: a Worker does them in order and ticks each one 
 ## Execution Notes
 - S1–S6 and C1–C7 built. Server: `node --test` all 248 pass; `pnpm run build` exit 0; `pnpm run lint` exit 0; `tools/check-no-inline-script.mjs` INLINE: none; `check-icon-font.mjs` ICON_FONT: ok; `check-perf-budget.mjs` PERF_BUDGET: ok (first-load 374400 bytes, small font 7 kB, icons 7 kB and 58 kB).
 - ask 020-1 answered (approved: src/app/app.spec.ts): dropped the `not_an_icon` fallback expectation; `pnpm run test` exit 0, lint exit 0.
+- scope extended: docs/brain/component-families.md — the kit check needs a family heading for the new icon-font service (Reuse Check row).
