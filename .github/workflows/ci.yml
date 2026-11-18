@@ -83,6 +83,47 @@ jobs:
       - name: Workflow script tests
         run: pnpm run --if-present test:scripts
 
+  # The diff checks and the debt ratchet (scripts/kit-checks.mjs): what this change adds is compared with the
+  # project's rules and its debt baseline (docs/project/debt-baseline.json by default). Blocking. A PR compares its merge
+  # commit with the base side (HEAD^1); a push with the commit before it.
+  kit-checks:
+    needs: changes
+    if: needs.changes.outputs.run-gates == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+# KIT:required — a project override must keep this step
+      - name: Install workflow script dependencies for the diff checks
+        if: hashFiles('scripts/package-lock.json') != ''
+        working-directory: scripts
+        run: npm ci --no-audit --no-fund
+# KIT:required — a project override must keep this step
+      - name: Kit diff checks
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            BASE="$(git rev-parse --verify 'HEAD^1')"
+          else
+            BASE="$PUSH_BEFORE"
+            if [[ -z "$BASE" || "$BASE" =~ ^0+$ ]] || ! git cat-file -e "${BASE}^{commit}" 2>/dev/null; then
+              BASE="$(git rev-parse -q --verify 'HEAD~1' || true)"
+            fi
+          fi
+          if [[ -z "$BASE" ]]; then
+            echo "No commit to compare with: nothing to check"
+            exit 0
+          fi
+          node scripts/kit-checks.mjs --base "$BASE"
+
   build:
     needs: changes
     if: needs.changes.outputs.run-gates == 'true'
@@ -159,6 +200,7 @@ jobs:
     needs:
       - changes
       - lint
+      - kit-checks
       - build
       - test
       - server-tests
@@ -182,6 +224,10 @@ jobs:
           if [[ "${{ needs.changes.outputs.run-gates }}" == "true" ]]; then
             if [[ "${{ needs.lint.result }}" != "success" ]]; then
               echo "lint failed: ${{ needs.lint.result }}"
+              exit 1
+            fi
+            if [[ "${{ needs.kit-checks.result }}" != "success" ]]; then
+              echo "kit-checks failed: ${{ needs.kit-checks.result }}"
               exit 1
             fi
             if [[ "${{ needs.build.result }}" != "success" ]]; then

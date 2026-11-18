@@ -78,6 +78,20 @@ line or file this plan names was removed, renamed or rewritten).
 ### Nice to Have (P2)
 - [ ] [Requirement]
 
+## Reuse Check
+<!-- One line per new shared piece (component, class, token, helper) the plan creates; read docs/brain/inventory.md first.
+     Rungs: 1 use as is · 2 use with existing inputs · 3 extend the family · 4 new family (why: required).
+     family: a ### heading of docs/brain/component-families.md, or none (rung 4 only).
+     Nothing new: one line "- none — <why>". Checked by node scripts/scope-check.mjs --reuse --plan=<path>. -->
+- [new piece] — family: [family-id | none] — rung: [1-4] — why: [one line; required for rung 4]
+
+## Defaults
+<!-- One line per `on` product default the plan triggers (docs/project/product-defaults.md); none triggered: leave empty.
+     A `check: card` default also needs a [human] Done-when item with the contract's card text.
+     Checked by node scripts/scope-check.mjs --defaults --plan=<path>. -->
+- [default-id] — applies — how: [the piece the contract names]
+- [default-id] — exception — why: [one line]
+
 ## UI/UX Notes
 - [Layout expectations, Hebrew RTL text considerations]
 - [Which keys are needed in `(not set)`]

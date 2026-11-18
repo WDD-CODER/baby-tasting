@@ -47,6 +47,7 @@ Rules of thumb:
 - Stack: `docs/project/tech-stack.md`
 - Current state capsule: `docs/project/current-state.md`
 - Path-scoped standards: `docs/agent/`
+- Reuse registry draft: the first install into a project with no registry writes `docs/brain/component-families.md` as a DRAFT (review every family, delete the DRAFT line) and a first debt baseline that only goes down (`node scripts/debt-baseline.mjs --lower`); see `docs/agent/standards-reuse.md`
 - Review command: `.claude/commands/review-it.md`
 
 ## What retired

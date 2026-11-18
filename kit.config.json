@@ -191,5 +191,9 @@
       "1366x768"
     ]
   },
-  "overrides": []
+  "overrides": [
+    { "path": ".gitignore", "reason": "the project's own Angular .gitignore (already ignores .env, logs and node_modules)" },
+    { "path": ".nvmrc", "reason": "the project pins Node 24 (major only)" },
+    { "path": "docs/project/product-defaults.md", "reason": "the project's own defaults list from docs/briefs/00-program.md section 8" }
+  ]
 }
