@@ -14,6 +14,11 @@
         >
           {{ t.skipped }}
         </app-button>
+        @if (mealCount() >= 2 && mealOpen()) {
+          <app-button variant="secondary" (pressed)="mealGiven.emit()">{{
+            mealGivenLabel()
+          }}</app-button>
+        }
         @if (it.status !== 'planned') {
           <app-button variant="ghost" (pressed)="patched.emit({ status: 'planned' })">{{
             t.unmark

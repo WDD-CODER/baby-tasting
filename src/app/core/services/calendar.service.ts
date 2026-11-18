@@ -103,6 +103,14 @@ export class CalendarService {
     )
   }
 
+  async markMealGiven(date: string, meal: Meal): Promise<boolean> {
+    return this.write(
+      (list) =>
+        list.map((it) => (it.date === date && it.meal === meal ? { ...it, status: 'given' } : it)),
+      () => firstValueFrom(this.api.post<ItemsResponse>('/calendar/meal-given', { date, meal })),
+    )
+  }
+
   async move(id: string, date: string, meal: Meal): Promise<boolean> {
     return this.write(
       (list) => list.map((it) => (it.id === id ? { ...it, date, meal } : it)),
