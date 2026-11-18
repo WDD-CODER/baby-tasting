@@ -53,6 +53,7 @@ Preserve across `/compact`: current plan number + branch, open todos, and any fa
 | Session start on unfamiliar work | `docs/brain/index.md`, then the relevant sub-file |
 | Architectural choice | `docs/brain/invariants.md` first, then `docs/brain/decisions/`; supersede, never edit in place |
 | Surprising behavior / a trap cost time | `docs/brain/gotchas.md` first |
+| "make this a default", `default yes/no/on/off <id>`, `/default`, or the Human corrects a look/behaviour meant to hold everywhere | `.claude/skills/product-defaults/SKILL.md` |
 
 ## Standards index
 

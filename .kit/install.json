@@ -1,10 +1,10 @@
 {
   "kit": {
-    "version": "3.4.2"
+    "version": "3.5.0"
   },
   "source": "github:WDD-CODER/ai-workflow-kit",
-  "ref": "v3.4.2",
-  "commit": "d5ccfac597c6dbb2aa19fa85647e4356d4154b73",
+  "ref": "v3.5.0",
+  "commit": "bf394cfb98598efc88426f54768e5a91978b853d",
   "packs": [
     "angular",
     "node-express"
@@ -124,12 +124,12 @@
       "source": "core/.claude/commands/kit-feedback.md"
     },
     ".claude/commands/orchestrate.md": {
-      "sha256": "6eceac160a80bef3a8860619ce770606284c39b425b6fd8c76220e50a8da1c9a",
+      "sha256": "da8193de7a7f3b72091b7acbeda4e50a41724f1c425ca95d9bbee4a144e254c0",
       "kind": "managed",
       "source": "core/.claude/commands/orchestrate.md"
     },
     ".claude/commands/plan.md": {
-      "sha256": "f6c9b1c1297d7bea1dd03113f3e8494ed91fe04163cf965b91b377539ab7f94f",
+      "sha256": "b8d1a07f1f77d30262d74b4aa61f5781642dcecffa64d6d7976422478cef20ae",
       "kind": "managed",
       "source": "core/.claude/commands/plan.md"
     },
@@ -159,12 +159,12 @@
       "source": "core/.claude/commands/security.md"
     },
     ".claude/commands/ship.md": {
-      "sha256": "0e8390918e811e3fa590c957f7849790fdfabf8c81a52dfc287d2e4f9cdcc017",
+      "sha256": "cf157a68e8e2c7ff6b748537a27bc39707c5c882c293b9417328b2b1df0ff1f4",
       "kind": "managed",
       "source": "core/.claude/commands/ship.md"
     },
     ".claude/commands/skills.md": {
-      "sha256": "09cf549206ba1853b3cc4e8e55a2f88d45181ad2eea6eacb1707235cc74f0214",
+      "sha256": "44200aceca2f07b5f82f7d9893138e0df93e78a1564d4989a412c9080a64a497",
       "kind": "managed",
       "source": "core/.claude/commands/skills.md"
     },
@@ -257,6 +257,11 @@
       "sha256": "c0b94dd19c04b983cade2de26be491919981f40bb915ca1eb9582611c32858d6",
       "kind": "managed",
       "source": "core/.claude/skills/preflight/SKILL.md"
+    },
+    ".claude/skills/product-defaults/SKILL.md": {
+      "sha256": "4e9146766ae86c14e9220b84df445d80c34b5e73ec8189ed9bff5adc53f9637d",
+      "kind": "managed",
+      "source": "core/.claude/skills/product-defaults/SKILL.md"
     },
     ".claude/skills/save-plan/SKILL.md": {
       "sha256": "cf75d8c5c8dd980f5eca609483d26b4116b5a227050b5a3c748ccb777665d7a5",
@@ -419,7 +424,7 @@
       "source": "packs/angular/docs/agent/conventions.md"
     },
     "docs/agent/decision-review.md": {
-      "sha256": "7fdcc84562fb8f5a1e0e291cb227d69067a906848eca766777c8c92b3f20834b",
+      "sha256": "23fe6c79b20b45941fbd5b8d807e9198789839ab99099cad9b982ef4f663fdf3",
       "kind": "managed",
       "source": "core/docs/agent/decision-review.md"
     },
@@ -494,7 +499,7 @@
       "source": "core/docs/agent/model-routing.md"
     },
     "docs/agent/orchestrator.md": {
-      "sha256": "60e2e3fe409cc10bcbf4510463d4f50041fed1cefccd54a084c82d73b322c8cc",
+      "sha256": "8b67d406676b97cfe93e4339b69e2b72c9104abf2c1fe2d825b517fd305ea44d",
       "kind": "managed",
       "source": "core/docs/agent/orchestrator.md"
     },
@@ -964,7 +969,7 @@
       "source": "core/scripts/lib/fe-command.mjs"
     },
     "scripts/lib/gate-select.mjs": {
-      "sha256": "0557a4a60c045cc409927d0a03dbf519fd95145da4659d6faf9f1167bcf0be2c",
+      "sha256": "0402a5e10318bc33d440a917f1a1f90adc1fc3538d30e510e94a5d6d8db75d66",
       "kind": "managed",
       "source": "core/scripts/lib/gate-select.mjs"
     },
@@ -1049,7 +1054,7 @@
       "source": "core/scripts/lib/proc.mjs"
     },
     "scripts/lib/product-defaults.mjs": {
-      "sha256": "0e2d267b46c2e00e68866b18c918bcde9437e8dced5752eecf357c9c257547ff",
+      "sha256": "6c894c9501e330748223481048e8ffb96c77db0bf1b0d1be1e6388a928fea4e2",
       "kind": "managed",
       "source": "core/scripts/lib/product-defaults.mjs"
     },
@@ -1199,7 +1204,7 @@
       "source": "core/scripts/preflight.mjs"
     },
     "scripts/product-defaults.mjs": {
-      "sha256": "7cdaad9a73bd41577174a49a423c19b25bf65f11659685070ea9f51f47d032d4",
+      "sha256": "02a098cf9e5795e9414130ed1bccd8c3651d632b89c24f6b1586b8540837e6ac",
       "kind": "managed",
       "source": "core/scripts/product-defaults.mjs"
     },
@@ -1224,7 +1229,7 @@
       "source": "core/scripts/reuse-scan.mjs"
     },
     "scripts/run-plans.mjs": {
-      "sha256": "53f840f9972d54dd39e3ea51a7bbb7318d76631abe347700b856e627f945bfc2",
+      "sha256": "af96044ee59d7a64d81a9d9c7691deaa8b444f35e6882a0b0270b1657a1a512e",
       "kind": "managed",
       "source": "core/scripts/run-plans.mjs"
     },
