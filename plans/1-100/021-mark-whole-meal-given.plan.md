@@ -1,6 +1,6 @@
 # Plan 021 — Mark a whole meal as given in one tap
 
-Status: draft
+Status: done
 Depends-on: none
 Snapshot: b16c47f352153ff50c1e5f20a04ccf74ad9a2bfa
 Source: the Human, 2026-11-18: "after adding a food to a meal, let's say 3 items, you need to enter the items and say that they were given. I want to allow an option that we can say that the meal was given. So everything inside the meal was given to the child." Answers the same day: the button goes in a food's sheet; skipped is not how the parents work ("if we haven't given one of the foods, we remove it from the meal"), so marking the meal given marks every food in it given; amount, liked and note stay per food ("if he clicks the specific ingredient, then he sets the amount, did he like it and remarks").
