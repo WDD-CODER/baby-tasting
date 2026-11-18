@@ -267,3 +267,9 @@ One heading per family, then bullet fields:
 - selector: (fill in)
 - when: (fill in)
 - files: `src/app/core/utils/tracker-rules.ts`
+
+### icon-font — Icon Font
+
+- selector: (none — a root service)
+- when: switch the app icons from the small icon font to the full Material Symbols font on demand
+- files: `src/app/core/icons/icon-font.service.ts`

@@ -1,0 +1,386 @@
+{
+  "run": "run-020",
+  "branch": "orch/run-020",
+  "base": "main",
+  "startedAt": "2026-11-18T08:51:29.218Z",
+  "mainShaAtStart": "3861e3944f17d018c255ce25d1910fd3cc4648e9",
+  "plans": {
+    "020": {
+      "nnn": "020",
+      "title": "The app loads and answers fast: small icon font, compressed and cached files, fewer database trips",
+      "branch": "feat/020-fast-load-fewer-db",
+      "state": "merged",
+      "round": 1,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-18T09:17:40.436Z"
+        },
+        "builder fix": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-18T09:42:25.054Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-18T09:46:39.197Z"
+        }
+      },
+      "humanItems": [
+        "In a browser window that never opened the app, the home screen shows its icons as icons right away.",
+        "An entry saved on one phone appears on the other phone within about 15 seconds without touching it.",
+        "In Settings → icons the picker shows every icon; an icon picked there shows on the home screen, also after a reload.",
+        "The installed app icon on the phone looks the same as before."
+      ],
+      "history": [
+        {
+          "at": "2026-11-18T08:52:28.478Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T08:52:28.638Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T09:11:50.167Z",
+          "state": "parked",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T09:12:26.605Z",
+          "state": "asking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T09:17:40.093Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T09:17:40.439Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T09:37:53.015Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T09:42:24.671Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-18T09:42:24.870Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-18T09:42:25.056Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-18T09:43:28.661Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-18T09:46:32.456Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-18T09:46:39.199Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-18T09:46:54.421Z",
+          "state": "merging",
+          "round": 1
+        },
+        {
+          "at": "2026-11-18T09:47:34.534Z",
+          "state": "merged",
+          "round": 1
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "020",
+          "title": "The app loads and answers fast: small icon font, compressed and cached files, fewer database trips",
+          "branch": "feat/020-fast-load-fewer-db",
+          "state": "asking",
+          "round": 0,
+          "tier": "build",
+          "models": {
+            "builder": {
+              "model": "sonnet",
+              "tier": "build",
+              "at": "2026-11-18T08:52:28.636Z"
+            }
+          },
+          "tiers": [
+            "build"
+          ],
+          "freeDiskGb": 18.8,
+          "reason": "asking 020-1: replan needed: ESCALATE: scope src/app/app.spec.ts — the test 'shows a household icon override in its slot' (line 94) expects an unknown override to fall back to the slot default, which plan step C5 removes; the file is outside the Read-Write Scope, and `pnpm run test` fails until it changes.",
+          "calls": [
+            {
+              "stage": "builder",
+              "model": "sonnet",
+              "seconds": 1161,
+              "tokens": {
+                "input": 6527061,
+                "output": 50384
+              },
+              "exit": 0
+            }
+          ],
+          "park": {
+            "at": "2026-11-18T09:12:17.065Z",
+            "reason": "replan needed: ESCALATE: scope src/app/app.spec.ts — the test 'shows a household icon override in its slot' (line 94) expects an unknown override to fall back to the slot default, which plan step C5 removes; the file is outside the Read-Write Scope, and `pnpm run test` fails until it changes."
+          },
+          "parkBranch": "park/run-020-020"
+        }
+      ],
+      "escalations": [
+        {
+          "step": "resumed after: asking 020-1: replan needed: ESCALATE: scope src/app/app.spec.ts — the test 'shows a household icon override in its slot' (line 94) expects an unknown",
+          "check": "(not given)"
+        }
+      ],
+      "replan": "no — (not given)",
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 17.8,
+      "sha": "00a395ff1182273e574e5bdf1430967db02a8c65",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 1206.2,
+          "tokens": {
+            "input": 27683,
+            "output": 974
+          },
+          "exit": 0
+        },
+        {
+          "stage": "builder fix",
+          "model": "sonnet",
+          "seconds": 60.4,
+          "tokens": {
+            "input": 189149,
+            "output": 3448
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 14.4,
+          "tokens": {
+            "input": 106075,
+            "output": 805
+          },
+          "exit": 0
+        }
+      ],
+      "roundCauses": [
+        "round 1: gate: node \"C:/coding projects/Cursor/baby-tasting/scripts/kit-checks.mjs\" --base origin/orch/run-020 --plan plans/020-fast-load-fewer-db-trips.plan.md"
+      ],
+      "checkedHead": "953409857c6374d4d40bde8518ee44323c00e14d"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-18T08:52:28.319Z",
+      "plan": "020",
+      "text": "the folder baby-tasting-orch-run-020-020 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-18T09:11:49.853Z",
+      "plan": "020",
+      "text": "builder left undone (round 0): Full `pnpm run test` is not green: `src/app/app.spec.ts` ('shows a household icon override in its slot') still expects an unknown override to fall back to the slot default. Fixing it means dropping the `not_an_icon` expectation (line 94), a one-line edit.; The scope-check, kit-checks and override-ch"
+    },
+    {
+      "at": "2026-11-18T09:11:51.745Z",
+      "plan": "020",
+      "text": "the folder baby-tasting-orch-run-020-020 was installed (server)"
+    },
+    {
+      "at": "2026-11-18T09:12:26.419Z",
+      "plan": "020",
+      "text": "parked: nothing to save (nothing uncommitted)"
+    },
+    {
+      "at": "2026-11-18T09:12:26.769Z",
+      "plan": "020",
+      "text": "ask 020-1 (scope, the Human or the advisor answers): May the builder edit src/app/app.spec.ts and drop its expectation that the unknown override 'not_an_icon' falls back to 'edit_note'?"
+    },
+    {
+      "at": "2026-11-18T09:14:57.727Z",
+      "plan": "020",
+      "text": "ask 020-1 answered by the human: approved: src/app/app.spec.ts"
+    },
+    {
+      "at": "2026-11-18T09:15:32.484Z",
+      "plan": "020",
+      "text": "scope of plan 020 extended on orch/run-020 by the answer to 020-1: src/app/app.spec.ts"
+    },
+    {
+      "at": "2026-11-18T09:17:20.530Z",
+      "plan": "020",
+      "text": "resumed from park/run-020-020: round 0, tier build, after: asking 020-1: replan needed: ESCALATE: scope src/app/app.spec.ts — the test 'shows a household icon override in its slot' (line 94) expects an unknown override"
+    },
+    {
+      "at": "2026-11-18T09:17:39.711Z",
+      "plan": "020",
+      "text": "the folder baby-tasting-orch-run-020-020 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-18T09:47:07.158Z",
+      "plan": "020",
+      "text": "the folder baby-tasting-orch-merge-run-020 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 17.8,
+  "updatedAt": "2026-11-18T09:52:19.087Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "020",
+      "type": "behaviour",
+      "text": "behaviour: the session memory is per repository instance and the catalog memory is per catalog context, each with a registry that clearCatalogMemory() and clearCache() empty (the plan said a module-level map). A single shared map would break the existing tests that wipe the database between tests — reverse: make the Map module-level and call clearCatalogMemory() in those test h",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "020",
+      "type": "behaviour",
+      "text": "behaviour: the two existing auth tests that edit session rows directly now read the changed row through a fresh app, because the 60 s session memory would otherwise hide the edit — reverse: drop the session memory.",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "020",
+      "type": "behaviour",
+      "text": "behaviour: the sync route takes only `limit`, not `from` or `to`, as the plan says — reverse: add parseBound to the route.",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "020",
+      "type": "behaviour",
+      "text": "behaviour: icon.ts now asks for the full font for any icon name that is not in app-icon-names.ts, not only for overrides — reverse: limit the check to the slot override branch.",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D5",
+      "plan": "020",
+      "type": "behaviour",
+      "text": "behaviour: the two app icons are palette PNGs (16 colours, no dithering) made with sharp-cli; the 512 px file is 59491 bytes, just under the 60 kB budget — reverse: restore the original PNGs from git.",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D6",
+      "plan": "020",
+      "type": "seen",
+      "text": "seen: tracker-stats and tracker-events specs/tests assume no other open sleep for the household; tests share one household, so the new sync test deletes its sleep afterwards (server/test/tracker-events.test.js).",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D7",
+      "plan": "020",
+      "type": "behaviour",
+      "text": "behaviour: a household icon override outside the small font is now used as it is (plan C5); there is no fallback to the default icon. Reverse: restore the ICON_NAMES check in icon.ts.",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D8",
+      "plan": "020",
+      "type": "seen",
+      "text": "seen: src/app/pages/tracker/stats-page/stats-page.scss exceeds its 4 kB budget by 1.71 kB (build warning; not touched by this plan)",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D9",
+      "plan": "020",
+      "type": "seen",
+      "text": "seen: scope-check --diff=origin/orch/run-020 lists files from plan 017 (DESIGN.md, server/domain/suggestions.js, public/emoji-search.json and others) and .playwright-mcp/*.yml as out of scope. None of them are in this branch's commit, so it looks like a stale origin/orch/run-020 ref or untracked files in the worktree.",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-18T09:52:19.084Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-18T09:52:19.087Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}

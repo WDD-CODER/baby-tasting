@@ -8,6 +8,9 @@ import { ApiService } from './api.service'
 import { CatalogService } from './catalog.service'
 import { ToastService } from './toast.service'
 
+// a focus refresh right after another one is skipped
+const MIN_REFRESH_GAP_MS = 2000
+
 interface ItemsResponse {
   items: CalendarItem[]
 }
@@ -24,6 +27,8 @@ export class CalendarService {
   private readonly items_ = signal<CalendarItem[]>([])
   private range_: { from: string; to: string } | null = null
   private nextTemp_ = 1
+  private refreshing_ = false
+  private lastRefreshEnd_ = 0
 
   /** Items of the loaded range. */
   readonly items = this.items_.asReadonly()
@@ -48,9 +53,20 @@ export class CalendarService {
 
   /** Reloads on window focus and when the tab becomes visible, until `destroyRef` is destroyed. */
   refreshOnFocus(destroyRef: DestroyRef): void {
-    const onFocus = (): void => void this.refresh()
+    // focus and visibilitychange often fire together: the second one is skipped
+    const refreshOnce = async (): Promise<void> => {
+      if (this.refreshing_ || Date.now() - this.lastRefreshEnd_ < MIN_REFRESH_GAP_MS) return
+      this.refreshing_ = true
+      try {
+        await this.refresh()
+      } finally {
+        this.refreshing_ = false
+        this.lastRefreshEnd_ = Date.now()
+      }
+    }
+    const onFocus = (): void => void refreshOnce()
     const onVisible = (): void => {
-      if (document.visibilityState === 'visible') void this.refresh()
+      if (document.visibilityState === 'visible') void refreshOnce()
     }
     window.addEventListener('focus', onFocus)
     document.addEventListener('visibilitychange', onVisible)

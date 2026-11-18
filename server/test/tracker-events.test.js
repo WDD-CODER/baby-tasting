@@ -34,6 +34,22 @@ const EDITS = {
 
 const day = (n) => `2026-06-${String(n).padStart(2, '0')}T09:00:00.000Z`
 
+test('GET /events/sync answers the events and the open sleep like the two separate routes', async () => {
+  const a = await signedInAgent(ctx.newApp(), 'parent-a')
+  const open = { eventType: 'SLEEP', sleep: { startAt: '2026-07-05T10:00:00.000Z', endAt: null, startLocation: 'CRIB' } }
+  const created = await a.post('/api/v1/tracker/events').send(open)
+  assert.equal(created.status, 201)
+  const sync = await a.get('/api/v1/tracker/events/sync?limit=400')
+  assert.equal(sync.status, 200)
+  const list = await a.get('/api/v1/tracker/events?limit=400')
+  const openRes = await a.get('/api/v1/tracker/sleep/open')
+  assert.deepEqual(sync.body, { events: list.body.events, openSleep: openRes.body })
+  assert.ok(sync.body.openSleep)
+  assert.equal((await a.get('/api/v1/tracker/events/sync?limit=0')).status, 400)
+  // leave no open sleep behind for the next tests
+  assert.equal((await a.delete(`/api/v1/tracker/events/${created.body.event.id}`)).status, 200)
+})
+
 test('every events route answers 401 without a session', async () => {
   const app = ctx.newApp()
   assert.equal((await request(app).get('/api/v1/tracker/events')).status, 401)

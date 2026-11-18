@@ -35,6 +35,23 @@ test('from and to must be YYYY-MM-DD: a full ISO string, a missing value and a r
   assert.equal((await a.get('/api/v1/tracker/stats/nutrition?from=2026-02-30&to=2026-03-01')).status, 400)
 })
 
+test('GET /stats answers the six sections, equal to the six /:kind answers; a bad range is 400', async () => {
+  const a = await signedInAgent(ctx.newApp(), 'parent-a')
+  const body = { eventType: 'NUTRITION', timestamp: '2026-06-10T09:00:00.000Z', nutrition: { feedType: 'BREAST', breastSide: 'LEFT', durationMinutes: 10 } }
+  assert.equal((await a.post('/api/v1/tracker/events').send(body)).status, 201)
+  const all = await a.get(`/api/v1/tracker/stats${Q}`)
+  assert.equal(all.status, 200)
+  assert.deepEqual(Object.keys(all.body).sort(), [...KINDS].sort())
+  for (const k of KINDS) {
+    const one = await a.get(`/api/v1/tracker/stats/${k}${Q}`)
+    assert.deepEqual(all.body[k], one.body, k)
+  }
+  const bad = await a.get('/api/v1/tracker/stats?from=2026-06-12&to=2026-06-11')
+  assert.equal(bad.status, 400)
+  assert.equal(bad.body.error.code, 'invalid')
+  assert.equal((await a.get('/api/v1/tracker/stats?from=2026-06-10T03:00:00.000Z&to=2026-06-11')).status, 400)
+})
+
 test('an unknown kind is 404', async () => {
   const a = await signedInAgent(ctx.newApp(), 'parent-a')
   assert.equal((await a.get(`/api/v1/tracker/stats/bogus${Q}`)).status, 404)
