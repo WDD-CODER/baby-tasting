@@ -87,6 +87,7 @@ package.json
 pnpm-lock.yaml
 e2e/**
 docs/project/current-state.md
+src/app/app.spec.ts
 ```
 
 ## Read Scope
