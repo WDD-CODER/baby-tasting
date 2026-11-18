@@ -5,7 +5,11 @@ import { NewTrackerEvent, SleepLocation, TrackerEvent } from '../models/tracker-
 import { ApiService } from './api.service'
 import { ToastService } from './toast.service'
 
-const REFRESH_MS = 5000
+const TICK_MS = 5000
+// the data is read on every third tick (15 s, D-020-1); the other ticks only move the clocks
+const DATA_EVERY_TICKS = 3
+// a background refresh right after another one is skipped
+const MIN_GAP_MS = 2000
 const LIMIT = 400
 
 export interface SleepToggleResult {
@@ -29,23 +33,31 @@ export class TrackerEventsService {
   /** Newest first. */
   readonly events = this.events_.asReadonly()
   readonly openSleep = this.openSleep_.asReadonly()
-  /** Ticks every 5 s while a page uses the service; drives countdowns and the awake widget. */
+  /** Ticks every 5 s while a page uses the service; drives countdowns and the awake widget (the data refreshes every 15 s). */
   readonly now = this.now_.asReadonly()
   readonly loaded = this.loaded_.asReadonly()
 
+  private running_ = false
+  private lastEnd_ = 0
+  private ticks_ = 0
+
   private readonly onVisible_ = (): void => {
-    if (document.visibilityState === 'visible') void this.refresh(true)
+    if (document.visibilityState === 'visible') void this.backgroundRefresh_()
   }
 
-  /** A page starts using the data: loads, then refreshes every 5 s while visible and on focus. Pair with stop(). */
+  /** A page starts using the data: loads, then refreshes every 15 s while visible and on focus. Pair with stop(). */
   start(): void {
     this.users_++
     if (this.timer_ !== null) return
     void this.refresh(false)
+    this.ticks_ = 0
     this.timer_ = setInterval(() => {
       this.now_.set(Date.now())
-      if (document.visibilityState === 'visible') void this.refresh(true)
-    }, REFRESH_MS)
+      this.ticks_++
+      if (this.ticks_ % DATA_EVERY_TICKS === 0 && document.visibilityState === 'visible') {
+        void this.backgroundRefresh_()
+      }
+    }, TICK_MS)
     document.addEventListener('visibilitychange', this.onVisible_)
     window.addEventListener('focus', this.onVisible_)
   }
@@ -59,18 +71,30 @@ export class TrackerEventsService {
     window.removeEventListener('focus', this.onVisible_)
   }
 
+  /** A timer or focus refresh: skipped while one is running or when the last one ended under 2 s ago. */
+  private async backgroundRefresh_(): Promise<void> {
+    if (this.running_ || Date.now() - this.lastEnd_ < MIN_GAP_MS) return
+    await this.refresh(true)
+  }
+
+  /** Reads the events and the open sleep in one request. The parent's own saves call it every time. */
   async refresh(background = false): Promise<void> {
+    this.running_ = true
     try {
-      const [list, open] = await Promise.all([
-        firstValueFrom(this.api.get<{ events: TrackerEvent[] }>(`/tracker/events?limit=${LIMIT}`)),
-        firstValueFrom(this.api.get<TrackerEvent | null>('/tracker/sleep/open')),
-      ])
-      this.events_.set(list.events)
-      this.openSleep_.set(open)
+      const res = await firstValueFrom(
+        this.api.get<{ events: TrackerEvent[]; openSleep: TrackerEvent | null }>(
+          `/tracker/events/sync?limit=${LIMIT}`,
+        ),
+      )
+      this.events_.set(res.events)
+      this.openSleep_.set(res.openSleep)
       this.now_.set(Date.now())
       this.loaded_.set(true)
     } catch {
       if (!background) this.toast.show(HE.tracker.log.loadFailed, 'bad')
+    } finally {
+      this.running_ = false
+      this.lastEnd_ = Date.now()
     }
   }
 

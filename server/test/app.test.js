@@ -42,6 +42,22 @@ test('a page path serves index.html of the static folder', async () => {
   assert.match(await res.text(), /spa-index/)
 })
 
+test('a built script is compressed and cached for a year', async () => {
+  fs.writeFileSync(path.join(staticDir, 'main-ABCD1234.js'), 'console.log("hello world");\n'.repeat(500))
+  const res = await fetch(`${base}/main-ABCD1234.js`, { headers: { 'accept-encoding': 'gzip' } })
+  assert.equal(res.status, 200)
+  assert.equal(res.headers.get('content-encoding'), 'gzip')
+  assert.match(res.headers.get('cache-control'), /immutable/)
+})
+
+test('the page and the worker manifest are always re-checked', async () => {
+  fs.writeFileSync(path.join(staticDir, 'ngsw.json'), '{}')
+  for (const url of ['/', '/index.html', '/ngsw.json', '/some/page']) {
+    const res = await fetch(`${base}${url}`)
+    assert.equal(res.headers.get('cache-control'), 'no-cache', url)
+  }
+})
+
 test('health reports the database', async () => {
   const res = await fetch(`${base}/api/v1/health`)
   assert.deepEqual(await res.json(), { status: 'ok', db: 'up' })

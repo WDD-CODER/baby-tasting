@@ -4,9 +4,21 @@
   inline-size: 1em;
   block-size: 1em;
 
+  font-family: var(--icon-font, 'Material Symbols App');
   font-size: var(--icon-size, 24px);
+  font-style: normal;
   font-variation-settings: 'FILL' 0;
+  font-weight: normal;
+  letter-spacing: normal;
   line-height: 1;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
 
   user-select: none;
 }

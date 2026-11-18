@@ -1,0 +1,10 @@
+// The small icon font: only the icons the app shows by default (built by tools/build-icon-font.mjs).
+// The full "Material Symbols Rounded" font stays declared by material-symbols/rounded.css and is only
+// downloaded when an icon uses it (see IconFontService).
+@font-face {
+  font-family: 'Material Symbols App';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('./fonts/material-symbols-app.woff2') format('woff2');
+}

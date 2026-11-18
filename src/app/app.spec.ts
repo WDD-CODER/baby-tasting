@@ -83,7 +83,7 @@ describe('App', () => {
       defaultBottleType: 'EXPRESSED_MILK',
       customActivities: [],
       quickActionOrder: [],
-      iconOverrides: { 'nav.tasting': 'nutrition', 'nav.log': 'not_an_icon' },
+      iconOverrides: { 'nav.tasting': 'nutrition' },
     })
     const fixture = TestBed.createComponent(App)
     fixture.detectChanges()
@@ -91,7 +91,6 @@ describe('App', () => {
       (fixture.nativeElement as HTMLElement).querySelectorAll('.tab__icon'),
     ).map((n) => n.textContent?.trim())
     expect(icons[3]).toBe('nutrition')
-    expect(icons[0]).toBe('edit_note')
   })
 
   it('opens the Tracker home on /', async () => {

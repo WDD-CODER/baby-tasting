@@ -1,6 +1,7 @@
 import { test, before, after, beforeEach } from 'node:test'
 import assert from 'node:assert/strict'
 import request from 'supertest'
+import { createCatalogContext } from '../routes/catalog-helpers.js'
 import { signedInAgent, startTestApp } from './helpers.js'
 
 let ctx
@@ -35,6 +36,40 @@ test('every catalog route answers 401 without a session', async () => {
     assert.equal((await request(app).post(`${base}/${id}/archive`)).status, 401)
     assert.equal((await request(app).post(`${base}/${id}/restore`)).status, 401)
     assert.equal((await request(app).delete(`${base}/${id}`)).status, 401)
+  }
+})
+
+test('the second Tasting request of a household runs no catalog check and no baby lookup in the middleware', async () => {
+  const calls = []
+  const spy = (name, repo) =>
+    new Proxy(repo, {
+      get(target, key) {
+        const value = target[key]
+        if (typeof value !== 'function') return value
+        return (...args) => (calls.push(`${name}.${String(key)}`), value.apply(target, args))
+      },
+    })
+  const mw = createCatalogContext({
+    repos: {
+      babies: spy('babies', { getForHousehold: async () => ({ _id: 'b1' }) }),
+      allergens: spy('allergens', { findMany: async () => [], insertOne: async () => ({}) }),
+      foods: spy('foods', { findMany: async () => [], insertOne: async () => ({}) }),
+    },
+  })
+  const run = (req) => new Promise((resolve, reject) => mw(req, {}, (err) => (err ? reject(err) : resolve())))
+  const first = { householdId: 'h1' }
+  await run(first)
+  assert.equal(first.babyId, 'b1')
+  assert.ok(calls.some((c) => c.startsWith('allergens.')) && calls.some((c) => c.startsWith('foods.')))
+  calls.length = 0
+  const second = { householdId: 'h1' }
+  await run(second)
+  assert.equal(second.babyId, 'b1')
+  assert.deepEqual(calls, [])
+  // a household with no baby is never remembered
+  const none = createCatalogContext({ repos: { babies: { getForHousehold: async () => null } } })
+  for (let i = 0; i < 2; i++) {
+    await assert.rejects(new Promise((resolve, reject) => none({ householdId: 'h2' }, {}, (e) => (e ? reject(e) : resolve()))))
   }
 })
 

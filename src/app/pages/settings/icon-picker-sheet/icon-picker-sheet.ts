@@ -10,6 +10,7 @@ import {
   signal,
 } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { IconFontService } from '../../../core/icons/icon-font.service'
 import { ICON_NAME_LIST } from '../../../core/icons/icon-names'
 import { ICON_SLOTS, SlotKey } from '../../../core/icons/icon-slots'
 import { HE } from '../../../core/i18n/he'
@@ -34,6 +35,7 @@ const COLUMNS = 6
 export class IconPickerSheet {
   private readonly trackerSettings = inject(TrackerSettingsService)
   private readonly toast = inject(ToastService)
+  private readonly iconFont = inject(IconFontService)
 
   /** The slot being changed; null keeps the sheet closed. */
   readonly slot = input<SlotKey | null>(null)
@@ -65,6 +67,8 @@ export class IconPickerSheet {
     effect(() => {
       const slot = this.slot()
       if (!slot) return
+      // the grid shows every icon, so the full font is needed
+      this.iconFont.useFullFont()
       this.query_.set('')
       this.chosen_.set(
         this.trackerSettings.settings()?.iconOverrides[slot] ?? ICON_SLOTS[slot].default,

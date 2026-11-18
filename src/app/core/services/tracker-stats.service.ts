@@ -13,6 +13,16 @@ import { babyDayStartMs, israelDateKey } from '../utils/israel-time'
 import { ApiService } from './api.service'
 import { ToastService } from './toast.service'
 
+/** The one answer of `GET /tracker/stats`. */
+interface AllStats {
+  nutrition: NutritionStats
+  sleep: SleepStats
+  diapers: DiaperStats
+  weight: WeightStats
+  pumping: PumpingStats
+  vomiting: VomitingStats
+}
+
 /** `YYYY-MM-DD` moved by whole calendar days. */
 export function shiftDay(date: string, days: number): string {
   const [y, m, d] = date.split('-').map(Number)
@@ -48,24 +58,15 @@ export class TrackerStatsService {
     const from = shiftDay(to, -(Math.max(1, days) - 1))
     const query = `?from=${from}&to=${to}`
     const id = ++this.request_
-    const get = <T>(kind: string): Promise<T> =>
-      firstValueFrom(this.api.get<T>(`/tracker/stats/${kind}${query}`))
     try {
-      const [nutrition, sleep, diapers, weight, pumping, vomiting] = await Promise.all([
-        get<NutritionStats>('nutrition'),
-        get<SleepStats>('sleep'),
-        get<DiaperStats>('diapers'),
-        get<WeightStats>('weight'),
-        get<PumpingStats>('pumping'),
-        get<VomitingStats>('vomiting'),
-      ])
+      const all = await firstValueFrom(this.api.get<AllStats>(`/tracker/stats${query}`))
       if (id !== this.request_) return
-      this.nutrition_.set(nutrition)
-      this.sleep_.set(sleep)
-      this.diapers_.set(diapers)
-      this.weight_.set(weight)
-      this.pumping_.set(pumping)
-      this.vomiting_.set(vomiting)
+      this.nutrition_.set(all.nutrition)
+      this.sleep_.set(all.sleep)
+      this.diapers_.set(all.diapers)
+      this.weight_.set(all.weight)
+      this.pumping_.set(all.pumping)
+      this.vomiting_.set(all.vomiting)
       this.loaded_.set(true)
     } catch {
       if (id === this.request_) this.toast.show(HE.tracker.log.loadFailed, 'bad')

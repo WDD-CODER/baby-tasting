@@ -16,28 +16,49 @@ function parseDay(value, name) {
   return value
 }
 
+function parseRange(query) {
+  const from = parseDay(query.from, 'from')
+  const to = parseDay(query.to, 'to')
+  if (to < from) throw new HttpError(400, 'invalid', 'to must not be before from')
+  if (datesInRange(from, to).length > MAX_DAYS) throw new HttpError(400, 'invalid', `the range is at most ${MAX_DAYS} days`)
+  return { from, to }
+}
+
+// One read of the events and of the first timestamp, shared by every statistic asked for.
+async function loadStatInput(repos, householdId, { from, to }) {
+  // One extra day on each side: the domain makes the exact 06:00 cut.
+  const docs = await repos.trackerEvents.list(householdId, {
+    from: jerusalemMidnight(from, -1),
+    to: jerusalemMidnight(to, 2),
+    limit: EVENT_LIMIT,
+  })
+  const opts = { from, to, dayStartHour: DAY_START_HOUR, now: new Date().toISOString() }
+  // D-015-2: the first event of any type inside the exact range; the averages count the days from there.
+  const firstEventAt = await repos.trackerEvents.firstTimestamp(householdId, rangeBounds(opts))
+  return { events: docs.map(toApiEvent), opts: { ...opts, firstEventAt } }
+}
+
 export function createTrackerStatsRouter({ repos }) {
   const router = Router()
+
+  // all six sections from one read of the events
+  router.get(
+    '/',
+    handle(async (req, res) => {
+      const range = parseRange(req.query)
+      const { events, opts } = await loadStatInput(repos, req.householdId, range)
+      res.json(Object.fromEntries(Object.entries(STAT_KINDS).map(([kind, compute]) => [kind, compute(events, opts)])))
+    }),
+  )
 
   router.get(
     '/:kind',
     handle(async (req, res) => {
       const compute = Object.hasOwn(STAT_KINDS, req.params.kind) ? STAT_KINDS[req.params.kind] : null
       if (!compute) throw notFound('Unknown statistic')
-      const from = parseDay(req.query.from, 'from')
-      const to = parseDay(req.query.to, 'to')
-      if (to < from) throw new HttpError(400, 'invalid', 'to must not be before from')
-      if (datesInRange(from, to).length > MAX_DAYS) throw new HttpError(400, 'invalid', `the range is at most ${MAX_DAYS} days`)
-      // One extra day on each side: the domain makes the exact 06:00 cut.
-      const docs = await repos.trackerEvents.list(req.householdId, {
-        from: jerusalemMidnight(from, -1),
-        to: jerusalemMidnight(to, 2),
-        limit: EVENT_LIMIT,
-      })
-      const opts = { from, to, dayStartHour: DAY_START_HOUR, now: new Date().toISOString() }
-      // D-015-2: the first event of any type inside the exact range; the averages count the days from there.
-      const firstEventAt = await repos.trackerEvents.firstTimestamp(req.householdId, rangeBounds(opts))
-      res.json(compute(docs.map(toApiEvent), { ...opts, firstEventAt }))
+      const range = parseRange(req.query)
+      const { events, opts } = await loadStatInput(repos, req.householdId, range)
+      res.json(compute(events, opts))
     }),
   )
 
