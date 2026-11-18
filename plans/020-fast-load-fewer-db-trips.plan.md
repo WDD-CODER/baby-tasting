@@ -178,4 +178,4 @@ These are the plan's milestones: a Worker does them in order and ticks each one 
 
 ## Execution Notes
 - S1–S6 and C1–C7 built. Server: `node --test` all 248 pass; `pnpm run build` exit 0; `pnpm run lint` exit 0; `tools/check-no-inline-script.mjs` INLINE: none; `check-icon-font.mjs` ICON_FONT: ok; `check-perf-budget.mjs` PERF_BUDGET: ok (first-load 374400 bytes, small font 7 kB, icons 7 kB and 58 kB).
-- BLOCKED: `ng test` has 1 failure, `src/app/app.spec.ts:94` "shows a household icon override in its slot" expects an unknown override `not_an_icon` to fall back to `edit_note`; C5 requires an override to be used as it is. `src/app/app.spec.ts` is outside the scope; needs `approved: src/app/app.spec.ts` (drop the `not_an_icon` expectation).
+- ask 020-1 answered (approved: src/app/app.spec.ts): dropped the `not_an_icon` fallback expectation; `pnpm run test` exit 0, lint exit 0.
