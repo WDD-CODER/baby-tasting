@@ -1,6 +1,27 @@
 {
   "version": 1,
   "counts": {
+    "default.audit-on-write": {
+      "total": 6,
+      "files": {
+        "server/repositories/activity-repository.js": 1,
+        "server/repositories/households-repository.js": 1,
+        "server/repositories/invites-repository.js": 1,
+        "server/repositories/sessions-repository.js": 1,
+        "server/repositories/test-reset-repository.js": 1,
+        "server/repositories/users-repository.js": 1
+      }
+    },
+    "default.icon-slots": {
+      "total": 5,
+      "files": {
+        "src/app/dev/components-demo/components-demo.html": 1,
+        "src/app/pages/calendar/calendar-page/calendar-page.html": 1,
+        "src/app/pages/foods/foods-page/foods-page.html": 1,
+        "src/app/pages/login/login.html": 1,
+        "src/app/shared/ui/datetime24/datetime24.html": 1
+      }
+    },
     "style-duplicate-block": {
       "total": 165,
       "files": {
