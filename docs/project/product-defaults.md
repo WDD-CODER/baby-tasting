@@ -25,22 +25,24 @@ Fields per default: `status` (`proposed` | `on` | `off`), `rule`, `applies when`
 
 ### confirm-destructive-action
 
-- status: proposed
+- status: on
 - rule: Delete, archive and releasing a lock ask the user to confirm first, and do nothing on cancel.
 - applies when: destructive-action
 - how: src/app/core/services/confirm-dialog.service.ts (ConfirmDialogService.confirm({ destructive: true }), rendered by the shell's app-confirm-dialog)
 - check: card
 - card: the page with the delete button · press delete, then cancel · a confirmation appears and nothing is removed
 - exceptions: an undo that restores the item at once; declare `exception — why: <one line>`
+- turned on: the Human, 2026-11-18
 
 ### audit-on-write
 
-- status: proposed
+- status: on
 - rule: Every create, update and delete records who made it and when.
 - applies when: write-endpoint
 - how: server/lib/audit.js (withCreateAudit, withUpdateAudit) through BaseRepository in server/repositories/base-repository.js; no repository writes without it
 - check: files: server/repositories/*-repository.js; trigger: \bclass\s+\w+Repository\b; evidence: \bextends\s+(?:BaseRepository|CatalogRepository)\b|\bwith(?:Create|Update)Audit\b; exclude: server/repositories/base-repository.js
 - exceptions: a repository that only reads, or a system record with no user; declare `exception — why: <one line>`
+- turned on: the Human, 2026-11-18
 
 ### empty-state-on-list
 
@@ -71,3 +73,26 @@ the plan reviewer and the project's own checks keep them.
 - **All UI strings live in one dictionary.** `src/app/core/i18n/he.ts` (`HE`); templates read it through a component field, never inline text.
 - **Colours only from tokens.** `src/styles/tokens.scss`; `tools/check-no-hex.mjs` runs inside `pnpm run lint`.
 - **Short feedback uses the toast.** `ToastService.show(text, tone)`, rendered by `app-toast` in the shell.
+
+### icon-slots
+
+- status: on
+- rule: Every icon in the app sits in a named slot that parents can change in Settings, icons; a fixed icon needs a written reason.
+- applies when: custom
+- plan words: \bicons?\b|app-icon
+- how: src/app/shared/ui/icon/icon.ts with a slot from src/app/core/icons/icon-slots.ts (then node server/lib/gen-icon-names.mjs); a fixed icon carries an icon-slot-exception comment in its template
+- check: files: src/app/**/*.html; trigger: <app-icon\b(?![^>]*\bslot\b); evidence: icon-slot-exception; exclude: src/app/pages/settings/icon-picker-sheet/**
+- exceptions: the icon picker itself, which shows every icon by name; a control icon such as show-password, with an icon-slot-exception comment
+- turned on: the Human, 2026-11-18
+
+### undo-instead-of-confirm
+
+- status: on
+- rule: A quick record or quick change saves at once and shows a toast with an undo button instead of asking first; only deleting, archiving or releasing a lock asks for confirmation.
+- applies when: custom
+- plan words: \bquick[- ]?(?:log|record|action|add)\b|\bone tap\b|\bbulk\b|\bmark(?:s|ed)?\b.{0,40}\bgiven\b
+- how: ToastService.show(text, tone, { label, run }) in src/app/core/services/toast.service.ts, as TrackerEventsService.showUndo does
+- check: card
+- card: the page with the quick action · tap it, then tap the undo button in the toast · it is saved at once, and after undo it is gone again
+- exceptions: a change that cannot be undone safely; declare exception — why: <one line>
+- turned on: the Human, 2026-11-18
