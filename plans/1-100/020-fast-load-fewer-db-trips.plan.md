@@ -1,6 +1,6 @@
 # Plan 020 — The app loads and answers fast: small icon font, compressed and cached files, fewer database trips
 
-Status: draft
+Status: done
 Depends-on: none
 Snapshot: 8891a87766721fc268088e5192f42d8d51cbd569
 Source: the Human, 2026-11-18: "run a full optimization report and then refactor accordingly so the app will run as fast as possible, because now it is really really slow". Report measured by the Planner the same day on the production build of `8891a87`, served locally against the dev database.

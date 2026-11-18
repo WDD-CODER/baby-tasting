@@ -1,6 +1,6 @@
 # Plan 017 — Tasting: faster food entry (prefilled new food, multi-select), searchable food icons with a "no icon" default, a calendar that fits the phone, clearer week suggestions
 
-Status: draft
+Status: done
 Depends-on: 016
 Snapshot: 2e5509029036498a9038f6f04f8391b08954bdec
 Source: the Human's requests after validating plan 015 (2026-11-16): "when adding a new ingredient after the name was typed and not found, put the typed name in the new form"; "allow icon search by name from the main icon repository, live if possible"; "the other emoji input does nothing but block saving — make it the icon search"; "if no icon was selected have a default no-icon icon so the user can save without an icon"; "when adding ingredients to a meal allow multi-select and save at the end"; "on mobile make the icons smaller and make the calendar fit the screen without scrolling"; "why can't I get weekly suggestions?".
