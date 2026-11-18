@@ -13,6 +13,9 @@
  *   node scripts/scope-check.mjs --deps --plan=<path>
  *   node scripts/scope-check.mjs --tags --plan=<path>
  *   node scripts/scope-check.mjs --tests --plan=<path>
+ *   node scripts/scope-check.mjs --reuse --plan=<path> [--diff=<base>]   (REUSE: ok | missing | bad | skipped; exit 1 on missing or bad)
+ *
+ *   node scripts/scope-check.mjs --defaults --plan=<path>                (DEFAULTS: ok | missing | bad | card missing | skipped; exit 1 on a problem)
  *
  * --diff also prints "SCOPE: test-out <path>" (exit 1) for a changed test file that no scope line naming a test
  * location lists (a broad folder glob such as tools/** does not list the tests under it).
@@ -58,6 +61,8 @@ import { listOpenPlans, OPEN_PLAN_DIRS } from './lib/plan-paths.mjs'
 import { parseDependsOn, parseProsePrerequisites } from './lib/plan-deps.mjs'
 import { doneWhenTagProblems } from './lib/done-when.mjs'
 import { scopeTestsLint } from './lib/scope-tests-lint.mjs'
+import { runReuseCheck } from './lib/reuse-check.mjs'
+import { runDefaultsCheck } from './lib/product-defaults.mjs'
 import { parseInvariants, checkPlanArch, diffArchWarnings, decisionWithoutAdr, parseAddedLines } from './lib/invariants.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -387,6 +392,9 @@ for (const flag of ['diff', 'plan', 'base']) {
   }
 }
 
+if (args.reuse) process.exit(runReuseCheck({ args, repoRoot }))
+if (args.defaults) process.exit(runDefaultsCheck({ args, repoRoot }))
+
 if (args.arch && args.diff) cmdArchDiff(args)
 else if (args.arch && args.plan) cmdArchPlan(args)
 else if (args.arch) fail('--arch needs --plan=<p> or --diff=<base>')
@@ -397,4 +405,4 @@ else if (args.file) cmdFile(args)
 else if (args.diff) cmdDiff(args)
 else if (args.overlap) cmdOverlap(args)
 else if (args.drift) cmdDrift(args)
-else fail('usage: --file=<p> | --diff=<base> | --overlap --plan=<p> | --drift [--plan=<p>] | --arch --plan=<p> | --arch --diff=<base> | --deps --plan=<p> | --tags --plan=<p> | --tests --plan=<p>')
+else fail('usage: --file=<p> | --diff=<base> | --overlap --plan=<p> | --drift [--plan=<p>] | --arch --plan=<p> | --arch --diff=<base> | --deps --plan=<p> | --tags --plan=<p> | --tests --plan=<p> | --reuse --plan=<p> | --defaults --plan=<p>')

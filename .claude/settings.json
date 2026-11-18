@@ -35,8 +35,7 @@
       "Bash(git clean -d*)",
       "Bash(rm -rf /*)",
       "Bash(rm -rf ~*)",
-      "Bash(rm -rf .git*)",
-      "Bash(gh pr merge*)"
+      "Bash(rm -rf .git*)"
     ]
   },
   "hooks": {
@@ -83,6 +82,11 @@
             "type": "command",
             "command": "\"C:/Program Files/Git/bin/bash.exe\" \"${CLAUDE_PROJECT_DIR}/scripts/scope-guard.sh\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/scripts/lib/guard.mjs\" merge",
+            "timeout": 30
           }
         ]
       }
