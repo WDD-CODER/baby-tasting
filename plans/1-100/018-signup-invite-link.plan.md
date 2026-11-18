@@ -1,6 +1,6 @@
 # Plan 018 — Sign-up for the two parents with an invite link, so Render needs no user list
 
-Status: draft
+Status: done
 Depends-on: none
 Snapshot: 8a9700d0cbc053d1c8fe83777245efdca1e6942b
 Source: the Human, 2026-11-17, before the first Render deploy: "create a sign in and sign up process for the deployed app so the users sign up when they enter, having only 2 users max"; "the signup will release the need to set env for the users"; chose the invite-link option and approved the design in chat. Local dev keeps `APP_USERS` (`dad`/`dad1`, `mom`/`mom1` in the main folder's `server/.env`).

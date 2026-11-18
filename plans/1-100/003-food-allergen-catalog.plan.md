@@ -1,6 +1,6 @@
 # Plan 003 — Food and allergen catalog the parents can extend and edit
 
-Status: draft
+Status: done
 Depends-on: 002
 Snapshot: ebf1b1f24e30f84c61981a4b78904df83e192c8f
 Source: docs/briefs/brief-3-catalog.md (the built-in allergen and food lists there are binding data; product rules: docs/briefs/00-program.md section 3, R8, R9, section 8)

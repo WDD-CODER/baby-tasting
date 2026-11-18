@@ -1,6 +1,6 @@
 # Plan 009 — Tracker base: password sign-in that stays on, five-tab navigation, baby profile, Tracker settings, icon slots
 
-Status: draft
+Status: done
 Depends-on: 008
 Snapshot: 5f881b2abe79c9e8ee8ca2424032619b6818bae0
 Source: docs/briefs/tracker/brief-T1-base.md (program: docs/briefs/tracker/00-tracker-program.md P1, P2, P3, P4, P7, F2)

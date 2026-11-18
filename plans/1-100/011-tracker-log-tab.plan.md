@@ -1,6 +1,6 @@
 # Plan 011 — Tracker log tab: today at a glance, quick actions, entry sheets, sleep timer and daily trackers
 
-Status: draft
+Status: done
 Depends-on: 010
 Snapshot: 5f881b2abe79c9e8ee8ca2424032619b6818bae0
 Source: docs/briefs/tracker/brief-T3-log-tab.md (program P2, P4, P5, P7, F3, F4, F8, F9; spec-log-settings §1, §3, §4, §5, §6.1–6.8, §7, §10)

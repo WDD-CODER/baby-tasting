@@ -1,6 +1,6 @@
 # Plan 014 — Tracker settings, icon picker, Excel export, data reset and installable app
 
-Status: draft
+Status: done
 Depends-on: 013
 Snapshot: 5f881b2abe79c9e8ee8ca2424032619b6818bae0
 Source: docs/briefs/tracker/brief-T6-settings-export-pwa.md (program P1, P7, F7, F11; spec-log-settings §8, §9; spec-server-data §5, §7.4)

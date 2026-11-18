@@ -1,6 +1,6 @@
 # Plan 008 — Food detail, progress summary, the settings page and the activity log
 
-Status: draft
+Status: done
 Depends-on: 007
 Snapshot: ebf1b1f24e30f84c61981a4b78904df83e192c8f
 Source: docs/briefs/brief-8-status-settings.md (product rules: docs/briefs/00-program.md R9, section 4 setting names, section 8)

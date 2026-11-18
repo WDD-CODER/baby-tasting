@@ -1,6 +1,6 @@
 # Plan 015 — Validation fixes: sleep sheet modes, averages over days with data, typed time picker, allergen in any meal
 
-Status: draft
+Status: done
 Depends-on: 014
 Snapshot: 0864ab6608ce50817c876d8f6731e3780ffd608c
 Source: the Human's validation of plans 009–014 (2026-11-16, cards ⑨ and ⑮ plus two extra notes); decisions logged below.

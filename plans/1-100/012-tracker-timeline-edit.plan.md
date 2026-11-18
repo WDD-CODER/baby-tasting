@@ -1,6 +1,6 @@
 # Plan 012 — Tracker timeline and the shared edit and delete sheet
 
-Status: draft
+Status: done
 Depends-on: 011
 Snapshot: 5f881b2abe79c9e8ee8ca2424032619b6818bae0
 Source: docs/briefs/tracker/brief-T4-timeline-edit.md (program F5, F8, F10; spec-timeline-dashboards §2, §4, §5.5; spec-log-settings §6.9)

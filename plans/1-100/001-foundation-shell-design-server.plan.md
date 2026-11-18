@@ -1,6 +1,6 @@
 # Plan 001 — Foundation: app shell, design system, server base and Render file
 
-Status: draft
+Status: done
 Depends-on: none
 Snapshot: e03b27cb0e8714242e89b859d9030fb2acb4e8d9
 Source: docs/briefs/brief-1-foundation.md (product rules: docs/briefs/00-program.md — it wins on any conflict)

@@ -1,6 +1,6 @@
 # Plan 006 — Week suggestions: which queued food and allergen on which day
 
-Status: draft
+Status: done
 Depends-on: 005
 Snapshot: ebf1b1f24e30f84c61981a4b78904df83e192c8f
 Source: docs/briefs/brief-6-suggestions.md (product rules: docs/briefs/00-program.md section 5 "Suggestions", R1–R7)

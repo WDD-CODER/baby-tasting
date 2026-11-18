@@ -1,6 +1,6 @@
 # Plan 007 — Reactions with photos, and locks on the suspected foods until a parent releases them
 
-Status: draft
+Status: done
 Depends-on: 006
 Snapshot: ebf1b1f24e30f84c61981a4b78904df83e192c8f
 Source: docs/briefs/brief-7-reactions-locks.md (product rules: docs/briefs/00-program.md R7, D6, section 5, section 8)

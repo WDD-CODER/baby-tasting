@@ -1,6 +1,6 @@
 # Plan 019 — Production build loads its full stylesheet, so icons and styles work behind the security policy
 
-Status: draft
+Status: done
 Depends-on: none
 Snapshot: be26ea3e67244a6e56f47707f38720c6a801f886
 Source: the Human, 2026-11-17, validating plan 018 on the production build served by the server (http://localhost:3010): "why does it look like this? Hebrew and English all together, something looks broken" — every Material Symbols icon renders as its name (`water_bottle`, `bedtime`, `settings`).

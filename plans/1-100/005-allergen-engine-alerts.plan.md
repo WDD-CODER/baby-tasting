@@ -1,6 +1,6 @@
 # Plan 005 — Allergen rules engine, alerts on the calendar and the allergens page
 
-Status: draft
+Status: done
 Depends-on: 004
 Snapshot: ebf1b1f24e30f84c61981a4b78904df83e192c8f
 Source: docs/briefs/brief-5-allergen-engine.md (product rules: docs/briefs/00-program.md section 4 in full, M1, section 5 "Alerts")

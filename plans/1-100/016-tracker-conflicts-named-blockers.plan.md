@@ -1,6 +1,6 @@
 # Plan 016 — Event conflicts that name what blocks them, awake-only events refused during sleep, calendar drag during a refresh
 
-Status: draft
+Status: done
 Depends-on: 015
 Snapshot: 5663ba228c064ab63c626147daf07b23fee78e15
 Source: the Human's validation of plan 015 (2026-11-16, card ⑤: "we need to let the user know what is blocking it, not only that something is blocking it; it can't be eating and sleeping at the same time, and other things"); the drag bug found in the same e2e run.

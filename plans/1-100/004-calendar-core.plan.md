@@ -1,6 +1,6 @@
 # Plan 004 — Calendar core: the home screen where parents plan and record every meal
 
-Status: draft
+Status: done
 Depends-on: 003
 Snapshot: ebf1b1f24e30f84c61981a4b78904df83e192c8f
 Source: docs/briefs/brief-4-calendar-core.md (product rules: docs/briefs/00-program.md section 3 "Calendar item", section 5, R4, R5, R8, R9, section 8)

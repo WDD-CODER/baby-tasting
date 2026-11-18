@@ -1,6 +1,6 @@
 # Plan 010 — Tracker events and sleep: data model, rules and API
 
-Status: draft
+Status: done
 Depends-on: 009
 Snapshot: 5f881b2abe79c9e8ee8ca2424032619b6818bae0
 Source: docs/briefs/tracker/brief-T2-events-sleep.md (program P4, P6, F7, F9, F10, F12; spec-server-data §1, §3.5–3.11, §7.6)

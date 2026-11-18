@@ -1,6 +1,6 @@
 # Plan 013 — Tracker statistics computed on the server and the six dashboard sections
 
-Status: draft
+Status: done
 Depends-on: 012
 Snapshot: 5f881b2abe79c9e8ee8ca2424032619b6818bae0
 Source: docs/briefs/tracker/brief-T5-dashboards.md (program P4, P6, F1; spec-timeline-dashboards §3; spec-server-data §4)

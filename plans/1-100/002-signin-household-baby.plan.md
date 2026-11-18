@@ -1,6 +1,6 @@
 # Plan 002 — Sign-in with a username, one shared household and the baby profile
 
-Status: draft
+Status: done
 Depends-on: 001
 Snapshot: ebf1b1f24e30f84c61981a4b78904df83e192c8f
 Source: docs/briefs/brief-2-signin-household-baby.md (product rules: docs/briefs/00-program.md D7, D8, M3, section 8)
