@@ -63,6 +63,14 @@ export class FoodForm implements HasUnsavedChanges {
       : '/tasting/foods'
   })()
 
+  /** D-017-1: the add-food sheet's meal (`addDate` + `addMeal`); the new food is added there after saving. */
+  private readonly addTarget = ((): { date: string; meal: string } | null => {
+    const q = this.route.snapshot.queryParamMap
+    const date = q.get('addDate')
+    const meal = q.get('addMeal')
+    return this.foodId === null && date !== null && meal !== null ? { date, meal } : null
+  })()
+
   protected readonly t = HE.foods.form
   protected readonly isEdit = this.foodId !== null
   protected readonly loading_ = signal(true)
@@ -116,9 +124,7 @@ export class FoodForm implements HasUnsavedChanges {
     const n = Number(raw)
     return Number.isInteger(n) && n >= 1 && n <= 120
   })
-  protected readonly ready_ = computed(
-    () => this.name_().trim() !== '' && this.emoji_().trim() !== '' && this.monthsValid_(),
-  )
+  protected readonly ready_ = computed(() => this.name_().trim() !== '' && this.monthsValid_())
 
   constructor() {
     const stop = warnBeforeUnload(() => this.hasUnsavedChanges())
@@ -142,6 +148,10 @@ export class FoodForm implements HasUnsavedChanges {
           return
         }
         this.fill(food)
+      } else {
+        // D-017-1: the name typed in the add-food sheet
+        const name = this.route.snapshot.queryParamMap.get('name')
+        if (name !== null) this.name_.set(name.trim())
       }
     } catch {
       this.loadFailed_.set(true)
@@ -168,9 +178,15 @@ export class FoodForm implements HasUnsavedChanges {
     this.error_.set('')
     this.saving_.set(true)
     try {
-      await this.catalog.saveFood(this.toInput(), this.foodId ?? undefined)
+      const saved = await this.catalog.saveFood(this.toInput(), this.foodId ?? undefined)
       this.leaving_ = true
-      await this.router.navigateByUrl(this.returnTo)
+      if (this.addTarget) {
+        await this.router.navigate([this.returnTo.split('?')[0]], {
+          queryParams: { added: saved.id, date: this.addTarget.date, meal: this.addTarget.meal },
+        })
+      } else {
+        await this.router.navigateByUrl(this.returnTo)
+      }
     } catch (err) {
       this.error_.set(this.messageFor(err))
     } finally {

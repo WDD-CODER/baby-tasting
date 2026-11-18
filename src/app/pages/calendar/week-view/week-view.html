@@ -8,7 +8,10 @@
       </div>
     }
     @for (meal of meals; track meal) {
-      <div class="label">{{ t.meal }} {{ meal }}</div>
+      <div class="label">
+        <span class="label__word">{{ t.meal }}</span
+        ><span>{{ meal }}</span>
+      </div>
       @for (day of days(); track day) {
         <div
           class="cell"
@@ -45,7 +48,7 @@
               [attr.aria-label]="foodById().get(s.foodId)?.name"
               (click)="suggestionOpened.emit(s)"
             >
-              <span aria-hidden="true">{{ foodById().get(s.foodId)?.emoji }}</span>
+              <span aria-hidden="true">{{ foodById().get(s.foodId)?.emoji | foodIcon }}</span>
             </button>
           }
           <button

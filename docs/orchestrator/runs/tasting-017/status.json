@@ -1,0 +1,249 @@
+{
+  "run": "tasting-017",
+  "branch": "orch/tasting-017",
+  "base": "main",
+  "startedAt": "2026-11-16T16:47:49.345Z",
+  "mainShaAtStart": "8a9700d0cbc053d1c8fe83777245efdca1e6942b",
+  "plans": {
+    "017": {
+      "nnn": "017",
+      "title": "Tasting: faster food entry (prefilled new food, multi-select), searchable food icons with a \"no icon\" default, a calendar that fits the phone, clearer week suggestions",
+      "branch": "feat/017-tasting-food-entry-emoji",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-16T16:48:52.238Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-16T17:02:44.120Z"
+        }
+      },
+      "humanItems": [
+        "The phone calendar reads well at the smaller size."
+      ],
+      "history": [
+        {
+          "at": "2026-11-16T16:48:52.054Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T16:48:52.240Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T17:00:10.377Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T17:02:36.223Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T17:02:44.122Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T17:03:15.234Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-16T17:04:08.930Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 24,
+      "sha": "1cf9add114e42da5c4be95bd03ee67e1a386fc28",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 675.6,
+          "tokens": {
+            "input": 6570736,
+            "output": 55809
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 30.3,
+          "tokens": {
+            "input": 285150,
+            "output": 1322
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "7c5cf8a013a31515e571229a31647421c55d9704"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-16T16:48:51.719Z",
+      "plan": "017",
+      "text": "the folder baby-tasting-orch-tasting-017-017 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-16T17:00:08.017Z",
+      "plan": "017",
+      "text": "builder left undone (round 0): 017-1: written, not run; 017-2: written, not run; 017-3: written, not run; 017-4: written, not run (the 360×780 fit is untested in a real browser); 017-5: written, not run"
+    },
+    {
+      "at": "2026-11-16T17:00:12.689Z",
+      "plan": "017",
+      "text": "the folder baby-tasting-orch-tasting-017-017 was installed (root)"
+    },
+    {
+      "at": "2026-11-16T17:03:37.497Z",
+      "plan": "017",
+      "text": "the folder baby-tasting-orch-merge-tasting-017 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 24,
+  "updatedAt": "2026-11-16T17:06:49.253Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "017",
+      "type": "behaviour",
+      "text": "behaviour: emojibase-data has no Hebrew data set (no `he` folder in any version), so the Hebrew words come from the CLDR he annotations. A generator script (src/app/dev/emoji-search-data/build.mjs) merges them with the emojibase English data into the self-hosted public/emoji-search.json, fetched on the first typed letter. emojibase-data is a devDependency. — reverse: drop publi",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "017",
+      "type": "behaviour",
+      "text": "behaviour: suggestWeek still returns an array, and the empty-result reason (`no_open_days` or `nothing_to_suggest`) comes from a separate pure noSuggestionsReason(). The empty-queue fallback also covers the allergen-start rule. The unit-test default queue is now ['none'], because an empty queue now means fallback. — reverse: remove the one fallback line in suggestWeek",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "017",
+      "type": "behaviour",
+      "text": "behaviour: the new-food form hands the food back to the calendar through query params (added, date, meal), and the calendar adds it to that meal, jumps to that week and strips the params. — reverse: drop addSavedFood in calendar-page.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "017",
+      "type": "behaviour",
+      "text": "behaviour: a food in the add-food sheet that fails its rule check is skipped with its toast, and the rest of the batch is still added. The allergen note shows once per batch. — reverse: stop at the first refusal in pickFoods",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D5",
+      "plan": "017",
+      "type": "behaviour",
+      "text": "behaviour: the week-view cell `+` button is now a thin strip under a tile and fills the cell when it is empty, so the touch target is smaller when a tile is present. — reverse: edit `.cell__add` in week-view.scss",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D6",
+      "plan": "017",
+      "type": "behaviour",
+      "text": "behaviour: in the week view the word `ארוחה` is visually hidden below 600px, leaving only the meal number (it stays for screen readers). — reverse: remove the `.label__word` hiding in week-view.scss",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D7",
+      "plan": "017",
+      "type": "removes",
+      "text": "removes: the free-text emoji input, so users can no longer type an arbitrary emoji and must search for one (as D-017-3 states) — reverse: re-add the input in emoji-picker.html",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D8",
+      "plan": "017",
+      "type": "removes",
+      "text": "removes: tapping a food in the add-food sheet no longer adds it at once; it is ticked and then added with `הוספה (N)` (as D-017-2 states) — reverse: emit picked straight from toggle()",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D9",
+      "plan": "017",
+      "type": "seen",
+      "text": "seen: ngsw-config.json:5 — the service worker does not list public/emoji-search.json, so the icon search needs the network the first time; the file is outside this plan's scope",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-16T17:06:49.250Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-16T17:06:49.253Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}

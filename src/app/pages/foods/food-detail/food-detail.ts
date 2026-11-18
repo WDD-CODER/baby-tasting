@@ -11,11 +11,12 @@ import { shortDate } from '../../../core/utils/dates'
 import { Button } from '../../../shared/ui/button/button'
 import { Chip } from '../../../shared/ui/chip/chip'
 import { ErrorState } from '../../../shared/ui/error-state/error-state'
+import { FoodIconPipe } from '../../../shared/ui/food-icon/food-icon.pipe'
 import { LoadingState } from '../../../shared/ui/loading-state/loading-state'
 
 @Component({
   selector: 'app-food-detail',
-  imports: [RouterLink, Button, Chip, ErrorState, LoadingState],
+  imports: [RouterLink, Button, Chip, ErrorState, FoodIconPipe, LoadingState],
   templateUrl: './food-detail.html',
   styleUrl: './food-detail.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

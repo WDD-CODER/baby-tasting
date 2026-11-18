@@ -1,7 +1,31 @@
 <div class="picker" role="group" [attr.aria-label]="label()">
   <span class="picker__label">{{ label() }}</span>
+  <input
+    class="picker__search"
+    type="search"
+    [attr.aria-label]="t.emojiSearch"
+    [placeholder]="t.emojiSearch"
+    [value]="query_()"
+    (input)="onQuery($event)"
+  />
+  <button
+    type="button"
+    class="picker__none"
+    [class.picker__item--selected]="value() === ''"
+    [attr.aria-pressed]="value() === ''"
+    (click)="value.set('')"
+  >
+    {{ t.emojiNone }}
+  </button>
+  @if (loading_()) {
+    <p class="picker__label picker__note">{{ t.emojiLoading }}</p>
+  } @else if (failed_()) {
+    <p class="picker__label picker__note">{{ t.emojiLoadFailed }}</p>
+  } @else if (searching_() && options_().length === 0) {
+    <p class="picker__label picker__note">{{ t.emojiNoResults }}</p>
+  }
   <div class="picker__grid">
-    @for (emoji of options; track emoji + $index) {
+    @for (emoji of options_(); track emoji) {
       <button
         type="button"
         class="picker__item"
@@ -13,12 +37,4 @@
       </button>
     }
   </div>
-  <input
-    class="picker__free"
-    type="text"
-    [attr.aria-label]="freeLabel"
-    [placeholder]="freeLabel"
-    [value]="value()"
-    (input)="onFree($event)"
-  />
 </div>

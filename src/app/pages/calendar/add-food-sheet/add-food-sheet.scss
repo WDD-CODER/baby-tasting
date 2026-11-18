@@ -83,3 +83,44 @@
   font-family: inherit;
   font-size: var(--fs-md);
 }
+
+.food {
+  &__check {
+    inline-size: var(--space-4);
+
+    color: var(--color-accent);
+    font-weight: var(--fw-bold);
+  }
+
+  &--selected {
+    background: var(--color-accent-border);
+  }
+}
+
+// the confirm button stays in view at the bottom of the sheet while the list scrolls
+.footer {
+  position: sticky;
+  inset-block-end: calc(-1 * var(--space-4));
+
+  padding-block: var(--space-3);
+
+  background: var(--color-surface);
+
+  &__add {
+    inline-size: 100%;
+    min-block-size: var(--touch-target);
+
+    border: 0;
+    border-radius: var(--radius-card);
+
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-family: inherit;
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+}

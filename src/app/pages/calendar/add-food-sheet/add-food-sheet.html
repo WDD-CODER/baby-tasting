@@ -16,9 +16,12 @@
           type="button"
           class="food food--preselected"
           aria-current="true"
-          (click)="pick(food)"
+          [class.food--selected]="isSelected(food)"
+          [attr.aria-pressed]="isSelected(food)"
+          (click)="toggle(food)"
         >
-          <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+          <span class="food__check" aria-hidden="true">{{ isSelected(food) ? '✓' : '' }}</span>
+          <span class="food__emoji" aria-hidden="true">{{ food.emoji | foodIcon }}</span>
           <span class="food__name">{{ food.name }}</span>
         </button>
       </li>
@@ -30,8 +33,15 @@
     <ul class="list">
       @for (food of recent(); track food.id) {
         <li>
-          <button type="button" class="food" (click)="pick(food)">
-            <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+          <button
+            type="button"
+            class="food"
+            [class.food--selected]="isSelected(food)"
+            [attr.aria-pressed]="isSelected(food)"
+            (click)="toggle(food)"
+          >
+            <span class="food__check" aria-hidden="true">{{ isSelected(food) ? '✓' : '' }}</span>
+            <span class="food__emoji" aria-hidden="true">{{ food.emoji | foodIcon }}</span>
             <span class="food__name">{{ food.name }}</span>
           </button>
         </li>
@@ -43,8 +53,15 @@
   <ul class="list">
     @for (food of matches(); track food.id) {
       <li>
-        <button type="button" class="food" (click)="pick(food)">
-          <span class="food__emoji" aria-hidden="true">{{ food.emoji }}</span>
+        <button
+          type="button"
+          class="food"
+          [class.food--selected]="isSelected(food)"
+          [attr.aria-pressed]="isSelected(food)"
+          (click)="toggle(food)"
+        >
+          <span class="food__check" aria-hidden="true">{{ isSelected(food) ? '✓' : '' }}</span>
+          <span class="food__emoji" aria-hidden="true">{{ food.emoji | foodIcon }}</span>
           <span class="food__name">{{ food.name }}</span>
           @if (food.allergenId) {
             <span class="food__allergen" aria-hidden="true">{{ t.allergenBadge }}</span>
@@ -56,5 +73,11 @@
     }
   </ul>
 
-  <button type="button" class="new" (click)="newFoodRequested.emit()">{{ t.newFood }}</button>
+  <button type="button" class="new" (click)="requestNew()">{{ newLabel_() }}</button>
+
+  <div class="footer">
+    <button type="button" class="footer__add" [disabled]="count_() === 0" (click)="confirm()">
+      {{ addLabel_() }}
+    </button>
+  </div>
 </app-bottom-sheet>

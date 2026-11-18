@@ -25,15 +25,15 @@
       <app-chip [selected]="view_() === 'month'" (pressed)="setView('month')">{{
         t.month
       }}</app-chip>
+      @if (view_() === 'week') {
+        <app-button variant="secondary" [loading]="suggesting_()" (pressed)="suggestWeek()">{{
+          suggestT.suggestWeek
+        }}</app-button>
+      }
     </div>
   </header>
 
   @if (view_() === 'week') {
-    <div class="calendar__suggest">
-      <app-button variant="secondary" [loading]="suggesting_()" (pressed)="suggestWeek()">{{
-        suggestT.suggestWeek
-      }}</app-button>
-    </div>
     @if (extensions.suggested().length > 0) {
       <div class="suggest-bar" role="status">
         <span class="suggest-bar__count">{{ suggestionBarText() }}</span>
@@ -94,8 +94,8 @@
     [recentIds]="recentIds()"
     [preselectFoodId]="preselect_()"
     (closed)="closeAdd()"
-    (picked)="pickFood($event)"
-    (newFoodRequested)="newFood()"
+    (picked)="pickFoods($event)"
+    (newFoodRequested)="newFood($event)"
   />
 
   <app-bottom-sheet

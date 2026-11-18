@@ -13,7 +13,8 @@ export function parseName(value) {
 
 function parseEmoji(value) {
   const emoji = typeof value === 'string' ? value.trim() : ''
-  if (emoji.length < 1 || [...emoji].length > 8) throw invalid('Emoji must be 1-8 characters')
+  // '' = no icon (D-017-4)
+  if ([...emoji].length > 8) throw invalid('Emoji must be at most 8 characters')
   return emoji
 }
 

@@ -110,11 +110,11 @@ line or file this plan names was removed, renamed or rewritten).
 
 ## Atomic Sub-tasks
 
-- [ ] O1: Emoji search + no-icon — add `emojibase-data`; `src/app/shared/ui/emoji-picker/` becomes the search picker (lazy-load the data on open), `ללא אייקון` option, placeholder constant in `src/app/core/**`, food form uses it, server accepts `emoji: ''`, Karma specs, demo page — package.json, pnpm-lock.yaml, src/app/**, server/**
-- [ ] O2: Add-food sheet multi-select and prefilled new food — `src/app/pages/calendar/add-food-sheet/**`, calendar page, `src/app/pages/foods/food-form/**` (accept a `name` and a return target via query params), Hebrew texts — src/app/**
-- [ ] O3: Phone week view — `src/app/pages/calendar/week-view/**`, `item-tile/**`, calendar page header, tokens — src/app/**, DESIGN.md
-- [ ] O4: Suggestions fallback and reason — `server/domain/suggestions.js` + test, the suggestions route, the calendar page message — server/**, src/app/**
-- [ ] O5: UI checks — `e2e/017-1-new-food-prefill.spec.ts`, `e2e/017-2-multi-select.spec.ts`, `e2e/017-3-icon-search.spec.ts`, `e2e/017-4-week-fits.spec.ts`, `e2e/017-5-suggest-empty-queue.spec.ts`; update every spec that adds a food with a single tap (`e2e/support/calendar.ts` `addFood`: select then `הוספה (1)`) or types an emoji; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
+- [x] O1: Emoji search + no-icon — add `emojibase-data`; `src/app/shared/ui/emoji-picker/` becomes the search picker (lazy-load the data on open), `ללא אייקון` option, placeholder constant in `src/app/core/**`, food form uses it, server accepts `emoji: ''`, Karma specs, demo page — package.json, pnpm-lock.yaml, src/app/**, server/**
+- [x] O2: Add-food sheet multi-select and prefilled new food — `src/app/pages/calendar/add-food-sheet/**`, calendar page, `src/app/pages/foods/food-form/**` (accept a `name` and a return target via query params), Hebrew texts — src/app/**
+- [x] O3: Phone week view — `src/app/pages/calendar/week-view/**`, `item-tile/**`, calendar page header, tokens — src/app/**, DESIGN.md
+- [x] O4: Suggestions fallback and reason — `server/domain/suggestions.js` + test, the suggestions route, the calendar page message — server/**, src/app/**
+- [x] O5: UI checks — `e2e/017-1-new-food-prefill.spec.ts`, `e2e/017-2-multi-select.spec.ts`, `e2e/017-3-icon-search.spec.ts`, `e2e/017-4-week-fits.spec.ts`, `e2e/017-5-suggest-empty-queue.spec.ts`; update every spec that adds a food with a single tap (`e2e/support/calendar.ts` `addFood`: select then `הוספה (1)`) or types an emoji; `docs/project/current-state.md` — e2e/**, docs/project/current-state.md
 
 ## Technical Considerations
 - `emojibase-data` compact files are ~200–400 kB each: load them lazily from the picker (dynamic import or an asset fetch), never in the main bundle; keep the initial bundle budget.
@@ -127,4 +127,8 @@ Material Symbols for foods (food icons stay emoji, P7), Tracker screens, deploy.
 - none
 
 ## Execution Notes
-- none yet
+- Step 0: drift commits 338c0f3 (e2e specs) and 08d480c (016 conflicts) touch no symbol this plan names: ok.
+- `emojibase-data` (any version; 18.0.0 installed, now a devDependency) ships no Hebrew set (`he` is absent). Hebrew words come from the CLDR annotations (`cldr-annotations-full` 49, used once by `src/app/dev/emoji-search-data/build.mjs`, not a dependency). The result is the self-hosted `public/emoji-search.json` (1923 emoji, 1597 with Hebrew names), fetched lazily on the first typed letter.
+- `suggestWeek` still returns an array; the empty-reason is the separate pure `noSuggestionsReason`. An empty queue falls back to untried non-archived foods (the unit-test default queue is now `['none']`).
+- Checks: `pnpm run build` -> 0; `pnpm run lint` -> 0; `pnpm run test` -> 0 (Karma 93 of 93, server 219 pass, 0 fail); `node --test server/domain/suggestions.test.js server/test/catalog.test.js server/test/suggestions.test.js` -> 0 (29 pass).
+- e2e `017-1`…`017-5` written, not run (no running app here).

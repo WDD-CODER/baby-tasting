@@ -27,10 +27,17 @@ export async function addFood(page: Page, date: string, meal: number, name: stri
   await cell(page, date, meal).locator('.cell__add').click()
   await page.getByLabel('חיפוש מזון').fill(name)
   // wait for the server to confirm: acting on the tile before that hits its temporary id
-  const created = page.waitForResponse((r) => r.request().method() === 'POST' && /\/api\/v1\/calendar$/.test(r.url()))
+  const created = page.waitForResponse((r) => r.request().method() === 'POST' && /\/api\/v1\/calendar$/.test(r.url()), {
+    timeout: 8000,
+  })
   await page.getByRole('button', { name: new RegExp(name) }).first().click()
-  await created
-  await page.waitForLoadState('networkidle')
+  await page.getByRole('button', { name: 'הוספה (1)' }).click()
+  // a refused or confirm-first add sends no request: stop waiting as soon as a message or a dialog shows
+  await Promise.race([
+    created.then(() => page.waitForLoadState('networkidle')),
+    page.locator('.toast').first().waitFor({ timeout: 8000 }),
+    page.getByRole('alertdialog').first().waitFor({ timeout: 8000 }),
+  ]).catch(() => undefined)
 }
 
 /** Drags a tile onto another cell with the mouse (the mouse has no start delay). */
