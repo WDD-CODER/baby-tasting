@@ -1,0 +1,706 @@
+{
+  "run": "run-023",
+  "branch": "orch/run-023",
+  "base": "main",
+  "startedAt": "2026-11-19T18:28:51.860Z",
+  "mainShaAtStart": "0d0568eac33e502dc7c81f18f7fa4597fe690877",
+  "plans": {
+    "023": {
+      "nnn": "023",
+      "title": "Minimize quick-action buttons you don't use",
+      "branch": "feat/023-minimize-quick-actions",
+      "state": "merged",
+      "round": 1,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-19T18:40:30.690Z"
+        },
+        "builder fix": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-19T18:47:06.475Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-19T18:53:48.371Z"
+        }
+      },
+      "humanItems": [
+        "On the phone, minimizing and restoring a button by dragging feels natural, and the chips are easy to tap."
+      ],
+      "history": [
+        {
+          "at": "2026-11-19T18:30:21.308Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:30:21.762Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:36:53.825Z",
+          "state": "parked",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:38:04.311Z",
+          "state": "asking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:40:30.520Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:40:30.692Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:43:44.541Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:43:45.010Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:43:45.378Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:43:55.290Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:43:55.845Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:43:56.065Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:47:05.964Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:47:06.230Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-19T18:47:06.478Z",
+          "state": "fixing",
+          "round": 1
+        },
+        {
+          "at": "2026-11-19T18:50:13.824Z",
+          "state": "gate",
+          "round": 1
+        },
+        {
+          "at": "2026-11-19T18:53:40.613Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-19T18:53:48.374Z",
+          "state": "checking",
+          "round": 1
+        },
+        {
+          "at": "2026-11-19T18:54:05.650Z",
+          "state": "merging",
+          "round": 1
+        },
+        {
+          "at": "2026-11-19T18:55:01.051Z",
+          "state": "merged",
+          "round": 1
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "023",
+          "title": "Minimize quick-action buttons you don't use",
+          "branch": "feat/023-minimize-quick-actions",
+          "state": "asking",
+          "round": 0,
+          "tier": "build",
+          "models": {
+            "builder": {
+              "model": "sonnet",
+              "tier": "build",
+              "at": "2026-11-19T18:30:21.761Z"
+            }
+          },
+          "tiers": [
+            "build"
+          ],
+          "freeDiskGb": 15.7,
+          "reason": "asking 023-1: replan needed: ESCALATE: scope src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts — its `TrackerSettings` fixture at line 9 lacks `quickActionsMinimized`, so `pnpm run test` exits 1 with TS2741. Needs the line `quickActionsMinimized: [],` in that fixture. Reply `approved: src/app/pages/tracker/t",
+          "calls": [
+            {
+              "stage": "builder",
+              "model": "sonnet",
+              "seconds": 390.8,
+              "tokens": {
+                "input": 1029744,
+                "output": 18738
+              },
+              "exit": 0
+            }
+          ],
+          "park": {
+            "at": "2026-11-19T18:37:37.690Z",
+            "reason": "replan needed: ESCALATE: scope src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts — its `TrackerSettings` fixture at line 9 lacks `quickActionsMinimized`, so `pnpm run test` exits 1 with TS2741. Needs the line `quickActionsMinimized: [],` in that fixture. Reply `approved: src/app/pages/tracker/t"
+          },
+          "parkBranch": "park/run-023-023"
+        }
+      ],
+      "escalations": [
+        {
+          "step": "resumed after: asking 023-1: replan needed: ESCALATE: scope src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts — its `TrackerSettings` fixture at ",
+          "check": "(not given)"
+        }
+      ],
+      "replan": "no — (not given)",
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 14.8,
+      "sha": "d3d72472a72d1e42251d856865a9aad0f7ad1ef6",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 190.4,
+          "tokens": {
+            "input": 127652,
+            "output": 2642
+          },
+          "exit": 0
+        },
+        {
+          "stage": "builder fix",
+          "model": "sonnet",
+          "seconds": 189.5,
+          "tokens": {
+            "input": 197878,
+            "output": 3237
+          },
+          "exit": 0
+        },
+        {
+          "stage": "builder fix",
+          "model": "sonnet",
+          "seconds": 183.5,
+          "tokens": {
+            "input": 84487,
+            "output": 1568
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 15.7,
+          "tokens": {
+            "input": 64106,
+            "output": 951
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "On the home page (`/`), in `ערוך פריסה`, dragging the activity button into the `ממוזער` row and tapping `סיום ושמירה` leaves the activity button out of the grid",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        },
+        {
+          "card": "`e2e/011-4-reorder.spec.ts` still passes.",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "roundCauses": [
+        "round 1: gate: node \"C:/coding projects/Cursor/baby-tasting/scripts/kit-checks.mjs\" --base origin/orch/run-023 --plan plans/023-minimize-quick-actions.plan.md",
+        "round 1: builder left uncommitted files: rc/app/pages/tracker/quick-grid/quick-grid.scss"
+      ],
+      "checkedHead": "ba3e9c648b393e04959c9ef1997baf26f20ea0b3"
+    },
+    "024": {
+      "nnn": "024",
+      "title": "One time picker everywhere: select-all typing and a tap-only time box",
+      "branch": "feat/024-time-box-picker",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-19T18:57:10.343Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-19T19:14:44.809Z"
+        }
+      },
+      "humanItems": [
+        "On the phone, setting a time takes two taps in the box, or typing right after tapping the field, with no deleting or scrolling."
+      ],
+      "history": [
+        {
+          "at": "2026-11-19T18:38:06.069Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:57:10.114Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T18:57:10.346Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:11:33.117Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:14:34.885Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:14:44.813Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:15:00.292Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:15:33.837Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "024",
+          "round": 0,
+          "models": {},
+          "state": "queued",
+          "reason": "waits on the answer to ask 023-1",
+          "freeDiskGb": 15.7
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 14.7,
+      "sha": "bac2f0dabb589b4e3b885010794a7ff3da12b89c",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 857.3,
+          "tokens": {
+            "input": 2315131,
+            "output": 24550
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 14.3,
+          "tokens": {
+            "input": 59148,
+            "output": 779
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "f4b523573e3ac0917592a2ca06f5845b1b204f0a"
+    },
+    "025": {
+      "nnn": "025",
+      "title": "Every confirmation opens a centred modal",
+      "branch": "feat/025-confirmations-in-modal",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-19T19:17:13.996Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-19T19:24:14.162Z"
+        }
+      },
+      "humanItems": [
+        "the page with the delete button · press delete, then cancel · a confirmation appears and nothing is removed (here: `/settings`, the full reset)"
+      ],
+      "history": [
+        {
+          "at": "2026-11-19T18:38:06.490Z",
+          "state": "queued",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:17:13.792Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:17:13.998Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:22:12.962Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:22:13.473Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:24:08.532Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:24:14.164Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:24:24.190Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T19:24:52.249Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "025",
+          "round": 0,
+          "models": {},
+          "state": "queued",
+          "reason": "waits on the answer to ask 023-1",
+          "freeDiskGb": 15.7
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 14.7,
+      "sha": "09307f776eb2d9a37cea3d522eee855ad6d28540",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 295.5,
+          "tokens": {
+            "input": 702210,
+            "output": 16938
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 9.4,
+          "tokens": {
+            "input": 49803,
+            "output": 457
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "In Settings (`/settings`), the full reset asks in the centred modal; typing `מחק הכל` enables the red button; `ביטול` keeps the data — e2e `e2e/025-1-reset-moda",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "798ada3e58d73337c82e797b78425555496a699b"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-19T18:30:21.000Z",
+      "plan": "023",
+      "text": "the folder baby-tasting-orch-run-023-023 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-19T18:36:53.283Z",
+      "plan": "023",
+      "text": "builder left undone (round 0): M1: the plan scope lacks the TrackerSettings fixture in timeline-row.spec.ts; the other five M1 files are done; pnpm run test not green until that fixture gets the field; [ui] item 1: e2e/023-1-minimize.spec.ts written, not run; [ui] item 2: e2e/011-4-reorder.spec.ts unchanged, not run; scope-check"
+    },
+    {
+      "at": "2026-11-19T18:38:03.406Z",
+      "plan": "023",
+      "text": "parked: nothing to save (nothing uncommitted)"
+    },
+    {
+      "at": "2026-11-19T18:38:04.778Z",
+      "plan": "023",
+      "text": "ask 023-1 (scope, the Human or the advisor answers): May the builder add `quickActionsMinimized: []` to the TrackerSettings fixture in src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts?"
+    },
+    {
+      "at": "2026-11-19T18:39:06.936Z",
+      "plan": "023",
+      "text": "ask 023-1 answered by the human: approved: src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts"
+    },
+    {
+      "at": "2026-11-19T18:39:20.418Z",
+      "plan": "023",
+      "text": "scope of plan 023 extended on orch/run-023 by the answer to 023-1: src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts"
+    },
+    {
+      "at": "2026-11-19T18:40:24.235Z",
+      "plan": "023",
+      "text": "resumed from park/run-023-023: round 0, tier build, after: asking 023-1: replan needed: ESCALATE: scope src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts — its `TrackerSettings` fixture at line 9 lac"
+    },
+    {
+      "at": "2026-11-19T18:40:30.338Z",
+      "plan": "023",
+      "text": "the folder baby-tasting-orch-run-023-023 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-19T18:43:41.261Z",
+      "plan": "023",
+      "text": "builder left undone (round 0): [ui] e2e/023-1-minimize.spec.ts: written, not run; [ui] e2e/011-4-reorder.spec.ts still passes: not run; [human] dragging and the chips feel natural on the phone"
+    },
+    {
+      "at": "2026-11-19T18:43:44.826Z",
+      "plan": "023",
+      "text": "[ui] On the home page (`/`), in `ערוך פריסה`, dragging the activity button into the `ממוזער` row and tapping `סיום ושמירה` leaves the activity button out of the: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-19T18:43:45.203Z",
+      "plan": "023",
+      "text": "[ui] `e2e/011-4-reorder.spec.ts` still passes.: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-19T18:43:54.754Z",
+      "plan": "023",
+      "text": "GATE: not run — node \"C:/coding projects/Cursor/baby-tasting/scripts/kit-checks.mjs\" --base origin/orch/run-023 --plan plans/023-minimize-quick-actions.plan.md failed first; runs after the fix: pnpm run build"
+    },
+    {
+      "at": "2026-11-19T18:43:54.946Z",
+      "plan": "023",
+      "text": "GATE: not run — node \"C:/coding projects/Cursor/baby-tasting/scripts/kit-checks.mjs\" --base origin/orch/run-023 --plan plans/023-minimize-quick-actions.plan.md failed first; runs after the fix: pnpm run lint"
+    },
+    {
+      "at": "2026-11-19T18:43:55.124Z",
+      "plan": "023",
+      "text": "GATE: not run — node \"C:/coding projects/Cursor/baby-tasting/scripts/kit-checks.mjs\" --base origin/orch/run-023 --plan plans/023-minimize-quick-actions.plan.md failed first; runs after the fix: pnpm run test"
+    },
+    {
+      "at": "2026-11-19T18:43:55.483Z",
+      "plan": "023",
+      "text": "node \"C:/coding projects/Cursor/baby-tasting/scripts/kit-checks.mjs\" --base origin/orch/run-023 --plan plans/023-minimize-quick-actions.plan.md failed before the slow checks: back to the builder (a bounce, not counted in maxFixRounds); the next gate runs every check"
+    },
+    {
+      "at": "2026-11-19T18:54:21.240Z",
+      "plan": "023",
+      "text": "the folder baby-tasting-orch-merge-run-023 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-19T18:57:09.884Z",
+      "plan": "024",
+      "text": "the folder baby-tasting-orch-run-023-024 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-19T19:11:28.054Z",
+      "plan": "024",
+      "text": "builder left undone (round 0): [ui] 024-1 (the activity sheet, 09 then 30 shows 09:30): written, not run; [ui] 024-2 (the reaction form uses the same picker and keeps the chosen time): written, not run; [human] two taps on a phone: not ticked"
+    },
+    {
+      "at": "2026-11-19T19:17:13.528Z",
+      "plan": "025",
+      "text": "the folder baby-tasting-orch-run-023-025 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-19T19:22:09.667Z",
+      "plan": "025",
+      "text": "builder left undone (round 0): [ui] e2e/025-1-reset-modal.spec.ts (the full reset asks in the centred modal, typing מחק הכל enables the red button, ביטול keeps the data): written, not run; e2e/014-4-delete-from-date.spec.ts: not run, though it still passes by inspection because the delete-from-date flow still asks through the sam"
+    },
+    {
+      "at": "2026-11-19T19:22:13.244Z",
+      "plan": "025",
+      "text": "[ui] In Settings (`/settings`), the full reset asks in the centred modal; typing `מחק הכל` enables the red button; `ביטול` keeps the data — e2e `e2e/025-1-reset: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-19T19:25:23.506Z",
+      "text": "FINAL: same tree as plan 025's gate — pnpm run build, pnpm run lint, pnpm run test, node scripts/override-check.mjs skipped"
+    },
+    {
+      "at": "2026-11-19T19:25:23.874Z",
+      "text": "make this a default? chips are not given the `data-quick` attribute (they use `data-chip`), so `e2e/011-4-reorder.spec.ts` keeps counting only grid buttons — reverse: rename the attribute (trigger: list) — reply: default yes run-list"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 14.7,
+  "updatedAt": "2026-11-19T19:25:26.376Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "023",
+      "type": "behaviour",
+      "text": "behaviour: chips are not given the `data-quick` attribute (they use `data-chip`), so `e2e/011-4-reorder.spec.ts` keeps counting only grid buttons — reverse: rename the attribute",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "023",
+      "type": "behaviour",
+      "text": "behaviour: the chip title for sleep is always the 'start sleep' title; a running sleep shows only the filled moon and a red border — reverse: use `sleepButtonEnd` when a sleep is open",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "023",
+      "type": "behaviour",
+      "text": "behaviour: a stored `quickActionsMinimized` with an unknown or repeated id keeps the valid ids on read; a PUT with such a value is 400 — reverse: ignore the whole stored value as the other fields do",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "024",
+      "type": "behaviour",
+      "text": "behaviour: a hand-typed minute such as 07:43 is shown as the selected cell only when it falls on a 5-minute step; the box does not mark other minutes — reverse: highlight the nearest step in datetime24.html",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D5",
+      "plan": "024",
+      "type": "behaviour",
+      "text": "behaviour: picking an hour keeps the current minutes and moves to the minute grid, so the value changes after the hour tap; ביטול then leaves the picked hour in place — reverse: hold both picks in the box and emit only on the minute tap",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D6",
+      "plan": "024",
+      "type": "behaviour",
+      "text": "behaviour: the old calendar chip's fixed icon in datetime24.html got an icon-slot-exception comment to pass the kit check — reverse: give it a slot and regenerate the icon names",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D7",
+      "plan": "024",
+      "type": "behaviour",
+      "text": "behaviour: the reaction form no longer uses the device's local time; its time is Asia/Jerusalem like the Tracker — reverse: convert with the device's own zone in reaction-form.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D8",
+      "plan": "025",
+      "type": "behaviour",
+      "text": "behaviour: scope extended to docs/brain/inventory.md, regenerated by node scripts/inventory.mjs because adding the default made the kit check inventory-stale fail — reverse: drop that file from the commit, then the kit check fails again",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-19T19:25:26.373Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-19T19:25:26.375Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}
