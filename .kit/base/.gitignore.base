@@ -1,0 +1,57 @@
+# Dependencies and build output
+/node_modules
+node_modules
+/dist
+/coverage
+/logs/
+*.log
+
+# Secrets — never commit
+.env
+.env.*
+.env.local
+.env.*.local
+!.env.example
+
+# Editors and OS
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.DS_Store
+
+# Worktree slot state (Planner-Worker workflow)
+.worktree-port
+.worktree-root
+.worktree-plan
+.worktree-validating
+.worktree-cleanup
+.claude/.slot-pids
+.claude/.slot-plan-start
+
+# The main folder's dev servers the orchestrator preflight started (slot-serve.mjs --main)
+.claude/.main-serve-pids
+.claude/logs/
+.claude/*.log
+
+# Claude Code local config and runtime state (never commit)
+.claude/settings.local.json
+.claude/worktrees/
+.claude/.plan-write-ack
+.claude/.ship-baseline
+.claude/.session-lock
+.claude/.last-npm-install-hash
+.claude/.last-npm-install-hash-server
+.claude/.last-npm-install-hash-scripts
+.claude/sessions/
+
+# Orchestrator runs: live status.json and the local copy of each run report (the run branch keeps the record)
+.claude/orchestrator-runs/
+
+# Style QA output: the report and the finding store (styleqa.outDir default)
+.claude/styleqa/
+
+# Workflow script dependencies (npm install inside scripts/)
+scripts/node_modules/

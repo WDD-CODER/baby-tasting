@@ -1,10 +1,10 @@
 {
   "kit": {
-    "version": "3.5.0"
+    "version": "3.7.0"
   },
   "source": "github:WDD-CODER/ai-workflow-kit",
-  "ref": "v3.5.0",
-  "commit": "bf394cfb98598efc88426f54768e5a91978b853d",
+  "ref": "v3.7.0",
+  "commit": "41a315ae65bf5f5ce430b2c08dd176737d6d2431",
   "packs": [
     "angular",
     "node-express"
@@ -19,7 +19,7 @@
       "source": "core/.claude/agents/git-agent.md"
     },
     ".claude/agents/orch-builder.md": {
-      "sha256": "6c7b81171bb52fc4f78fc953279a8698df2bad9bb12474e8bddd56d8ac747a8f",
+      "sha256": "c8bf1faec9f382239488900d0af98b21f51a3ad8fa5890677d979eb179827058",
       "kind": "managed",
       "source": "core/.claude/agents/orch-builder.md"
     },
@@ -389,7 +389,7 @@
       "source": "packs/angular/.vscode/tasks.json"
     },
     "AGENTS.md": {
-      "sha256": "61bb1608ce23d1c89cb8154d09ea9bad6535f4b78f249d539243bb4af9ecef76",
+      "sha256": "1b9dcd9d828ae66cb2c3b973cda5816accb8fd023cce260f39cb076677931604",
       "kind": "seed",
       "source": "templates/AGENTS.md"
     },
@@ -499,7 +499,7 @@
       "source": "core/docs/agent/model-routing.md"
     },
     "docs/agent/orchestrator.md": {
-      "sha256": "8b67d406676b97cfe93e4339b69e2b72c9104abf2c1fe2d825b517fd305ea44d",
+      "sha256": "ab35c9543747b398499ad1207f8a110766f374a50714b95981d25c2fa3d7d2e3",
       "kind": "managed",
       "source": "core/docs/agent/orchestrator.md"
     },
@@ -889,7 +889,7 @@
       "source": "core/scripts/kit-feedback.mjs"
     },
     "scripts/kit-manifest-check.mjs": {
-      "sha256": "5d47c9ffa7e856734565a42ed572c167764d6faa0796ea3485a99032bcd4a8ac",
+      "sha256": "bc435a17e4030483a0fdabcc810ab5c66343e2458170cd319320d9d1d3144a4e",
       "kind": "managed",
       "source": "core/scripts/kit-manifest-check.mjs"
     },
@@ -974,7 +974,7 @@
       "source": "core/scripts/lib/gate-select.mjs"
     },
     "scripts/lib/guard.mjs": {
-      "sha256": "8352c3e7ad88a691f3d54c506e8e83488294afeeee4a103eeac7db87d5b178e2",
+      "sha256": "bcecf9ab256363e215016a86143c61f1df032443c0ca67fd911c869516cdc9ea",
       "kind": "managed",
       "source": "core/scripts/lib/guard.mjs"
     },
@@ -988,13 +988,18 @@
       "kind": "managed",
       "source": "core/scripts/lib/merge-guard.mjs"
     },
+    "scripts/lib/notify.mjs": {
+      "sha256": "7bd5976ce26824d4e5f7553f799aaa5c172d6945fc3681e3b3943c9f785ac424",
+      "kind": "managed",
+      "source": "core/scripts/lib/notify.mjs"
+    },
     "scripts/lib/orch-folders.mjs": {
       "sha256": "6a5fec9d01cacf1d6745838f4e307cdfb3415f46cf222c58771d099fd62d5f9d",
       "kind": "managed",
       "source": "core/scripts/lib/orch-folders.mjs"
     },
     "scripts/lib/orch-run.mjs": {
-      "sha256": "f8bbaf75d52bec8b4d73e75fe217bb75a10241cecf402b405256e7d810651ae5",
+      "sha256": "55a4a276167ad8c1f86bdf45e2172ba3f3b0e558c2eb7f2ddac9e755dd6194c0",
       "kind": "managed",
       "source": "core/scripts/lib/orch-run.mjs"
     },
@@ -1009,7 +1014,7 @@
       "source": "core/scripts/lib/plan-deps.mjs"
     },
     "scripts/lib/plan-gate.mjs": {
-      "sha256": "a160837de7f15f52cfe32464b707da54c0c9db29a8743c447eb3b5c64906a45a",
+      "sha256": "e718b350307f164b08f2947eeac459fb98c7481510370c010e5a7dc55b8a1aa8",
       "kind": "managed",
       "source": "core/scripts/lib/plan-gate.mjs"
     },
@@ -1129,7 +1134,7 @@
       "source": "core/scripts/orch-preflight.mjs"
     },
     "scripts/orch-state.mjs": {
-      "sha256": "df715bc4babb7c99ca12a0cceabe2c943adfabda5c79e132f9d5ba4ae47a5dc7",
+      "sha256": "8d87ae463bea0fbd4eb7be0f2bfadb0af286ad9751287579e06670a0f41a6df4",
       "kind": "managed",
       "source": "core/scripts/orch-state.mjs"
     },
@@ -1229,7 +1234,7 @@
       "source": "core/scripts/reuse-scan.mjs"
     },
     "scripts/run-plans.mjs": {
-      "sha256": "af96044ee59d7a64d81a9d9c7691deaa8b444f35e6882a0b0270b1657a1a512e",
+      "sha256": "17575d381e359afc806980268244725ff0dbd000ba09060f22f01d140e2b6db2",
       "kind": "managed",
       "source": "core/scripts/run-plans.mjs"
     },
@@ -1403,5 +1408,31 @@
       "npm audit (workflow scripts, report only)",
       "Semgrep OWASP Top Ten"
     ]
+  },
+  "kitCopies": {
+    ".gitignore": {
+      "sha256": "a8edab5e475edea8e103799b0a83e0e3c2fd29001756cdd4d2ef6402a8937e17",
+      "base": ".kit/base/.gitignore.base"
+    },
+    ".nvmrc": {
+      "sha256": "55075b5ec4e8b31936cbbc282b8829116d1fd48f2f2f1856dee592a6650700ce",
+      "base": ".kit/base/.nvmrc.base"
+    },
+    "docs/brain/agent-lessons/builder.md": "73bcbe105778217c7322d8d6a50bf40dbe396f0b17822d6fad871309712424fa",
+    "docs/brain/agent-rules.md": "eb3d2492962b23bb201ba97aa5900d001ce78e20bf2c0af88558772788e6c762",
+    "docs/brain/component-families.md": "9df7dd68a9c8ac5e1d09d035045d9a3ef57ab61b4805d17ec9a3f3219017c0e3",
+    "docs/brain/follow-ups.md": "642cf3547c996af1362df370aa991540b455e4dd1f58b7dd05d0c4599fe5c4d8",
+    "docs/brain/index.md": "b2eba57aa7227bd2468e7bad58455396471effc07484b8753a5c896a80f98b77",
+    "docs/brain/invariants.md": "c299b96ff582cf2de509cb6281e2f1f1841e3f11fa3bf11ebe0e5094802f092d",
+    "docs/brain/inventory.md": "233e6b4e2a8a41846ebd9853cd559100a1223871c7c79916b7dd6252cb836daa",
+    "docs/brain/projectbrief.md": "d492c7d3a6b72c66983d58d6798f6bdf206bf7bba757388274a0f42b27967c61",
+    "docs/brain/run-log.md": "65067b3dc5e879fdf318360d39b7510c7cc202a7283b4667dfa8c23d26d3770b",
+    "docs/project/current-state.md": "50f8380c431f89d9939f480904f7dede8e391fb9676d118a7bbc3dca0dc1e876",
+    "docs/project/debt-baseline.json": "5d00bc6f73b586e76af9475537226618dd5336daebe970e9269640b16fe54333",
+    "docs/project/product-defaults.md": {
+      "sha256": "01186ea0b745c7d34721f55072b34d0b1f03938cc8e49f391d058c5c96d0aec9",
+      "base": ".kit/base/docs/project/product-defaults.md.base"
+    },
+    "docs/project/tech-stack.md": "edee63e69ef8c9417e4ce6b67fb5da728828b15205778283174302aa6f5661dc"
   }
 }

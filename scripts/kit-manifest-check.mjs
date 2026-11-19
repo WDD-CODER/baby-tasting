@@ -106,7 +106,10 @@ if (!existsSync(manifestPath)) {
   process.exit(1)
 }
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
-const excluded = (manifest.excluded ?? []).map((e) => globToRegExp(e.path))
+// The folders kit features write at run time (project data, never workflow files): left out of every project's
+// inventory, so a project's manifest never has to list them. One list, here.
+const KIT_DATA_DIRS = ['docs/brain/remarks/**']
+const excluded = [...KIT_DATA_DIRS.map((path) => ({ path })), ...(manifest.excluded ?? [])].map((e) => globToRegExp(e.path))
 const entries = manifest.entries ?? []
 
 const files = new Set()
