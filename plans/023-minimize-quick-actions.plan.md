@@ -50,6 +50,7 @@ e2e/023-1-minimize.spec.ts
 e2e/011-4-reorder.spec.ts
 e2e/screens/023-1.png
 docs/project/current-state.md
+src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts
 ```
 
 ## Read Scope
