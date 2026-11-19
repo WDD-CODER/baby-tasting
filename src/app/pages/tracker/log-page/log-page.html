@@ -1,10 +1,40 @@
 <div class="log">
   <app-log-banners (logPumping)="open('pumping')" (endSleep)="open('sleep')" />
-  <app-today-carousel [events]="day()" [now]="now()" />
-  <app-quick-grid [bathActive]="bathActive()" (openSheet)="open($event)" />
-  <app-diaper-tracker [events]="day()" />
-  <app-pumping-tracker [events]="day()" (add)="open('pumping')" />
-  <app-bio-gaya-card [events]="day()" />
+  <div class="log__edit">
+    <button
+      type="button"
+      class="log__reorder"
+      [class.log__reorder--on]="editing()"
+      (click)="toggleEdit()"
+    >
+      {{ editing() ? '✓ ' + t.reorderDone : '⠿ ' + t.reorderStart }}
+    </button>
+  </div>
+  <app-home-card
+    [id]="'today'"
+    [title]="t.cardTodayTitle"
+    slot="card.today"
+    [hasContent]="day().length > 0"
+  >
+    <app-today-carousel [events]="day()" [now]="now()" />
+  </app-home-card>
+  <app-home-card [id]="'quick'" [title]="t.cardQuickTitle" slot="card.quick">
+    <app-quick-grid [bathActive]="bathActive()" (openSheet)="open($event)" />
+  </app-home-card>
+  <app-home-card [id]="'diaper'" [title]="t.diaperTrackerTitle" slot="card.diaper">
+    <app-diaper-tracker [events]="day()" />
+  </app-home-card>
+  <app-home-card [id]="'pumping'" [title]="t.pumpingTrackerTitle" slot="card.pumping">
+    <app-pumping-tracker [events]="day()" (add)="open('pumping')" />
+  </app-home-card>
+  <app-home-card
+    [id]="'biogaya'"
+    [title]="t.bioGayaTitle"
+    slot="card.biogaya"
+    [hasContent]="hasBioGaya()"
+  >
+    <app-bio-gaya-card [events]="day()" />
+  </app-home-card>
   <app-entry-sheet [type]="sheet()" (closed)="close()" />
   <app-edit-sheet />
 </div>

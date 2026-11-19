@@ -46,17 +46,6 @@
     <app-awake-widget class="qg__wide" [minutes]="awake()" [bathActive]="bathActive()" />
   }
 
-  <div class="qg__wide">
-    <button
-      type="button"
-      class="qg__reorder"
-      [class.qg__reorder--on]="reorder()"
-      (click)="toggleReorder()"
-    >
-      {{ reorder() ? '✓ ' + t.reorderDone : '⠿ ' + t.reorderStart }}
-    </button>
-  </div>
-
   <div
     class="qg__list qg__wide"
     id="qg-grid"
