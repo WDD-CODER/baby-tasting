@@ -178,6 +178,12 @@ export const ICON_SLOTS = {
     group: 'כרטיסים',
     keywords: ['bio gaia', 'probiotic', 'ביו גאיה'],
   },
+  'ui.time': {
+    default: 'schedule',
+    label: 'בחירת שעה',
+    group: 'ממשק',
+    keywords: ['time', 'clock', 'שעה', 'שעון'],
+  },
 } as const satisfies Record<string, IconSlot>
 
 export type SlotKey = keyof typeof ICON_SLOTS

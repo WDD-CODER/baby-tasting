@@ -26,20 +26,15 @@ import { PhotoUploadService } from '../../../core/services/photo-upload.service'
 import { ReactionsService } from '../../../core/services/reactions.service'
 import { ToastService } from '../../../core/services/toast.service'
 import { addDays, today } from '../../../core/utils/dates'
+import { israelToIso, nowInIsrael, toIsraelString } from '../../../core/utils/israel-time'
 import { Button } from '../../../shared/ui/button/button'
 import { Chip } from '../../../shared/ui/chip/chip'
+import { DateTime24 } from '../../../shared/ui/datetime24/datetime24'
 import { ErrorState } from '../../../shared/ui/error-state/error-state'
 import { LoadingState } from '../../../shared/ui/loading-state/loading-state'
-import { TextField } from '../../../shared/ui/text-field/text-field'
 
 const MAX_PHOTOS = 5
 const MAX_TEXT = 1000
-
-/** `YYYY-MM-DDTHH:mm` in the device's own time, as a datetime-local input wants it. */
-function toLocalInput(date: Date): string {
-  const pad = (n: number): string => String(n).padStart(2, '0')
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
-}
 
 interface RelatedOption {
   id: string
@@ -48,7 +43,7 @@ interface RelatedOption {
 
 @Component({
   selector: 'app-reaction-form',
-  imports: [FormsModule, Button, Chip, ErrorState, LoadingState, TextField],
+  imports: [FormsModule, Button, Chip, DateTime24, ErrorState, LoadingState],
   templateUrl: './reaction-form.html',
   styleUrl: './reaction-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -80,7 +75,7 @@ export class ReactionForm implements HasUnsavedChanges {
   protected readonly loadFailed_ = signal(false)
   protected readonly saving_ = signal(false)
   protected readonly error_ = signal('')
-  protected readonly noticedAt_ = signal(toLocalInput(new Date()))
+  protected readonly noticedAt_ = signal(nowInIsrael())
   protected readonly itemIds_ = signal<string[]>([])
   protected readonly symptoms_ = signal<Symptom[]>([])
   protected readonly severity_ = signal<Severity | null>(null)
@@ -204,7 +199,7 @@ export class ReactionForm implements HasUnsavedChanges {
     this.saving_.set(true)
     try {
       const input = {
-        noticedAt: new Date(this.noticedAt_()).toISOString(),
+        noticedAt: israelToIso(this.noticedAt_()) ?? new Date().toISOString(),
         itemIds: this.itemIds_(),
         symptoms: this.symptoms_(),
         severity,
@@ -245,7 +240,7 @@ export class ReactionForm implements HasUnsavedChanges {
   }
 
   private fill(reaction: Reaction): void {
-    this.noticedAt_.set(toLocalInput(new Date(reaction.noticedAt)))
+    this.noticedAt_.set(toIsraelString(Date.parse(reaction.noticedAt)))
     this.itemIds_.set(reaction.itemIds)
     this.symptoms_.set(reaction.symptoms)
     this.severity_.set(reaction.severity)

@@ -99,10 +99,10 @@ line or file this plan names was removed, renamed or rewritten).
 
 These are the plan's milestones: a Worker does them in order and ticks each one after it is checked.
 
-- [ ] T1: Select the whole typed time when the field is tapped so typing replaces it — `(focus)` selects the input's value — src/app/shared/ui/datetime24/**
-- [ ] T2: Add the centred hour-then-minute time box behind a clock button and drop the old lists — step signal `hour | minute | null`; hour tap moves to minutes; minute tap sets the value through the existing setter and closes; backdrop and `ביטול` close; new slot `ui.time` and regenerated icon names — src/app/shared/ui/datetime24/**, src/app/core/icons/icon-slots.ts, src/app/core/icons/icon-names.ts, server/domain/tracker/icon-names.js, src/app/core/i18n/he.ts
-- [ ] T3: Use the same picker for a reaction's time — the reaction form's `מתי` becomes `app-datetime24` with the date chips; the value it sends stays an ISO moment — src/app/pages/reactions/reaction-form/**
-- [ ] T4: Prove it in the real app — `e2e/024-1-time-box.spec.ts` per the [ui] items; update any spec that used `בחירה מרשימה` or filled the reaction's `datetime-local`; the demo page shows the new box; one line in current-state — e2e/**, src/app/dev/components-demo/**, docs/project/current-state.md
+- [x] T1: Select the whole typed time when the field is tapped so typing replaces it — `(focus)` selects the input's value — src/app/shared/ui/datetime24/**
+- [x] T2: Add the centred hour-then-minute time box behind a clock button and drop the old lists — step signal `hour | minute | null`; hour tap moves to minutes; minute tap sets the value through the existing setter and closes; backdrop and `ביטול` close; new slot `ui.time` and regenerated icon names — src/app/shared/ui/datetime24/**, src/app/core/icons/icon-slots.ts, src/app/core/icons/icon-names.ts, server/domain/tracker/icon-names.js, src/app/core/i18n/he.ts
+- [x] T3: Use the same picker for a reaction's time — the reaction form's `מתי` becomes `app-datetime24` with the date chips; the value it sends stays an ISO moment — src/app/pages/reactions/reaction-form/**
+- [x] T4: Prove it in the real app — `e2e/024-1-time-box.spec.ts` per the [ui] items; update any spec that used `בחירה מרשימה` or filled the reaction's `datetime-local`; the demo page shows the new box; one line in current-state — e2e/**, src/app/dev/components-demo/**, docs/project/current-state.md
 
 ## Technical Considerations
 - Dependencies: `app-datetime24` is used by `entry-sheet` (time with date, and time only for `fixStart`) and the components demo; both get the change without edits.
@@ -122,4 +122,5 @@ These are the plan's milestones: a Worker does them in order and ticks each one 
 - Q: What does the time box look like? A: hour grid, then minutes (Human, 2026-11-19).
 
 ## Execution Notes
-- none yet
+- pnpm run build, lint, test -> exit 0 (Karma 108 SUCCESS). [ui] items: e2e/024-1-time-box.spec.ts written, not run.
+- the e2e spec covers the activity sheet and the reaction form (items 024-1 and 024-2 in one file).
