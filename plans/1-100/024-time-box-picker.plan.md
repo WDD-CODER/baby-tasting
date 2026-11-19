@@ -1,6 +1,6 @@
 # Plan 024 — One time picker everywhere: select-all typing and a tap-only time box
 
-Status: draft
+Status: done
 Depends-on: none
 Snapshot: b778b9117cbeb4acc6ceb6d3c5fbd9b34ddd9e01
 Source: the Human, 2026-11-19: "make all the different places that you select time work different … once it's selected it's all selected, then it allows the user to set it as he wishes, but it needs to be a time selector like the calendar container … so the user could pick the hour or set the time freely by text … so the user doesn't need to start clicking and dragging." Answer the same day: the time box is an hour grid, then a minute grid.

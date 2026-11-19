@@ -1,6 +1,6 @@
 # Plan 023 — Minimize quick-action buttons you don't use
 
-Status: draft
+Status: done
 Depends-on: none
 Snapshot: b778b9117cbeb4acc6ceb6d3c5fbd9b34ddd9e01
 Source: the Human, 2026-11-19: "There's this option to arrange the different containers … I want to allow there an option to minimize, like if somebody's not using one of the containers, like let's say the activity or the sleep timer, he could have an option to drag them somewhere that they'll become like a really minimized one. And then only when it's clicked, it's gonna open again." Answers the same day: the six quick-action buttons (not the home sections); tapping a minimized one uses it once and it stays minimized.
