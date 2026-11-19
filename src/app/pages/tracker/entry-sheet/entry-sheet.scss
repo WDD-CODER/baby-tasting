@@ -161,9 +161,7 @@
     font-weight: var(--fw-bold);
   }
 
-  &__delete,
-  &__confirmYes,
-  &__confirmNo {
+  &__delete {
     min-block-size: var(--touch-target);
     border: 1px solid var(--color-tier-bad);
     border-radius: var(--radius-card);
@@ -178,46 +176,6 @@
     &:disabled {
       opacity: 0.6;
     }
-  }
-
-  &__confirm {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-
-    padding: var(--space-4);
-    border: 1px solid var(--color-tier-bad);
-    border-radius: var(--radius-card);
-
-    background: var(--color-surface-raised);
-  }
-
-  &__confirmText {
-    margin: 0;
-
-    color: var(--color-text);
-    font-size: var(--fs-sm);
-    font-weight: var(--fw-bold);
-    text-align: center;
-  }
-
-  &__confirmRow {
-    display: flex;
-    gap: var(--space-3);
-
-    button {
-      flex: 1;
-    }
-  }
-
-  &__confirmYes {
-    background: var(--color-tier-bad);
-    color: var(--color-on-accent);
-  }
-
-  &__confirmNo {
-    border-color: var(--color-border);
-    color: var(--color-text);
   }
 
   &__submit {
