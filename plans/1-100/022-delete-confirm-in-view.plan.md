@@ -1,6 +1,6 @@
 # Plan 022 — Deleting from the timeline asks in a dialog the parent can see
 
-Status: draft
+Status: done
 Depends-on: none
 Snapshot: 8789dbf1450cc045f174947f0b6baf4615804c9a
 Source: the Human, 2026-11-19: "There is a problem removing items from my live render application … I'm trying to remove items from the timeline and it's not working. It's not responding." Reproduced by the Planner the same day on the production build of `8789dbf` (iPhone 13 size, 390×664 visible): after tapping `מחק אירוע` at the bottom of the edit sheet, the confirmation strip (`האם למחוק את האירוע הזה?` · `מחק` · `ביטול`) is drawn below the button at y = 709, outside the 664 px screen, and the sheet does not scroll to it — so nothing visible happens. Tapping `מחק` in the strip deletes correctly (server and refresh work; no console error).
