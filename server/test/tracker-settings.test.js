@@ -32,6 +32,7 @@ const DEFAULTS = {
   defaultBottleType: 'EXPRESSED_MILK',
   customActivities: ['שגרת בוקר', 'בייבי יוגה', 'שירים', 'טיול בעגלה', 'עיסוי תינוקות'],
   quickActionOrder: ['meal', 'diaper', 'sleep', 'activity', 'weight', 'vomiting'],
+  quickActionsMinimized: [],
   iconOverrides: {},
 }
 
@@ -62,6 +63,7 @@ test('PUT saves names, bottle, activities, order and icon overrides for the hous
     defaultBottleType: 'FORMULA',
     customActivities: ['שירים', 'אמבטיה'],
     quickActionOrder: ['sleep', 'meal', 'diaper', 'activity', 'weight', 'vomiting'],
+    quickActionsMinimized: [],
     iconOverrides: { 'nav.log': 'stylus', 'nav.tasting': 'nutrition' },
   }
   const saved = await a.put('/api/v1/tracker/settings').send(body)
@@ -101,6 +103,9 @@ test('PUT refuses an unknown slot key, an unknown icon name and other bad values
     { customActivities: [''] },
     { quickActionOrder: ['meal', 'meal'] },
     { quickActionOrder: ['dance'] },
+    { quickActionsMinimized: ['activity', 'activity'] },
+    { quickActionsMinimized: ['dance'] },
+    { quickActionsMinimized: 'activity' },
     { unknownKey: 1 },
     [],
   ]
@@ -134,4 +139,14 @@ test('the generated icon list holds the library names and the navigation slots',
   for (const slot of ['nav.log', 'nav.timeline', 'nav.stats', 'nav.tasting', 'nav.settings']) {
     assert.ok(ICON_SLOT_KEYS.has(slot), slot)
   }
+})
+
+test('PUT saves quickActionsMinimized and GET returns it; a household with none gets []', async () => {
+  const app = ctx.newApp()
+  const a = await signedInAgent(app)
+  assert.deepEqual((await a.get('/api/v1/tracker/settings')).body.settings.quickActionsMinimized, [])
+  const saved = await a.put('/api/v1/tracker/settings').send({ quickActionsMinimized: ['activity'] })
+  assert.equal(saved.status, 200)
+  assert.deepEqual((await a.get('/api/v1/tracker/settings')).body.settings.quickActionsMinimized, ['activity'])
+  assert.deepEqual(withTrackerDefaults({ quickActionsMinimized: ['activity', 'dance'] }).quickActionsMinimized, ['activity'])
 })

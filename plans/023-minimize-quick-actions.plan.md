@@ -106,9 +106,9 @@ line or file this plan names was removed, renamed or rewritten).
 These are the plan's milestones: a Worker does them in order and ticks each one after it is checked.
 
 - [ ] M1: Store which quick-action buttons a household minimized — `quickActionsMinimized` in `TRACKER_DEFAULTS` (`[]`), validated like `quickActionOrder` (known ids, no repeats), reconciled on read (unknown ids dropped); client model field; the spec fixtures that build a settings object get `quickActionsMinimized: []` — server/domain/tracker/settings.js, server/test/tracker-settings.test.js, src/app/core/models/tracker-settings.ts, src/app/app.spec.ts, src/app/pages/settings/icon-picker-sheet/icon-picker-sheet.spec.ts, src/app/pages/tracker/entry-sheet/entry-sheet.spec.ts
-- [ ] M2: Let the parent drag a button into a minimized row and back while editing the layout — second `cdkDropList` (`qg__minimized`) connected to the grid list; `drop` moves ids between `order_` and a new `minimized_` signal; `saveOrder` saves both fields; the grid renders only ids not minimized — src/app/pages/tracker/quick-grid/**, src/app/core/i18n/he.ts
-- [ ] M3: Make a minimized chip work like the full button — chip tap and long press call the same `onDown`/`onUp` path with the chip's id; the sleep chip shows a filled moon while a sleep runs — src/app/pages/tracker/quick-grid/**
-- [ ] M4: Prove it in the real app — `e2e/023-1-minimize.spec.ts` per the [ui] item; keep `e2e/011-4-reorder.spec.ts` passing; one line in current-state under the Tracker notes — e2e/023-1-minimize.spec.ts, e2e/011-4-reorder.spec.ts, docs/project/current-state.md
+- [x] M2: Let the parent drag a button into a minimized row and back while editing the layout — second `cdkDropList` (`qg__minimized`) connected to the grid list; `drop` moves ids between `order_` and a new `minimized_` signal; `saveOrder` saves both fields; the grid renders only ids not minimized — src/app/pages/tracker/quick-grid/**, src/app/core/i18n/he.ts
+- [x] M3: Make a minimized chip work like the full button — chip tap and long press call the same `onDown`/`onUp` path with the chip's id; the sleep chip shows a filled moon while a sleep runs — src/app/pages/tracker/quick-grid/**
+- [x] M4: Prove it in the real app — `e2e/023-1-minimize.spec.ts` per the [ui] item; keep `e2e/011-4-reorder.spec.ts` passing; one line in current-state under the Tracker notes — e2e/023-1-minimize.spec.ts, e2e/011-4-reorder.spec.ts, docs/project/current-state.md
 
 ## Technical Considerations
 - Dependencies: `TrackerSettingsService.save` sends a partial object; the server merges it.
@@ -129,4 +129,6 @@ These are the plan's milestones: a Worker does them in order and ticks each one 
 - Q: What does tapping a minimized one do? A: uses it once; it stays minimized (Human, 2026-11-19).
 
 ## Execution Notes
-- none yet
+- pnpm run build -> 0; pnpm run lint -> 0; node --test server/test/tracker-settings.test.js -> 0, pass 8
+- pnpm run test -> 1: TS2741 in src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts:9 (TrackerSettings fixture lacks quickActionsMinimized); that file is outside the scope, needs `approved: src/app/pages/tracker/timeline-page/timeline-row/timeline-row.spec.ts`
+- e2e 023-1 written, not run

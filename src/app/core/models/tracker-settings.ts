@@ -10,6 +10,8 @@ export interface TrackerSettings {
   defaultBottleType: BottleType
   customActivities: string[]
   quickActionOrder: QuickActionId[]
+  /** Quick-action buttons shown as small chips under the grid. */
+  quickActionsMinimized: QuickActionId[]
   /** Slot key → Material Symbols name. */
   iconOverrides: Record<string, string>
 }

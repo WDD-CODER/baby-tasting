@@ -83,6 +83,7 @@ describe('App', () => {
       defaultBottleType: 'EXPRESSED_MILK',
       customActivities: [],
       quickActionOrder: [],
+      quickActionsMinimized: [],
       iconOverrides: { 'nav.tasting': 'nutrition' },
     })
     const fixture = TestBed.createComponent(App)

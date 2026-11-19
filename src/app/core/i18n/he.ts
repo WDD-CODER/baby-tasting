@@ -494,6 +494,8 @@ export const HE = {
       quickDiaperOptions: { PEE: 'פיפי בלבד', POO: 'קקי בלבד', BOTH: 'שניהם יחד' },
       reorderStart: 'ערוך פריסה',
       reorderDone: 'סיום ושמירה',
+      minimizedTitle: 'ממוזער',
+      minimizedHint: 'גררו לכאן כדי למזער',
       mealTitle: 'ארוחה / בקבוק',
       mealCounts: 'בקבוקים: {b} | הנקות: {n}',
       mealHint: 'קליק: ארוחה מהירה 🍼 | החזק: מלא 🤱',

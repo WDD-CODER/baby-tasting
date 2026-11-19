@@ -10,6 +10,7 @@ const base: TrackerSettings = {
   defaultBottleType: 'EXPRESSED_MILK',
   customActivities: [],
   quickActionOrder: ['meal', 'diaper', 'sleep', 'activity', 'weight', 'vomiting'],
+  quickActionsMinimized: [],
   iconOverrides: { 'quick.weight': 'scale' },
 }
 
