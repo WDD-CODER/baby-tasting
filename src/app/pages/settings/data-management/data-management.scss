@@ -28,14 +28,10 @@
     font-size: var(--fs-sm);
   }
 
-  &__option,
-  &__confirm {
+  &__option {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-  }
-
-  &__option {
     padding-block-start: var(--space-3);
     border-block-start: 1px solid var(--color-border);
   }

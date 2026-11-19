@@ -27,33 +27,9 @@
     <section class="data__option">
       <h4 class="data__subtitle">{{ t.optionBTitle }}</h4>
       <p class="data__text">{{ t.optionBText }}</p>
-      <app-button variant="danger" [fullWidth]="true" [disabled]="busy_()" (pressed)="openReset()">
+      <app-button variant="danger" [fullWidth]="true" [disabled]="busy_()" (pressed)="resetAll()">
         {{ t.resetAll }}
       </app-button>
     </section>
   </div>
 </app-card>
-
-<app-bottom-sheet [open]="resetOpen_()" [title]="t.confirmTitleB" (closed)="closeReset()">
-  <div class="data__confirm">
-    <p class="data__text">{{ t.confirmBodyB }}</p>
-    <app-text-field
-      name="typedConfirm"
-      [label]="t.typedWord"
-      [ngModel]="typed_()"
-      (ngModelChange)="typed_.set($event)"
-    />
-    <app-button
-      variant="danger"
-      [fullWidth]="true"
-      [loading]="busy_()"
-      [disabled]="!typedOk_()"
-      (pressed)="resetAll()"
-    >
-      {{ t.confirmYes }}
-    </app-button>
-    <app-button variant="secondary" [fullWidth]="true" (pressed)="closeReset()">{{
-      cancel
-    }}</app-button>
-  </div>
-</app-bottom-sheet>

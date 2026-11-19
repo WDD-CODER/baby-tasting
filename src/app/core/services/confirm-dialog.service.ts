@@ -7,6 +7,8 @@ export interface ConfirmOptions {
   confirmLabel?: string
   cancelLabel?: string
   destructive?: boolean
+  requireWord?: string
+  requireWordLabel?: string
 }
 
 export interface ConfirmRequest {
@@ -15,6 +17,8 @@ export interface ConfirmRequest {
   confirmLabel: string
   cancelLabel: string
   destructive: boolean
+  requireWord: string
+  requireWordLabel: string
 }
 
 @Injectable({ providedIn: 'root' })
@@ -31,6 +35,8 @@ export class ConfirmDialogService {
       confirmLabel: opts.confirmLabel ?? HE.common.confirm,
       cancelLabel: opts.cancelLabel ?? HE.common.cancel,
       destructive: opts.destructive ?? false,
+      requireWord: opts.requireWord ?? '',
+      requireWordLabel: opts.requireWordLabel ?? '',
     })
     return new Promise<boolean>((resolve) => {
       this.resolve_ = resolve

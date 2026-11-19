@@ -96,3 +96,14 @@ the plan reviewer and the project's own checks keep them.
 - card: the page with the quick action · tap it, then tap the undo button in the toast · it is saved at once, and after undo it is gone again
 - exceptions: a change that cannot be undone safely; declare exception — why: <one line>
 - turned on: the Human, 2026-11-18
+
+### confirm-in-modal
+
+- status: on
+- rule: Every confirmation question opens as a centred modal through ConfirmDialogService, never as an inline strip or a bottom sheet.
+- applies when: destructive-action
+- how: src/app/core/services/confirm-dialog.service.ts (ConfirmDialogService.confirm), rendered by the shell's app-confirm-dialog
+- check: card
+- card: the page with the confirmation · trigger it · a modal opens in the middle of the screen, visible without scrolling
+- exceptions: (say where it does not apply)
+- turned on: the Human, 2026-11-19

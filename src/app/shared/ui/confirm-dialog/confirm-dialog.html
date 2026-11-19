@@ -12,10 +12,21 @@
   @if (body()) {
     <p class="dialog__body">{{ body() }}</p>
   }
+  @if (requireWord()) {
+    <app-text-field
+      name="typedConfirm"
+      [label]="requireWordLabel()"
+      [ngModel]="typed_()"
+      (ngModelChange)="typed_.set($event)"
+    />
+  }
   <div class="dialog__actions">
     <app-button variant="secondary" (pressed)="cancelled.emit()">{{ cancelLabel() }}</app-button>
-    <app-button [variant]="destructive() ? 'danger' : 'primary'" (pressed)="confirmed.emit()">{{
-      confirmLabel()
-    }}</app-button>
+    <app-button
+      [variant]="destructive() ? 'danger' : 'primary'"
+      [disabled]="!canConfirm_()"
+      (pressed)="confirmed.emit()"
+      >{{ confirmLabel() }}</app-button
+    >
   </div>
 </div>
