@@ -659,9 +659,10 @@ export const HE = {
       typeTime: 'שעה (HH:MM)',
       timeInvalid: 'שעה לא תקינה — 00:00 עד 23:59',
       minusMinutes: 'הפחת {n} דקות',
-      fromList: 'בחירה מרשימה',
-      hour: 'שעה',
-      minute: 'דקות',
+      openTimeBox: 'בחירת שעה',
+      pickHour: 'שעה',
+      pickMinute: 'דקות',
+      cancel: 'ביטול',
     },
     timelineEmpty: 'עוד אין כאן כלום',
     timeline: {

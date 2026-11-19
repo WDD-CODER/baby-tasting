@@ -10,13 +10,10 @@
     <h2 class="reaction__title">{{ isEdit ? t.editTitle : t.newTitle }}</h2>
 
     <form class="reaction__fields" (ngSubmit)="submit()">
-      <app-text-field
-        name="noticedAt"
-        type="datetime-local"
-        [label]="t.when"
-        [ngModel]="noticedAt_()"
-        (ngModelChange)="noticedAt_.set($event)"
-      />
+      <div class="reaction__when" data-testid="reaction-when">
+        <span class="reaction__legend">{{ t.when }}</span>
+        <app-datetime24 [value]="noticedAt_()" (valueChange)="noticedAt_.set($event)" />
+      </div>
 
       <fieldset class="reaction__group">
         <legend class="reaction__legend">{{ t.related }}</legend>

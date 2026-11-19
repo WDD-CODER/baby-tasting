@@ -12,8 +12,17 @@
       [attr.aria-invalid]="invalid()"
       [value]="typed()"
       (input)="onType($event)"
+      (focus)="selectAll($event)"
       (blur)="onTypedBlur()"
     />
+    <button
+      type="button"
+      class="dt__chip dt__chip--icon"
+      [attr.aria-label]="t.openTimeBox"
+      (click)="openBox()"
+    >
+      <app-icon slot="ui.time" [size]="20" />
+    </button>
   </div>
   @if (invalid()) {
     <p class="dt__error" role="alert">{{ t.timeInvalid }}</p>
@@ -56,70 +65,43 @@
         [attr.aria-label]="t.pickDate"
         (click)="toggleDateInput()"
       >
+        <!-- icon-slot-exception: the calendar chip is a fixed control icon (not part of this plan) -->
         <app-icon name="calendar_month" [size]="20" />
       </button>
     </div>
   }
 
-  <button type="button" class="dt__link" [attr.aria-expanded]="listOpen()" (click)="toggleList()">
-    {{ t.fromList }}
-  </button>
-
-  @if (listOpen()) {
-    <div class="dt__time" dir="ltr">
-      <span class="dt__slot">
-        <button type="button" class="dt__num" [attr.aria-label]="t.hour" (click)="toggle('hour')">
-          {{ hh() }}
-        </button>
-        @if (popover() === 'hour') {
-          <div class="dt__list" role="listbox">
-            @for (h of hours; track h) {
-              <button
-                type="button"
-                role="option"
-                class="dt__opt"
-                [attr.aria-selected]="h === hh()"
-                [class.dt__opt--on]="h === hh()"
-                (click)="setHour(h)"
-              >
-                {{ h }}
-              </button>
-            }
-          </div>
+  @if (step()) {
+    <div class="dt__backdrop" (click)="closeBox()"></div>
+    <div class="dt__box" role="dialog" aria-modal="true" [attr.aria-label]="t.openTimeBox">
+      <p class="dt__box-title">{{ step() === 'hour' ? t.pickHour : t.pickMinute }}</p>
+      <div class="dt__grid" [class.dt__grid--min]="step() === 'minute'" dir="ltr">
+        @if (step() === 'hour') {
+          @for (h of hours; track h) {
+            <button
+              type="button"
+              class="dt__opt"
+              [class.dt__opt--on]="h === hh()"
+              (click)="pickHour(h)"
+            >
+              {{ h }}
+            </button>
+          }
+        } @else {
+          @for (m of minutes; track m) {
+            <button
+              type="button"
+              class="dt__opt"
+              [class.dt__opt--on]="m === mm()"
+              (click)="pickMinute(m)"
+            >
+              {{ m }}
+            </button>
+          }
         }
-      </span>
-      <span>:</span>
-      <span class="dt__slot">
-        <button
-          type="button"
-          class="dt__num"
-          [attr.aria-label]="t.minute"
-          (click)="toggle('minute')"
-        >
-          {{ mm() }}
-        </button>
-        @if (popover() === 'minute') {
-          <div class="dt__list" role="listbox">
-            @for (m of minutes; track m) {
-              <button
-                type="button"
-                role="option"
-                class="dt__opt"
-                [attr.aria-selected]="m === mm()"
-                [class.dt__opt--on]="m === mm()"
-                (click)="setMinute(m)"
-              >
-                {{ m }}
-              </button>
-            }
-          </div>
-        }
-      </span>
+      </div>
+      <button type="button" class="dt__link" (click)="closeBox()">{{ t.cancel }}</button>
     </div>
-  }
-
-  @if (popover()) {
-    <div class="dt__backdrop" (click)="closePopover()"></div>
   }
 
   @if (withDate() && dateOpen()) {
