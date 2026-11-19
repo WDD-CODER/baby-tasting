@@ -231,7 +231,6 @@ export class EntrySheet {
     return type ? s.titles[type] : ''
   })
   protected readonly e = HE.tracker.edit
-  protected readonly deleteAsk = signal(false)
   protected readonly typeLine = computed(() => {
     const event = this.editing()
     if (!event) return ''
@@ -302,7 +301,6 @@ export class EntrySheet {
   /** Fills the form from an existing event: every field it has, with the form's defaults for the rest (spec-timeline-dashboards §4.1). */
   private load(event: TrackerEvent): void {
     this.reset()
-    this.deleteAsk.set(false)
     this.note.set(event.note ?? '')
     this.timestamp.set(toIsraelString(Date.parse(event.timestamp)))
     const n = event.nutrition
@@ -460,19 +458,22 @@ export class EntrySheet {
     }
   }
 
-  protected askDelete(): void {
-    this.deleteAsk.set(true)
+  /** Asks in the shared centred dialog (visible on a phone); cancel does nothing. */
+  protected async askDelete(): Promise<void> {
+    if (this.submitting()) return
+    const yes = await this.confirmDialog.confirm({
+      title: this.t.deleteStrip,
+      confirmLabel: this.t.deleteYes,
+      cancelLabel: this.t.deleteNo,
+      destructive: true,
+    })
+    if (yes) await this.confirmDelete()
   }
 
-  protected cancelDelete(): void {
-    this.deleteAsk.set(false)
-  }
-
-  /** Deletes the event after the confirmation strip; the toast's undo puts it back as a new event. */
+  /** Deletes the event after the confirmation dialog; the toast's undo puts it back as a new event. */
   protected async confirmDelete(): Promise<void> {
     const event = this.editing()
     if (!event || this.submitting()) return
-    this.deleteAsk.set(false)
     this.submitting.set(true)
     try {
       await this.events.remove(event.id)

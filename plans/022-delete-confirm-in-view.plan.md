@@ -85,8 +85,8 @@ line or file this plan names was removed, renamed or rewritten).
 
 These are the plan's milestones: a Worker does them in order and ticks each one after it is checked.
 
-- [ ] F1: Ask the delete question in the shared centred dialog so a phone shows it — askDelete awaits ConfirmDialogService.confirm with title deleteStrip, confirmLabel deleteYes, cancelLabel deleteNo, destructive true; on true run the existing delete; remove the deleteAsk signal, the strip markup and its styles — src/app/pages/tracker/entry-sheet/entry-sheet.ts, src/app/pages/tracker/entry-sheet/entry-sheet.html, src/app/pages/tracker/entry-sheet/entry-sheet.scss
-- [ ] F2: Replay the phone bug in the delete test so it cannot come back — 012-4 at 390×664 with the in-viewport assertion, cancel then confirm, as in the success criteria; keep 016-1 passing — e2e/012-4-delete.spec.ts, e2e/016-1-sleep-conflict-named.spec.ts
+- [x] F1: Ask the delete question in the shared centred dialog so a phone shows it — askDelete awaits ConfirmDialogService.confirm with title deleteStrip, confirmLabel deleteYes, cancelLabel deleteNo, destructive true; on true run the existing delete; remove the deleteAsk signal, the strip markup and its styles — src/app/pages/tracker/entry-sheet/entry-sheet.ts, src/app/pages/tracker/entry-sheet/entry-sheet.html, src/app/pages/tracker/entry-sheet/entry-sheet.scss
+- [x] F2: Replay the phone bug in the delete test so it cannot come back — 012-4 at 390×664 with the in-viewport assertion, cancel then confirm, as in the success criteria; keep 016-1 passing — e2e/012-4-delete.spec.ts, e2e/016-1-sleep-conflict-named.spec.ts
 
 ## Technical Considerations
 - Dependencies: the entry sheet already uses `ConfirmDialogService` for ending a sleep, so the dialog draws above the bottom sheet.
@@ -106,4 +106,6 @@ These are the plan's milestones: a Worker does them in order and ticks each one 
 - none
 
 ## Execution Notes
-- none yet
+- pnpm run build -> exit 0; pnpm run lint -> exit 0; pnpm run test -> exit 0; node scripts/override-check.mjs -> ok.
+- Updated entry-sheet.spec.ts delete unit test (beside scoped file) to the shared dialog.
+- [ui] e2e 012-4 (390x664) and 016-1 written/kept, not run (no app in worktree).

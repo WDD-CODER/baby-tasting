@@ -559,24 +559,6 @@
         >
           {{ e.delete }}
         </button>
-        @if (deleteAsk()) {
-          <div class="es__confirm" role="alertdialog" [attr.aria-label]="t.deleteStrip">
-            <p class="es__confirmText">{{ t.deleteStrip }}</p>
-            <div class="es__confirmRow">
-              <button
-                type="button"
-                class="es__confirmYes"
-                data-testid="edit-delete-yes"
-                (click)="confirmDelete()"
-              >
-                {{ t.deleteYes }}
-              </button>
-              <button type="button" class="es__confirmNo" (click)="cancelDelete()">
-                {{ t.deleteNo }}
-              </button>
-            </div>
-          </div>
-        }
       }
     </form>
   }
