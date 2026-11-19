@@ -71,6 +71,9 @@ e2e/support/tracker.ts
 e2e/screens/026-1.png
 docs/brain/inventory.md
 docs/project/current-state.md
+docs/brain/component-families.md
+server/domain/tracker/icon-names.js
+src/app/core/icons/icon-names.ts
 ```
 
 ## Read Scope
