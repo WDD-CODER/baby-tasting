@@ -1,0 +1,178 @@
+{
+  "run": "run-022",
+  "branch": "orch/run-022",
+  "base": "main",
+  "startedAt": "2026-11-19T09:32:44.778Z",
+  "mainShaAtStart": "b778b911d64b21ee3e035794e506099da5a79935",
+  "plans": {
+    "022": {
+      "nnn": "022",
+      "title": "Deleting from the timeline asks in a dialog the parent can see",
+      "branch": "feat/022-delete-confirm-in-view",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-19T09:33:40.656Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-19T09:40:32.034Z"
+        }
+      },
+      "humanItems": [
+        "the page with the delete button · press delete, then cancel · a confirmation appears and nothing is removed (here: `/timeline`, open an event, `מחק אירוע`; then delete for real and the event is gone)"
+      ],
+      "history": [
+        {
+          "at": "2026-11-19T09:33:40.505Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T09:33:40.658Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T09:38:58.474Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T09:38:58.794Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T09:38:59.045Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T09:40:27.835Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T09:40:32.035Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T09:40:39.701Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T09:41:09.287Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 19.4,
+      "sha": "fe29fa2306b6bd1383b0c490bcad06693adec0f2",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 315.5,
+          "tokens": {
+            "input": 609542,
+            "output": 10306
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 7.2,
+          "tokens": {
+            "input": 41199,
+            "output": 355
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "`e2e/012-4-delete.spec.ts` at 390×664 (iPhone 13 visible height): open a timeline row, tap `מחק אירוע`; the dialog `האם למחוק את האירוע הזה?` is inside the view",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        },
+        {
+          "card": "`e2e/016-1-sleep-conflict-named.spec.ts` still passes (it opens the same edit sheet).",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "ccbc150340594cd6499362ed8855ee8d532dbf57"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-19T09:33:40.351Z",
+      "plan": "022",
+      "text": "the folder baby-tasting-orch-run-022-022 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-19T09:38:56.332Z",
+      "plan": "022",
+      "text": "builder left undone (round 0): [ui] e2e/012-4-delete.spec.ts at 390x664: written, not run; [ui] e2e/016-1-sleep-conflict-named.spec.ts still passes: not run (file unchanged)"
+    },
+    {
+      "at": "2026-11-19T09:38:58.666Z",
+      "plan": "022",
+      "text": "[ui] `e2e/012-4-delete.spec.ts` at 390×664 (iPhone 13 visible height): open a timeline row, tap `מחק אירוע`; the dialog `האם למחוק את האירוע הזה?` is inside the: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-19T09:38:58.918Z",
+      "plan": "022",
+      "text": "[ui] `e2e/016-1-sleep-conflict-named.spec.ts` still passes (it opens the same edit sheet).: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-19T09:40:47.819Z",
+      "plan": "022",
+      "text": "the folder baby-tasting-orch-merge-run-022 was installed (root, scripts, server)"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 19.4,
+  "updatedAt": "2026-11-19T09:43:06.369Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "022",
+      "type": "behaviour",
+      "text": "behaviour: the delete button does nothing while a save or delete is in progress, as the old strip's confirm did — reverse: remove the submitting() guard in askDelete()",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-19T09:43:06.367Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-19T09:43:06.368Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}
