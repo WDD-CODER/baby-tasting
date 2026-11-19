@@ -2,6 +2,7 @@ import { signal } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
 import { NewTrackerEvent, TrackerEvent } from '../../../core/models/tracker-event'
 import { BottleType, TrackerSettings } from '../../../core/models/tracker-settings'
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service'
 import { DoubleSubmitService } from '../../../core/services/double-submit.service'
 import { ToastService } from '../../../core/services/toast.service'
 import { TrackerEventsService } from '../../../core/services/tracker-events.service'
@@ -205,13 +206,21 @@ describe('EntrySheet in edit mode', () => {
     expect(updates[0].body.note).toBe('')
   })
 
-  it('delete asks first and removes only after the confirmation', async () => {
+  it('delete asks in the shared dialog; cancel removes nothing, confirm removes', async () => {
     const { fixture, root, removed } = setup(quickBottle)
-    root.querySelector<HTMLButtonElement>('[data-testid="edit-delete"]')?.click()
-    fixture.detectChanges()
+    const dialog = TestBed.inject(ConfirmDialogService)
+    const del = root.querySelector<HTMLButtonElement>('[data-testid="edit-delete"]')
+
+    del?.click()
+    expect(dialog.request()?.title).toBe('האם למחוק את האירוע הזה?')
+    expect(dialog.request()?.destructive).toBe(true)
     expect(removed.length).toBe(0)
-    expect(root.textContent).toContain('האם למחוק את האירוע הזה?')
-    root.querySelector<HTMLButtonElement>('[data-testid="edit-delete-yes"]')?.click()
+    dialog.answer(false)
+    await fixture.whenStable()
+    expect(removed.length).toBe(0)
+
+    del?.click()
+    dialog.answer(true)
     await fixture.whenStable()
     expect(removed).toEqual(['q1'])
   })
