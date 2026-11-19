@@ -84,6 +84,7 @@ describe('App', () => {
       customActivities: [],
       quickActionOrder: [],
       quickActionsMinimized: [],
+      homeCardsMinimized: [],
       iconOverrides: { 'nav.tasting': 'nutrition' },
     })
     const fixture = TestBed.createComponent(App)

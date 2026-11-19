@@ -8,7 +8,10 @@ import {
 } from '@angular/core'
 import { TrackerEventsService } from '../../../core/services/tracker-events.service'
 import { babyDayEvents } from '../../../core/utils/tracker-rules'
-import { BioGayaCard } from '../bio-gaya-card/bio-gaya-card'
+import { BioGayaCard, bioGayaGiven } from '../bio-gaya-card/bio-gaya-card'
+import { HomeCard } from '../home-card/home-card'
+import { HomeLayoutService } from '../home-layout.service'
+import { HE } from '../../../core/i18n/he'
 import { DiaperTracker } from '../diaper-tracker/diaper-tracker'
 import { EditSheet } from '../edit-sheet/edit-sheet'
 import { EntrySheet } from '../entry-sheet/entry-sheet'
@@ -23,6 +26,7 @@ import { TodayCarousel } from '../today-carousel/today-carousel'
 @Component({
   selector: 'app-log-page',
   imports: [
+    HomeCard,
     TodayCarousel,
     QuickGrid,
     DiaperTracker,
@@ -39,6 +43,7 @@ import { TodayCarousel } from '../today-carousel/today-carousel'
 export class LogPage {
   private readonly events = inject(TrackerEventsService)
   private readonly reminders = inject(LogReminderService)
+  private readonly layout = inject(HomeLayoutService)
 
   private readonly sheet_ = signal<SheetType | null>(null)
   protected readonly sheet = this.sheet_.asReadonly()
@@ -46,11 +51,19 @@ export class LogPage {
   protected readonly now = this.events.now
   protected readonly day = computed(() => babyDayEvents(this.events.events(), this.now()))
   protected readonly bathActive = this.reminders.bathActive
+  protected readonly t = HE.tracker.log
+  protected readonly editing = this.layout.editing
+  protected readonly hasBioGaya = computed(() => bioGayaGiven(this.day()) !== null)
 
   constructor() {
     // Load, then refresh every 5 s while visible and on focus (spec §1.4); stop when the page goes away.
     this.events.start()
     inject(DestroyRef).onDestroy(() => this.events.stop())
+  }
+
+  protected toggleEdit(): void {
+    if (this.layout.editing()) void this.layout.finish()
+    else this.layout.start()
   }
 
   protected open(type: SheetType): void {

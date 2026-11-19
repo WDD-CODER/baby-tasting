@@ -1,0 +1,32 @@
+@if (editing()) {
+  <div class="hc__switchRow" [attr.data-testid]="'home-card-switch-' + id()">
+    <strong>{{ title() }}</strong>
+    <button
+      type="button"
+      class="hc__switch"
+      [class.hc__switch--on]="minimized()"
+      [attr.aria-pressed]="minimized()"
+      (click)="toggleMinimized()"
+    >
+      {{ t.cardMinimize }}
+    </button>
+  </div>
+}
+
+@if (showBar()) {
+  <button
+    type="button"
+    class="hc__bar"
+    [attr.aria-expanded]="opened()"
+    [attr.data-testid]="'home-card-bar-' + id()"
+    (click)="toggleOpen()"
+  >
+    <app-icon [slot]="slot()" [size]="20" />
+    <strong class="hc__title">{{ title() }}</strong>
+    <span class="hc__chevron" [class.hc__chevron--open]="opened()" aria-hidden="true">⌄</span>
+  </button>
+}
+
+<div class="hc__body" [class.hc__body--hidden]="!showBody()">
+  <ng-content />
+</div>

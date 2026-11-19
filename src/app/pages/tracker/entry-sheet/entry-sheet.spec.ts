@@ -17,6 +17,7 @@ function settings(defaultBottleType: BottleType): TrackerSettings {
     customActivities: ['שירים'],
     quickActionOrder: ['meal', 'diaper', 'sleep', 'activity', 'weight', 'vomiting'],
     quickActionsMinimized: [],
+    homeCardsMinimized: [],
     iconOverrides: {},
   }
 }

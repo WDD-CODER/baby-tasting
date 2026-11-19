@@ -3,6 +3,7 @@ import { ICON_NAMES, ICON_SLOT_KEYS } from './icon-names.js'
 
 export const BOTTLE_TYPES = Object.freeze(['EXPRESSED_MILK', 'FORMULA'])
 export const QUICK_ACTION_IDS = Object.freeze(['meal', 'diaper', 'sleep', 'activity', 'weight', 'vomiting'])
+export const HOME_CARD_IDS = Object.freeze(['today', 'quick', 'diaper', 'pumping', 'biogaya'])
 
 export const TRACKER_DEFAULTS = Object.freeze({
   parentAName: 'אמא',
@@ -11,6 +12,7 @@ export const TRACKER_DEFAULTS = Object.freeze({
   customActivities: Object.freeze(['שגרת בוקר', 'בייבי יוגה', 'שירים', 'טיול בעגלה', 'עיסוי תינוקות']),
   quickActionOrder: QUICK_ACTION_IDS,
   quickActionsMinimized: Object.freeze([]),
+  homeCardsMinimized: Object.freeze([]),
   iconOverrides: Object.freeze({}),
 })
 
@@ -42,6 +44,11 @@ const CHECKS = {
     if (!Array.isArray(v)) return 'quickActionsMinimized must be a list'
     if (v.some((id) => !QUICK_ACTION_IDS.includes(id))) return `quickActionsMinimized ids must be ${QUICK_ACTION_IDS.join(', ')}`
     return new Set(v).size === v.length ? null : 'quickActionsMinimized has a repeated id'
+  },
+  homeCardsMinimized: (v) => {
+    if (!Array.isArray(v)) return 'homeCardsMinimized must be a list'
+    if (v.some((id) => !HOME_CARD_IDS.includes(id))) return `homeCardsMinimized ids must be ${HOME_CARD_IDS.join(', ')}`
+    return new Set(v).size === v.length ? null : 'homeCardsMinimized has a repeated id'
   },
   iconOverrides: (v) => {
     if (!isPlainObject(v)) return 'iconOverrides must be an object'
@@ -86,6 +93,7 @@ export function withTrackerDefaults(stored) {
     ...TRACKER_DEFAULTS,
     customActivities: [...TRACKER_DEFAULTS.customActivities],
     quickActionsMinimized: [],
+    homeCardsMinimized: [],
     iconOverrides: {},
   }
   if (!isPlainObject(stored)) return { ...out, quickActionOrder: [...QUICK_ACTION_IDS] }
@@ -96,6 +104,10 @@ export function withTrackerDefaults(stored) {
   const minimized = stored.quickActionsMinimized
   out.quickActionsMinimized = Array.isArray(minimized)
     ? minimized.filter((id, i) => QUICK_ACTION_IDS.includes(id) && minimized.indexOf(id) === i)
+    : []
+  const cards = stored.homeCardsMinimized
+  out.homeCardsMinimized = Array.isArray(cards)
+    ? cards.filter((id, i) => HOME_CARD_IDS.includes(id) && cards.indexOf(id) === i)
     : []
   out.iconOverrides = { ...out.iconOverrides }
   out.customActivities = [...out.customActivities]
