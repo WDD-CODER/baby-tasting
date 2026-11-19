@@ -18,6 +18,7 @@
 
   &__typed-row {
     display: flex;
+    gap: var(--space-2);
     justify-content: flex-start;
   }
 
@@ -53,7 +54,7 @@
   }
 
   &__link {
-    align-self: flex-start;
+    align-self: center;
 
     color: var(--color-accent);
     font-family: inherit;
@@ -97,60 +98,10 @@
     }
   }
 
-  &__time {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-
-    color: var(--color-text);
-    font-weight: var(--fw-bold);
-  }
-
-  &__slot {
-    position: relative;
-    z-index: 43;
-  }
-
-  &__num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-inline-size: var(--touch-target);
-    min-block-size: var(--touch-target);
-    border: 0;
-    border-radius: var(--radius-card);
-
-    background: var(--color-surface-raised);
-    color: var(--color-text);
-    font-family: inherit;
-    font-size: var(--fs-lg);
-    font-weight: var(--fw-bold);
-    cursor: pointer;
-  }
-
-  &__list {
-    position: absolute;
-    inset-block-start: 100%;
-    inset-inline-start: 0;
-    z-index: 44;
-
-    display: flex;
-    flex-direction: column;
-
-    inline-size: 64px;
-    max-block-size: 160px;
-    overflow-y: auto;
-
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-card);
-
-    background: var(--color-surface);
-  }
-
   &__opt {
     min-block-size: var(--touch-target);
-    border: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
 
     background: transparent;
     color: var(--color-text);
@@ -159,8 +110,11 @@
     cursor: pointer;
 
     &--on {
+      border-color: var(--color-accent);
+
       background: var(--color-accent);
       color: var(--color-on-accent);
+      font-weight: var(--fw-bold);
     }
   }
 
@@ -168,6 +122,48 @@
     position: fixed;
     inset: 0;
     z-index: 42;
+
+    background: var(--color-backdrop);
+  }
+
+  // centred by margin: auto on all sides; a translate of -50% runs the wrong way in RTL and pushed it off screen
+  &__box {
+    position: fixed;
+    inset: 0;
+    z-index: 43;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+
+    inline-size: min(22rem, calc(100vw - 2 * var(--space-4)));
+    block-size: fit-content;
+    max-block-size: 90vh;
+    overflow-y: auto;
+
+    margin: auto;
+    padding: var(--space-4);
+    border-radius: var(--radius-card);
+
+    background: var(--color-surface);
+  }
+
+  &__box-title {
+    margin: 0;
+
+    color: var(--color-text);
+    font-weight: var(--fw-bold);
+    text-align: center;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-2);
+
+    &--min {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   &__native {

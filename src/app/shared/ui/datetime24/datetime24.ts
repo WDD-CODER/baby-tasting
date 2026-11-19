@@ -1,24 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  computed,
-  inject,
-  input,
-  model,
-  signal,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, input, model, signal } from '@angular/core'
 import { HE } from '../../../core/i18n/he'
 import { addWallMinutes, nowInIsrael } from '../../../core/utils/israel-time'
 import { Icon } from '../icon/icon'
 
-type Popover = 'hour' | 'minute' | null
+type Step = 'hour' | 'minute' | null
 
 /** `date` shows the date chips and the calendar; `none` is time only (the date part of `value` is kept). */
 export type DateMode = 'none' | 'date'
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
-const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
+const MINUTES = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'))
 const PREVIEW = new Intl.DateTimeFormat('he-IL', {
   timeZone: 'UTC',
   weekday: 'short',
@@ -43,7 +34,7 @@ export function parseTyped(text: string): string | null {
 
 /**
  * The shared 24-hour time picker in Asia/Jerusalem (D-015-3). `value` is `YYYY-MM-DDTHH:mm`; it never gets a partial
- * value. The typed `HH:MM` field comes first; chips move the current value; the hour and minute lists open from a link.
+ * value. The typed `HH:MM` field comes first; chips move the current value; a clock button opens a time box (hour grid, then minute grid).
  */
 @Component({
   selector: 'app-datetime24',
@@ -53,8 +44,6 @@ export function parseTyped(text: string): string | null {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DateTime24 {
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef)
-
   readonly value = model('')
   readonly dateMode = input<DateMode>('date')
 
@@ -66,15 +55,13 @@ export class DateTime24 {
     label: HE.tracker.dt.minusMinutes.replace('{n}', String(n)),
   }))
 
-  private readonly popover_ = signal<Popover>(null)
+  private readonly step_ = signal<Step>(null)
   private readonly dateOpen_ = signal(false)
-  private readonly listOpen_ = signal(false)
   /** What the parent is typing; null shows the value's time. */
   private readonly draft_ = signal<string | null>(null)
   private readonly invalid_ = signal(false)
-  protected readonly popover = this.popover_.asReadonly()
+  protected readonly step = this.step_.asReadonly()
   protected readonly dateOpen = this.dateOpen_.asReadonly()
-  protected readonly listOpen = this.listOpen_.asReadonly()
   protected readonly invalid = this.invalid_.asReadonly()
 
   protected readonly date = computed(() => /^\d{4}-\d{2}-\d{2}/.exec(this.value())?.[0] ?? '')
@@ -144,40 +131,36 @@ export class DateTime24 {
     this.emit(addWallMinutes(base, minutes))
   }
 
-  protected setHour(hour: string): void {
+  /** Tapping the field selects its whole value so the next digits replace it. */
+  protected selectAll(event: Event): void {
+    const field = event.target as HTMLInputElement
+    field.select()
+    // some phones place the caret after the focus event; select again once it has
+    setTimeout(() => field.select())
+  }
+
+  protected openBox(): void {
+    this.step_.set('hour')
+  }
+
+  protected pickHour(hour: string): void {
     this.clearDraft()
     this.emit(`${this.dateOrToday()}T${hour}:${this.mm()}`)
-    this.popover_.set(null)
+    this.step_.set('minute')
   }
 
-  protected setMinute(minute: string): void {
+  protected pickMinute(minute: string): void {
     this.clearDraft()
     this.emit(`${this.dateOrToday()}T${this.hh()}:${minute}`)
-    this.popover_.set(null)
+    this.step_.set(null)
   }
 
-  protected toggleList(): void {
-    this.listOpen_.update((open) => !open)
-    if (!this.listOpen_()) this.popover_.set(null)
+  protected closeBox(): void {
+    this.step_.set(null)
   }
 
   protected toggleDateInput(): void {
     this.dateOpen_.update((open) => !open)
-  }
-
-  protected toggle(which: 'hour' | 'minute'): void {
-    this.popover_.update((current) => (current === which ? null : which))
-    if (this.popover_()) {
-      queueMicrotask(() =>
-        this.host.nativeElement
-          .querySelector('[aria-selected="true"]')
-          ?.scrollIntoView({ block: 'center' }),
-      )
-    }
-  }
-
-  protected closePopover(): void {
-    this.popover_.set(null)
   }
 
   protected onDateInput(event: Event): void {

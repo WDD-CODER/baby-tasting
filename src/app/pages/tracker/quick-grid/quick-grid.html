@@ -59,12 +59,15 @@
 
   <div
     class="qg__list qg__wide"
+    id="qg-grid"
     cdkDropList
+    [cdkDropListData]="shown()"
+    [cdkDropListConnectedTo]="['qg-minimized']"
     cdkDropListOrientation="mixed"
     [cdkDropListDisabled]="!reorder()"
     (cdkDropListDropped)="drop($event)"
   >
-    @for (id of order(); track id) {
+    @for (id of shown(); track id) {
       <div
         class="qg__item"
         [class.qg__item--wide]="id === 'sleep'"
@@ -171,4 +174,49 @@
       </div>
     }
   </div>
+
+  @if (showMinimized()) {
+    <div class="qg__wide qg__mini">
+      <strong>{{ t.minimizedTitle }}</strong>
+      @if (reorder()) {
+        <small>{{ t.minimizedHint }}</small>
+      }
+      <div
+        class="qg__chips"
+        [class.qg__chips--reorder]="reorder()"
+        id="qg-minimized"
+        data-testid="quick-minimized"
+        cdkDropList
+        cdkDropListOrientation="mixed"
+        [cdkDropListData]="minimized()"
+        [cdkDropListConnectedTo]="['qg-grid']"
+        [cdkDropListDisabled]="!reorder()"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (id of minimized(); track id) {
+          <div class="qg__chipItem" cdkDrag [cdkDragDisabled]="!reorder()" [attr.data-chip]="id">
+            <button
+              type="button"
+              class="qg__chip"
+              [class.qg__chip--pressed]="pressed() === id"
+              [class.qg__chip--open]="id === 'sleep' && !!openSleep()"
+              (pointerdown)="onDown(id, $event)"
+              (pointermove)="onMove($event)"
+              (pointerup)="onUp(id, $event)"
+              (pointercancel)="cancelPress()"
+              (pointerleave)="cancelPress()"
+              (contextmenu)="$event.preventDefault()"
+            >
+              <app-icon
+                [slot]="chipSlot(id)"
+                [size]="20"
+                [filled]="id === 'sleep' && !!openSleep()"
+              />
+              <span>{{ chipTitle(id) }}</span>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </section>

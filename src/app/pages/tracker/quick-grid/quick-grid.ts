@@ -1,4 +1,10 @@
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop'
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDropList,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop'
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,6 +17,7 @@ import {
 } from '@angular/core'
 import { HE } from '../../../core/i18n/he'
 import { DiaperContains, VomitingSize } from '../../../core/models/tracker-event'
+import { SlotKey } from '../../../core/icons/icon-slots'
 import { QuickActionId } from '../../../core/models/tracker-settings'
 import { ToastService } from '../../../core/services/toast.service'
 import { TrackerEventsService } from '../../../core/services/tracker-events.service'
@@ -46,6 +53,14 @@ export function reconcileOrder(saved: readonly string[] | undefined): QuickActio
   )
   const unique = known.filter((id, i) => known.indexOf(id) === i)
   return [...unique, ...DEFAULT_ORDER.filter((id) => !unique.includes(id))]
+}
+
+/** Known ids only, no repeats (the minimized chips). */
+export function reconcileMinimized(saved: readonly string[] | undefined): QuickActionId[] {
+  const known = (saved ?? []).filter((id): id is QuickActionId =>
+    (DEFAULT_ORDER as string[]).includes(id),
+  )
+  return known.filter((id, i) => known.indexOf(id) === i)
 }
 
 interface Press {
@@ -95,6 +110,7 @@ export class QuickGrid {
   ]
 
   private readonly order_ = signal<QuickActionId[]>(DEFAULT_ORDER)
+  private readonly minimized_ = signal<QuickActionId[]>([])
   private readonly reorder_ = signal(false)
   private readonly diaperPanel_ = signal(false)
   private readonly vomitingPanel_ = signal(false)
@@ -102,7 +118,12 @@ export class QuickGrid {
   private press_: Press | null = null
 
   protected readonly order = this.order_.asReadonly()
+  protected readonly minimized = this.minimized_.asReadonly()
   protected readonly reorder = this.reorder_.asReadonly()
+  protected readonly shown = computed(() =>
+    this.order_().filter((id) => !this.minimized_().includes(id)),
+  )
+  protected readonly showMinimized = computed(() => this.reorder_() || this.minimized_().length > 0)
   protected readonly diaperPanel = this.diaperPanel_.asReadonly()
   protected readonly vomitingPanel = this.vomitingPanel_.asReadonly()
   protected readonly pressed = this.pressed_.asReadonly()
@@ -144,6 +165,7 @@ export class QuickGrid {
     effect(() => {
       const saved = this.settings.settings()?.quickActionOrder
       this.order_.set(reconcileOrder(saved))
+      this.minimized_.set(reconcileMinimized(this.settings.settings()?.quickActionsMinimized))
     })
   }
 
@@ -159,10 +181,33 @@ export class QuickGrid {
   }
 
   protected drop(event: CdkDragDrop<QuickActionId[]>): void {
-    const next = [...this.order_()]
-    const [moved] = next.splice(event.previousIndex, 1)
-    next.splice(event.currentIndex, 0, moved)
-    this.order_.set(next)
+    const grid = [...this.shown()]
+    const chips = [...this.minimized_()]
+    const target = event.container.id === 'qg-minimized' ? chips : grid
+    if (event.previousContainer === event.container) {
+      moveItemInArray(target, event.previousIndex, event.currentIndex)
+    } else {
+      const source = event.previousContainer.id === 'qg-minimized' ? chips : grid
+      transferArrayItem(source, target, event.previousIndex, event.currentIndex)
+    }
+    this.minimized_.set(chips)
+    this.order_.set([...grid, ...chips])
+  }
+
+  protected chipSlot(id: QuickActionId): SlotKey {
+    return `quick.${id}`
+  }
+
+  protected chipTitle(id: QuickActionId): string {
+    const titles: Record<QuickActionId, string> = {
+      meal: this.t.mealTitle,
+      diaper: this.t.diaperButton,
+      sleep: this.t.sleepButtonStart,
+      activity: this.t.activityButton,
+      weight: this.t.weightButton,
+      vomiting: this.t.vomitingButton,
+    }
+    return titles[id]
   }
 
   protected closeDiaper(): void {
@@ -237,12 +282,16 @@ export class QuickGrid {
     else if (id === 'diaper') this.diaperPanel_.update((open) => !open)
     else if (id === 'sleep') void this.quick.sleep()
     else if (id === 'vomiting') this.vomitingPanel_.update((open) => !open)
+    else this.openFull(id)
   }
 
   private async saveOrder(): Promise<void> {
     this.reorder_.set(false)
     try {
-      await this.settings.save({ quickActionOrder: this.order_() })
+      await this.settings.save({
+        quickActionOrder: this.order_(),
+        quickActionsMinimized: this.minimized_(),
+      })
       this.toast.show(this.t.reorderSaved, 'good')
     } catch {
       this.toast.show(this.t.reorderFailed, 'bad')

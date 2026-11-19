@@ -33,6 +33,11 @@
     gap: var(--space-4);
   }
 
+  &__when {
+    display: grid;
+    gap: var(--space-1);
+  }
+
   &__group {
     display: flex;
     flex-direction: column;
