@@ -1,6 +1,6 @@
 # Plan 025 — Every confirmation opens a centred modal
 
-Status: draft
+Status: done
 Depends-on: 022
 Snapshot: b778b9117cbeb4acc6ceb6d3c5fbd9b34ddd9e01
 Source: the Human, 2026-11-19: "Have all confirmations open a modal in the middle of the screen." Answer the same day: make it a standing default, and move the delete-all question into the modal too. Plan 022 (PR #21) already moved the timeline delete question into the shared dialog; after it, the only confirmation not in the modal is Settings → data management's full reset, a bottom sheet where the parent types `מחק הכל`.
