@@ -10,6 +10,7 @@ export const TRACKER_DEFAULTS = Object.freeze({
   defaultBottleType: 'EXPRESSED_MILK',
   customActivities: Object.freeze(['שגרת בוקר', 'בייבי יוגה', 'שירים', 'טיול בעגלה', 'עיסוי תינוקות']),
   quickActionOrder: QUICK_ACTION_IDS,
+  quickActionsMinimized: Object.freeze([]),
   iconOverrides: Object.freeze({}),
 })
 
@@ -36,6 +37,11 @@ const CHECKS = {
     if (!Array.isArray(v)) return 'quickActionOrder must be a list'
     if (v.some((id) => !QUICK_ACTION_IDS.includes(id))) return `quickActionOrder ids must be ${QUICK_ACTION_IDS.join(', ')}`
     return new Set(v).size === v.length ? null : 'quickActionOrder has a repeated id'
+  },
+  quickActionsMinimized: (v) => {
+    if (!Array.isArray(v)) return 'quickActionsMinimized must be a list'
+    if (v.some((id) => !QUICK_ACTION_IDS.includes(id))) return `quickActionsMinimized ids must be ${QUICK_ACTION_IDS.join(', ')}`
+    return new Set(v).size === v.length ? null : 'quickActionsMinimized has a repeated id'
   },
   iconOverrides: (v) => {
     if (!isPlainObject(v)) return 'iconOverrides must be an object'
@@ -79,6 +85,7 @@ export function withTrackerDefaults(stored) {
   const out = {
     ...TRACKER_DEFAULTS,
     customActivities: [...TRACKER_DEFAULTS.customActivities],
+    quickActionsMinimized: [],
     iconOverrides: {},
   }
   if (!isPlainObject(stored)) return { ...out, quickActionOrder: [...QUICK_ACTION_IDS] }
@@ -86,6 +93,10 @@ export function withTrackerDefaults(stored) {
     if (field in stored && CHECKS[field](stored[field]) === null) out[field] = stored[field]
   }
   out.quickActionOrder = reconcileQuickActionOrder(out.quickActionOrder)
+  const minimized = stored.quickActionsMinimized
+  out.quickActionsMinimized = Array.isArray(minimized)
+    ? minimized.filter((id, i) => QUICK_ACTION_IDS.includes(id) && minimized.indexOf(id) === i)
+    : []
   out.iconOverrides = { ...out.iconOverrides }
   out.customActivities = [...out.customActivities]
   return out
