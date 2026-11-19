@@ -5,7 +5,6 @@ import { ConfirmDialogService } from '../../../core/services/confirm-dialog.serv
 import { ToastService } from '../../../core/services/toast.service'
 import { TrackerEventsService } from '../../../core/services/tracker-events.service'
 import { today } from '../../../core/utils/dates'
-import { BottomSheet } from '../../../shared/ui/bottom-sheet/bottom-sheet'
 import { Button } from '../../../shared/ui/button/button'
 import { Card } from '../../../shared/ui/card/card'
 import { TextField } from '../../../shared/ui/text-field/text-field'
@@ -13,7 +12,7 @@ import { TextField } from '../../../shared/ui/text-field/text-field'
 /** Settings › data management: delete from a date backwards (that date included, F7) or reset everything. */
 @Component({
   selector: 'app-data-management',
-  imports: [FormsModule, BottomSheet, Button, Card, TextField],
+  imports: [FormsModule, Button, Card, TextField],
   templateUrl: './data-management.html',
   styleUrl: './data-management.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,12 +23,8 @@ export class DataManagement {
   private readonly toast = inject(ToastService)
 
   protected readonly t = HE.tracker.settings.data
-  protected readonly cancel = HE.common.cancel
   protected readonly date_ = signal(today())
   protected readonly busy_ = signal(false)
-  protected readonly resetOpen_ = signal(false)
-  protected readonly typed_ = signal('')
-  protected readonly typedOk_ = computed(() => this.typed_() === this.t.typedWord)
   protected readonly deleteLabel_ = computed(() =>
     this.t.deleteFrom.replace('{date}', this.date_()),
   )
@@ -46,19 +41,17 @@ export class DataManagement {
     if (ok) await this.run(date, this.t.doneCutoff)
   }
 
-  protected openReset(): void {
-    this.typed_.set('')
-    this.resetOpen_.set(true)
-  }
-
-  protected closeReset(): void {
-    this.typed_.set('')
-    this.resetOpen_.set(false)
-  }
-
   protected async resetAll(): Promise<void> {
-    if (!this.typedOk_()) return
-    await this.run(null, this.t.doneAll)
+    if (this.busy_()) return
+    const ok = await this.confirm.confirm({
+      title: this.t.confirmTitleB,
+      body: this.t.confirmBodyB,
+      confirmLabel: this.t.confirmYes,
+      destructive: true,
+      requireWord: this.t.typedWord,
+      requireWordLabel: this.t.typedWord,
+    })
+    if (ok) await this.run(null, this.t.doneAll)
   }
 
   private async run(date: string | null, done: string): Promise<void> {
@@ -70,7 +63,6 @@ export class DataManagement {
       this.toast.show(this.t.failed, 'bad')
     } finally {
       this.busy_.set(false)
-      this.closeReset()
     }
   }
 }
