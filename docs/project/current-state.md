@@ -4,6 +4,7 @@
 - Accounts (plan 018): without `APP_USERS` the app is in `db` mode: first sign-up is parent A, parent A's single-use invite link makes parent B, then sign-up closes; see `docs/project/accounts.md`.
 - Active plan: 001 — foundation: shell, design system, server base, Render file.
 - Open bugs: —
+- Plan checklist: `docs/project/plan-checks.md` is the project's own checklist (phone and RTL, Hebrew text and icons, data and API, tests and routes, reuse, hotspots) that `/plan`'s Architect + PM review applies to every plan.
 - Key files:
   - App: `src/app/layout/shell/` (top bar, four tabs), `src/app/pages/{calendar,foods,allergens,settings}` (empty states), `src/app/shared/ui/*` (13 shared components), `src/app/core/` (i18n `he.ts`, `ApiService`, toast, confirm, unsaved-changes guard), dev page `/dev/components` (non-production only).
   - Styles: `src/styles/tokens.scss`, `src/styles.scss`; rules in `DESIGN.md`; `tools/check-no-hex.mjs` runs inside `pnpm run lint`.
