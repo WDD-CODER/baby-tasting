@@ -33,6 +33,7 @@ const DEFAULTS = {
   customActivities: ['שגרת בוקר', 'בייבי יוגה', 'שירים', 'טיול בעגלה', 'עיסוי תינוקות'],
   quickActionOrder: ['meal', 'diaper', 'sleep', 'activity', 'weight', 'vomiting'],
   quickActionsMinimized: [],
+  homeCardsMinimized: ['diaper', 'pumping'],
   iconOverrides: {},
 }
 
@@ -64,6 +65,7 @@ test('PUT saves names, bottle, activities, order and icon overrides for the hous
     customActivities: ['שירים', 'אמבטיה'],
     quickActionOrder: ['sleep', 'meal', 'diaper', 'activity', 'weight', 'vomiting'],
     quickActionsMinimized: [],
+    homeCardsMinimized: [],
     iconOverrides: { 'nav.log': 'stylus', 'nav.tasting': 'nutrition' },
   }
   const saved = await a.put('/api/v1/tracker/settings').send(body)
@@ -106,6 +108,9 @@ test('PUT refuses an unknown slot key, an unknown icon name and other bad values
     { quickActionsMinimized: ['activity', 'activity'] },
     { quickActionsMinimized: ['dance'] },
     { quickActionsMinimized: 'activity' },
+    { homeCardsMinimized: ['dance'] },
+    { homeCardsMinimized: ['pumping', 'pumping'] },
+    { homeCardsMinimized: 'pumping' },
     { unknownKey: 1 },
     [],
   ]
@@ -131,6 +136,18 @@ test('domain: defaults, validation and order reconcile are pure', () => {
   ])
   assert.equal(validateTrackerSettings({ iconOverrides: { 'nav.settings': 'tune' } }).ok, true)
   assert.equal(validateTrackerSettings(null).ok, false)
+})
+
+test('PUT saves homeCardsMinimized and GET returns it; a household with none starts with diaper and pumping', async () => {
+  const app = ctx.newApp()
+  const a = await signedInAgent(app)
+  // The GET of a household with nothing saved is covered by DEFAULTS above; earlier tests here saved a value.
+  assert.deepEqual(withTrackerDefaults({}).homeCardsMinimized, ['diaper', 'pumping'])
+  assert.deepEqual(withTrackerDefaults({ homeCardsMinimized: [] }).homeCardsMinimized, [])
+  const saved = await a.put('/api/v1/tracker/settings').send({ homeCardsMinimized: ['pumping'] })
+  assert.equal(saved.status, 200)
+  assert.deepEqual((await a.get('/api/v1/tracker/settings')).body.settings.homeCardsMinimized, ['pumping'])
+  assert.deepEqual(withTrackerDefaults({ homeCardsMinimized: ['pumping', 'dance'] }).homeCardsMinimized, ['pumping'])
 })
 
 test('the generated icon list holds the library names and the navigation slots', () => {

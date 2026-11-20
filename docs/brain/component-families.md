@@ -297,3 +297,15 @@ One heading per family, then bullet fields:
 - selector: (none — a CLI check)
 - when: fail the build when server code calls console directly
 - files: `tools/check-no-server-console.mjs`
+
+### home-card — Home Card
+
+- selector: `app-home-card` (class `.hc`)
+- when: wrap a home-page container that a parent can minimize to one bar (title, slot icon, chevron)
+- files: `src/app/pages/tracker/home-card/home-card.ts`
+
+### home-layout — Home Layout
+
+- selector: (none — a root service)
+- when: the page-wide edit-layout mode of the home page and its single save (quick-action order, minimized buttons and containers)
+- files: `src/app/pages/tracker/home-layout.service.ts`

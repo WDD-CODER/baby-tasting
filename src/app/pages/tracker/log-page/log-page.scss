@@ -8,4 +8,24 @@
   gap: var(--space-4);
 
   padding-block-end: calc(var(--space-8) + var(--touch-target));
+
+  &__reorder {
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+
+    background: var(--color-surface-raised);
+    color: var(--color-text-secondary);
+    font-family: inherit;
+    font-size: var(--fs-sm);
+    cursor: pointer;
+
+    &--on {
+      border-color: var(--color-event-activity);
+
+      color: var(--color-event-activity);
+      font-weight: var(--fw-bold);
+    }
+  }
 }

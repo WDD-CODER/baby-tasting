@@ -11,6 +11,7 @@ const base: TrackerSettings = {
   customActivities: [],
   quickActionOrder: ['meal', 'diaper', 'sleep', 'activity', 'weight', 'vomiting'],
   quickActionsMinimized: [],
+  homeCardsMinimized: [],
   iconOverrides: { 'quick.weight': 'scale' },
 }
 
