@@ -14,7 +14,7 @@ Read by `/plan`'s Architect + PM review through `paths.planChecks` in `kit.confi
 
 ## Hebrew text and icons
 - Every new string is a key in `src/app/core/i18n/he.ts`, named in the plan's UI/UX Notes.
-- Every icon is a slot in `src/app/core/icons/icon-slots.ts` (the `icon-slots` default).
+- Every icon is a slot in `src/app/core/icons/icon-slots.ts` (the `icon-slots` default). A new slot or a new fixed icon also lists in scope the generated name lists (`server/domain/tracker/icon-names.js`, `src/app/core/icons/icon-names.ts`, `src/app/core/icons/app-icon-names.ts`) and the small font `src/styles/fonts/material-symbols-app.woff2`, rebuilt by `node tools/build-icon-font.mjs` (run-026 had to ask for them).
 - Colours come only from tokens; proof: `tools/check-no-hex.mjs` (runs in `pnpm run lint`).
 
 ## Data and API
@@ -28,6 +28,7 @@ Read by `/plan`'s Architect + PM review through `paths.planChecks` in `kit.confi
 
 ## Reuse Check
 - One row per new piece: `- <piece> — family: <id|none> — rung: <1-4> — why: <…>`, or `- none — <why>`; gate: `node scripts/scope-check.mjs --reuse --plan=<path>`.
+- A rung 3–4 row puts `docs/brain/component-families.md` in scope: kit-checks fails until the new piece has a family heading there (run-026 and run-027 both had to ask).
 - Look in `docs/brain/inventory.md` first: the shared confirm dialog (`ConfirmDialogService`), the time picker (`app-datetime24`), sheets, chips and `app-icon` already exist.
 
 ## Hotspots
