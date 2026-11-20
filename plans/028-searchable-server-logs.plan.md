@@ -64,6 +64,7 @@ src/app/core/i18n/he.ts
 docs/agent/standards-backend.md
 docs/project/plan-checks.md
 docs/project/current-state.md
+docs/brain/component-families.md
 ```
 
 ## Read Scope
