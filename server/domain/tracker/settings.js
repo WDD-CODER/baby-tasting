@@ -12,7 +12,8 @@ export const TRACKER_DEFAULTS = Object.freeze({
   customActivities: Object.freeze(['שגרת בוקר', 'בייבי יוגה', 'שירים', 'טיול בעגלה', 'עיסוי תינוקות']),
   quickActionOrder: QUICK_ACTION_IDS,
   quickActionsMinimized: Object.freeze([]),
-  homeCardsMinimized: Object.freeze([]),
+  // A new household starts with the diaper and pumping trackers as bars (the Human, 2026-11-20).
+  homeCardsMinimized: Object.freeze(['diaper', 'pumping']),
   iconOverrides: Object.freeze({}),
 })
 
@@ -93,7 +94,7 @@ export function withTrackerDefaults(stored) {
     ...TRACKER_DEFAULTS,
     customActivities: [...TRACKER_DEFAULTS.customActivities],
     quickActionsMinimized: [],
-    homeCardsMinimized: [],
+    homeCardsMinimized: [...TRACKER_DEFAULTS.homeCardsMinimized],
     iconOverrides: {},
   }
   if (!isPlainObject(stored)) return { ...out, quickActionOrder: [...QUICK_ACTION_IDS] }
@@ -108,7 +109,7 @@ export function withTrackerDefaults(stored) {
   const cards = stored.homeCardsMinimized
   out.homeCardsMinimized = Array.isArray(cards)
     ? cards.filter((id, i) => HOME_CARD_IDS.includes(id) && cards.indexOf(id) === i)
-    : []
+    : [...TRACKER_DEFAULTS.homeCardsMinimized]
   out.iconOverrides = { ...out.iconOverrides }
   out.customActivities = [...out.customActivities]
   return out

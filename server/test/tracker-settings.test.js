@@ -33,7 +33,7 @@ const DEFAULTS = {
   customActivities: ['שגרת בוקר', 'בייבי יוגה', 'שירים', 'טיול בעגלה', 'עיסוי תינוקות'],
   quickActionOrder: ['meal', 'diaper', 'sleep', 'activity', 'weight', 'vomiting'],
   quickActionsMinimized: [],
-  homeCardsMinimized: [],
+  homeCardsMinimized: ['diaper', 'pumping'],
   iconOverrides: {},
 }
 
@@ -138,10 +138,12 @@ test('domain: defaults, validation and order reconcile are pure', () => {
   assert.equal(validateTrackerSettings(null).ok, false)
 })
 
-test('PUT saves homeCardsMinimized and GET returns it; a household with none gets []', async () => {
+test('PUT saves homeCardsMinimized and GET returns it; a household with none starts with diaper and pumping', async () => {
   const app = ctx.newApp()
   const a = await signedInAgent(app)
-  assert.deepEqual((await a.get('/api/v1/tracker/settings')).body.settings.homeCardsMinimized, [])
+  // The GET of a household with nothing saved is covered by DEFAULTS above; earlier tests here saved a value.
+  assert.deepEqual(withTrackerDefaults({}).homeCardsMinimized, ['diaper', 'pumping'])
+  assert.deepEqual(withTrackerDefaults({ homeCardsMinimized: [] }).homeCardsMinimized, [])
   const saved = await a.put('/api/v1/tracker/settings').send({ homeCardsMinimized: ['pumping'] })
   assert.equal(saved.status, 200)
   assert.deepEqual((await a.get('/api/v1/tracker/settings')).body.settings.homeCardsMinimized, ['pumping'])

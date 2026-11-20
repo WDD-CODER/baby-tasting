@@ -23,7 +23,13 @@
   >
     <app-icon [slot]="slot()" [size]="20" />
     <strong class="hc__title">{{ title() }}</strong>
-    <span class="hc__chevron" [class.hc__chevron--open]="opened()" aria-hidden="true">⌄</span>
+    <!-- icon-slot-exception: the open/close arrow is a fixed control icon, not a changeable slot (the Human, 2026-11-20) -->
+    <app-icon
+      class="hc__chevron"
+      [class.hc__chevron--open]="opened()"
+      name="expand_more"
+      [size]="20"
+    />
   </button>
 }
 
