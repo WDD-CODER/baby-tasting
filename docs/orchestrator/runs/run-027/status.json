@@ -1,0 +1,400 @@
+{
+  "run": "run-027",
+  "branch": "orch/run-027",
+  "base": "main",
+  "startedAt": "2026-11-20T05:35:26.590Z",
+  "mainShaAtStart": "14df4391124d7aa717f1adbd64e7cbbfc4de8d2d",
+  "plans": {
+    "027": {
+      "nnn": "027",
+      "title": "Write this project's own plan checklist so every plan gets the same phone, Hebrew and reuse checks",
+      "branch": "feat/027-project-plan-checklist",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-20T05:36:57.221Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-20T05:44:39.153Z"
+        }
+      },
+      "humanItems": [
+        "`docs/project/plan-checks.md` (the path `kit.config.json` `paths.planChecks` names) exists with the sections `## Success criteria`, `## Phone and RTL`, `## Hebrew text and icons`, `## Data and API`, `## Tests and routes`, `## Reuse Check`, `## Hotspots` — the reviewer confirms in its receipt.",
+        "Reading the checklist, every line is something you would want checked on a new plan, in plain words."
+      ],
+      "history": [
+        {
+          "at": "2026-11-20T05:36:56.884Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:36:57.224Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:41:56.536Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:44:33.992Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:44:39.155Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:44:44.429Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:45:25.894Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 11.3,
+      "sha": "c8b1b15850d33d009cb6803144bf2bbb0d4c6eb6",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 295,
+          "tokens": {
+            "input": 239644,
+            "output": 5270
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 4.7,
+          "tokens": {
+            "input": 18955,
+            "output": 190
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "45a913fa7afb0dc315d7b405877db80c25040eda"
+    },
+    "028": {
+      "nnn": "028",
+      "title": "Searchable server logs: one request id from the phone's error message to the server's log line",
+      "branch": "feat/028-searchable-server-logs",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-20T05:56:28.032Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-20T06:04:11.935Z"
+        }
+      },
+      "humanItems": [
+        "On the deployed app, Render's log shows one JSON line per request with a `requestId`."
+      ],
+      "history": [
+        {
+          "at": "2026-11-20T05:47:23.216Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:47:23.405Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:53:08.021Z",
+          "state": "parked",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:53:55.721Z",
+          "state": "asking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:56:27.732Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T05:56:28.035Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T06:01:34.288Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T06:04:06.308Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T06:04:11.937Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T06:04:28.172Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-20T06:05:00.029Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "028",
+          "title": "Searchable server logs: one request id from the phone's error message to the server's log line",
+          "branch": "feat/028-searchable-server-logs",
+          "state": "asking",
+          "round": 0,
+          "tier": "build",
+          "models": {
+            "builder": {
+              "model": "sonnet",
+              "tier": "build",
+              "at": "2026-11-20T05:47:23.403Z"
+            }
+          },
+          "tiers": [
+            "build"
+          ],
+          "freeDiskGb": 11.1,
+          "reason": "asking 028-1: replan needed: ESCALATE: scope kit-checks.mjs fails 4 reuse-registry findings; docs/brain/component-families.md needs family headings for the Reuse Check rows (server logger, app logs store, log query tool, server console check) and is outside the plan's Read-Write Scope",
+          "calls": [
+            {
+              "stage": "builder",
+              "model": "sonnet",
+              "seconds": 344.2,
+              "tokens": {
+                "input": 1038762,
+                "output": 20698
+              },
+              "exit": 0
+            }
+          ],
+          "park": {
+            "at": "2026-11-20T05:53:37.849Z",
+            "reason": "replan needed: ESCALATE: scope kit-checks.mjs fails 4 reuse-registry findings; docs/brain/component-families.md needs family headings for the Reuse Check rows (server logger, app logs store, log query tool, server console check) and is outside the plan's Read-Write Scope"
+          },
+          "parkBranch": "park/run-027-028"
+        }
+      ],
+      "escalations": [
+        {
+          "step": "resumed after: asking 028-1: replan needed: ESCALATE: scope kit-checks.mjs fails 4 reuse-registry findings; docs/brain/component-families.md needs family headings fo",
+          "check": "(not given)"
+        }
+      ],
+      "replan": "no — (not given)",
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 11,
+      "sha": "56b1f77fa7efa0c8874c85412e9ec23f5f53f848",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 302.9,
+          "tokens": {
+            "input": 192223,
+            "output": 4001
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 15.5,
+          "tokens": {
+            "input": 46209,
+            "output": 1569
+          },
+          "exit": 0
+        }
+      ],
+      "checkedHead": "965eb314aea59a54e1be11844b42a12537b8df42"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-20T05:36:56.611Z",
+      "plan": "027",
+      "text": "the folder baby-tasting-orch-run-027-027 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-20T05:41:52.544Z",
+      "plan": "027",
+      "text": "builder left undone (round 0): scope-check (kit copy) --diff command: not run separately; the kit-checks run with --base and --plan covers scope; [human] items: not ticked, as the rules require"
+    },
+    {
+      "at": "2026-11-20T05:44:56.567Z",
+      "plan": "027",
+      "text": "the folder baby-tasting-orch-merge-run-027 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-20T05:47:23.023Z",
+      "plan": "028",
+      "text": "the folder baby-tasting-orch-run-027-028 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-20T05:53:07.778Z",
+      "plan": "028",
+      "text": "builder left undone (round 0): kit-checks reuse-registry: add 4 family headings to docs/brain/component-families.md (outside scope); No [ui] items in the plan, so no e2e tests were written."
+    },
+    {
+      "at": "2026-11-20T05:53:09.664Z",
+      "plan": "028",
+      "text": "the folder baby-tasting-orch-run-027-028 was installed (server)"
+    },
+    {
+      "at": "2026-11-20T05:53:55.512Z",
+      "plan": "028",
+      "text": "parked: nothing to save (nothing uncommitted)"
+    },
+    {
+      "at": "2026-11-20T05:53:55.955Z",
+      "plan": "028",
+      "text": "ask 028-1 (scope, the Human or the advisor answers): May the builder add family headings for the 4 new pieces to docs/brain/component-families.md so the kit-checks reuse-registry check passes?"
+    },
+    {
+      "at": "2026-11-20T05:54:56.560Z",
+      "plan": "028",
+      "text": "ask 028-1 answered by the human: approved: docs/brain/component-families.md"
+    },
+    {
+      "at": "2026-11-20T05:55:06.459Z",
+      "plan": "028",
+      "text": "scope of plan 028 extended on orch/run-027 by the answer to 028-1: docs/brain/component-families.md"
+    },
+    {
+      "at": "2026-11-20T05:56:19.248Z",
+      "plan": "028",
+      "text": "resumed from park/run-027-028: round 0, tier build, after: asking 028-1: replan needed: ESCALATE: scope kit-checks.mjs fails 4 reuse-registry findings; docs/brain/component-families.md needs family headings for the Reus"
+    },
+    {
+      "at": "2026-11-20T05:56:27.493Z",
+      "plan": "028",
+      "text": "the folder baby-tasting-orch-run-027-028 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-20T06:04:35.290Z",
+      "plan": "028",
+      "text": "the folder baby-tasting-orch-merge-run-027 was installed (server)"
+    },
+    {
+      "at": "2026-11-20T06:05:31.904Z",
+      "text": "FINAL: same tree as plan 028's gate — pnpm run build, pnpm run lint, pnpm run test, node scripts/override-check.mjs skipped"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 11,
+  "updatedAt": "2026-11-20T06:05:34.703Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "027",
+      "type": "behaviour",
+      "text": "behaviour: current-state.md has no 'workflow notes' section, so I added the line as a top-level bullet after 'Open bugs' — reverse: delete that one line",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "028",
+      "type": "behaviour",
+      "text": "behaviour: app_logs rows are written with withCreateAudit(doc, 'system') so the audit-on-write kit check passes; this adds createdBy/updatedBy/createdAt/updatedAt fields the plan did not list — reverse: drop the withCreateAudit call and declare the exception in the check data",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "028",
+      "type": "behaviour",
+      "text": "behaviour: the 500 path logs both http.unhandled and the http.request error line, so one failure writes two error rows to app_logs — reverse: log http.request at info for status 500",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "028",
+      "type": "behaviour",
+      "text": "behaviour: the logger sink is a module-level singleton, so the last createApp call owns the app_logs writes — reverse: pass the sink per app instance",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D5",
+      "plan": "028",
+      "type": "seen",
+      "text": "seen: docs/project/current-state.md — the line for plan 028 was appended at the end of the file, not under a heading (the file has no headings), so check placement",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-20T06:05:34.701Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-20T06:05:34.703Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}
