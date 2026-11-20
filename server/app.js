@@ -4,6 +4,7 @@ import compression from 'compression'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
+import { attachSink, logger } from './lib/logger.js'
 import { createRequireAuth } from './middleware/auth.js'
 import { errorHandler } from './middleware/error-handler.js'
 import { notFound } from './middleware/not-found.js'
@@ -57,7 +58,20 @@ export function createApp({ config, db, photoStore = createPhotoStore(config.clo
   const appUsers = config.appUsers ?? []
   const authConfig = { ...config, appUsers, accountsMode: appUsers.length ? 'env' : 'db' }
   const requireAuth = createRequireAuth({ repos, config: authConfig })
-  createIndexes(db).catch((err) => console.error('index creation failed', err))
+  attachSink((rec) =>
+    repos.appLogs.write({
+      at: new Date(rec.time),
+      level: rec.levelName === 'warn' ? 'warn' : 'error',
+      event: rec.event ?? 'log',
+      message: rec.msg ?? '',
+      requestId: rec.requestId ?? null,
+      householdId: rec.householdId ?? null,
+      path: rec.path ?? null,
+      status: rec.status ?? null,
+      err: rec.err ? { name: rec.err.type ?? 'Error', message: rec.err.message ?? '' } : null,
+    }),
+  )
+  createIndexes(db).catch((err) => logger.error({ event: 'indexes.failed', err }, 'index creation failed'))
 
   if (config.nodeEnv === 'production') app.set('trust proxy', 1)
   app.disable('x-powered-by')

@@ -87,7 +87,7 @@ line or file this plan names was removed, renamed or rewritten).
 
 These are the plan's milestones: a Worker does them in order and ticks each one after it is checked.
 
-- [ ] M1: Write the project plan checklist the plan review reads — a short intro (what reads it: `/plan`'s Architect + PM review via `paths.planChecks`) and these sections, each line naming its proof — docs/project/plan-checks.md
+- [x] M1: Write the project plan checklist the plan review reads — a short intro (what reads it: `/plan`'s Architect + PM review via `paths.planChecks`) and these sections, each line naming its proof — docs/project/plan-checks.md
   - **Success criteria:** a plan that touches UI has at least one `[ui]` item (one page, one action, a quoted Hebrew text, a screenshot under `e2e/screens/<NNN>-<n>.png`) and one `[human]` item for feel on the phone; checks are `pnpm run build`, `pnpm run lint`, `pnpm run test`, `node --test server/test/<file>`, never `npx`.
   - **Phone and RTL:** every touched page fits 360 × 780 with no sideways scroll (`document.documentElement.scrollWidth` equals the screen width); a fixed overlay, modal or sheet is centred with `inset: 0` + `margin: auto` (or the shared confirm dialog / sheet), never `translate(-50%)` on an inline axis; touch targets at least `--touch-target`; logical CSS properties only.
   - **Hebrew text and icons:** every new string is a key in `src/app/core/i18n/he.ts`, named in the plan's UI/UX Notes; every icon is a slot in `src/app/core/icons/icon-slots.ts` (default `icon-slots`); colours only from tokens (`tools/check-no-hex.mjs`).
@@ -95,7 +95,7 @@ These are the plan's milestones: a Worker does them in order and ticks each one 
   - **Tests and routes:** e2e specs are `e2e/<NNN>-<n>-<slug>.spec.ts`, start with the `openLog` helper from the e2e support folder, and use the real route path from `src/app/app.routes.ts` (tasting pages sit under `/tasting/…`); a moved or renamed control lists every e2e spec that clicks it.
   - **Reuse Check:** one row per new piece — `- <piece> — family: <id|none> — rung: <1-4> — why: <…>`, or `- none — <why>`; gate `node scripts/scope-check.mjs --reuse --plan=<path>`. Look in `docs/brain/inventory.md` first: the shared confirm dialog (`ConfirmDialogService`), the time picker (`app-datetime24`), sheets, chips and `app-icon` already exist.
   - **Hotspots:** `src/styles.scss` and `src/app/app.routes.ts` are append-only.
-- [ ] M2: Note the new checklist in the project state — one line under the workflow notes of current-state — docs/project/current-state.md
+- [x] M2: Note the new checklist in the project state — one line under the workflow notes of current-state — docs/project/current-state.md
 
 ## Technical Considerations
 - Dependencies: none.
@@ -115,4 +115,4 @@ These are the plan's milestones: a Worker does them in order and ticks each one 
 - none.
 
 ## Execution Notes
-- none yet
+- M1, M2 done; checks run by the gate.

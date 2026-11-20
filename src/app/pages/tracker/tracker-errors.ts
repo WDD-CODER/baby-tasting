@@ -16,5 +16,6 @@ export function saveErrorText(err: unknown, fallback: string, candidate = 'SLEEP
   if (err.status === 0) return t.connectFailed
   if (err.code === 'event_conflict' && err.conflict) return conflictMessage(err.conflict, candidate)
   if (err.code === 'sleep_already_open') return t.sleepAlreadyOpen
+  if (err.requestId) return `${fallback} · ${t.errorCode}: ${err.requestId.slice(0, 8)}`
   return fallback
 }

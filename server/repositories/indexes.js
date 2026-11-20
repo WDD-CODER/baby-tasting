@@ -24,4 +24,6 @@ export async function createIndexes(db) {
   await db.collection('settings').createIndex({ householdId: 1 }, { unique: true })
   await db.collection('trackerEvents').createIndex({ householdId: 1, timestamp: -1 })
   await db.collection('trackerEvents').createIndex({ householdId: 1, eventType: 1, 'sleep.endAt': 1 })
+  await db.collection('app_logs').createIndex({ at: 1 }, { expireAfterSeconds: 30 * 24 * 3600 })
+  await db.collection('app_logs').createIndex({ requestId: 1 })
 }
