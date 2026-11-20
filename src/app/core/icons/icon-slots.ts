@@ -172,6 +172,30 @@ export const ICON_SLOTS = {
     group: 'מיקומי שינה',
     keywords: ['stroller', 'pram', 'עגלה'],
   },
+  'card.today': {
+    default: 'calendar_month',
+    label: 'היום',
+    group: 'כרטיסים',
+    keywords: ['today', 'summary', 'היום'],
+  },
+  'card.quick': {
+    default: 'edit_note',
+    label: 'פעולות מהירות',
+    group: 'כרטיסים',
+    keywords: ['quick', 'actions', 'פעולות מהירות'],
+  },
+  'card.diaper': {
+    default: 'baby_changing_station',
+    label: 'סבב חיתולים',
+    group: 'כרטיסים',
+    keywords: ['diaper', 'round', 'חיתולים'],
+  },
+  'card.pumping': {
+    default: 'water_bottle',
+    label: 'שאיבות חלב',
+    group: 'כרטיסים',
+    keywords: ['pumping', 'milk', 'שאיבות'],
+  },
   'card.biogaya': {
     default: 'water_drop',
     label: 'ביו גאיה',

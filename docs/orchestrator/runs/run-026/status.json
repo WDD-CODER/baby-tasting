@@ -1,0 +1,340 @@
+{
+  "run": "run-026",
+  "branch": "orch/run-026",
+  "base": "main",
+  "startedAt": "2026-11-19T21:29:22.524Z",
+  "mainShaAtStart": "f0e48f9074b3c46f0f0d1a22712780cf720d6a32",
+  "plans": {
+    "026": {
+      "nnn": "026",
+      "title": "Minimize any container on the home screen",
+      "branch": "feat/026-minimize-home-cards",
+      "state": "merged",
+      "round": 0,
+      "tier": "build",
+      "models": {
+        "builder": {
+          "model": "sonnet",
+          "tier": "build",
+          "at": "2026-11-19T21:51:40.703Z"
+        },
+        "reviewer": {
+          "model": "sonnet",
+          "at": "2026-11-19T22:01:48.886Z"
+        }
+      },
+      "humanItems": [
+        "On the phone, minimizing a container and opening its bar feels natural, and the bars are easy to tap."
+      ],
+      "history": [
+        {
+          "at": "2026-11-19T21:32:07.379Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T21:32:07.793Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T21:48:01.338Z",
+          "state": "parked",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T21:48:50.115Z",
+          "state": "asking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T21:51:40.435Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T21:51:40.705Z",
+          "state": "building",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T21:58:00.402Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T21:58:01.474Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T21:58:02.263Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T21:58:03.635Z",
+          "state": "gate",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T22:01:43.067Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T22:01:48.888Z",
+          "state": "checking",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T22:02:00.248Z",
+          "state": "merging",
+          "round": 0
+        },
+        {
+          "at": "2026-11-19T22:02:51.841Z",
+          "state": "merged",
+          "round": 0
+        }
+      ],
+      "earlier": [
+        {
+          "nnn": "026",
+          "title": "Minimize any container on the home screen",
+          "branch": "feat/026-minimize-home-cards",
+          "state": "asking",
+          "round": 0,
+          "tier": "build",
+          "models": {
+            "builder": {
+              "model": "sonnet",
+              "tier": "build",
+              "at": "2026-11-19T21:32:07.791Z"
+            }
+          },
+          "tiers": [
+            "build"
+          ],
+          "freeDiskGb": 12.3,
+          "reason": "asking 026-1: ESCALATE scope: ESCALATE: scope docs/brain/component-families.md — `node kit-checks.mjs --base origin/orch/run-026 --plan plans/026-minimize-home-cards.plan.md` exits non-zero: 2 reuse-registry-missing-piece findings, because the rung-4 Reuse Check rows (app-home-card, HomeLayoutService) each need a family heading ",
+          "calls": [
+            {
+              "stage": "builder",
+              "model": "sonnet",
+              "seconds": 953,
+              "tokens": {
+                "input": 3410978,
+                "output": 35009
+              },
+              "exit": 0
+            }
+          ],
+          "park": {
+            "at": "2026-11-19T21:48:37.065Z",
+            "reason": "ESCALATE scope: ESCALATE: scope docs/brain/component-families.md — `node kit-checks.mjs --base origin/orch/run-026 --plan plans/026-minimize-home-cards.plan.md` exits non-zero: 2 reuse-registry-missing-piece findings, because the rung-4 Reuse Check rows (app-home-card, HomeLayoutService) each need a family heading"
+          },
+          "parkBranch": "park/run-026-026"
+        }
+      ],
+      "escalations": [
+        {
+          "step": "resumed after: asking 026-1: ESCALATE scope: ESCALATE: scope docs/brain/component-families.md — `node kit-checks.mjs --base origin/orch/run-026 --plan plans/026-mini",
+          "check": "(not given)"
+        }
+      ],
+      "replan": "no — (not given)",
+      "tiers": [
+        "build"
+      ],
+      "freeDiskGb": 12.3,
+      "sha": "5f971a3d92a00ac59e2354af41f15e072d2b0fba",
+      "calls": [
+        {
+          "stage": "builder",
+          "model": "sonnet",
+          "seconds": 372.8,
+          "tokens": {
+            "input": 195820,
+            "output": 3501
+          },
+          "exit": 0
+        },
+        {
+          "stage": "reviewer",
+          "model": "sonnet",
+          "seconds": 10.5,
+          "tokens": {
+            "input": 45588,
+            "output": 838
+          },
+          "exit": 0
+        }
+      ],
+      "uiCards": [
+        {
+          "card": "On the home page (`/`), tapping `ערוך פריסה`, switching `מזער` on for the pumping tracker and tapping `סיום ושמירה` shows the pumping tracker as one bar carryin",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        },
+        {
+          "card": "`e2e/023-1-minimize.spec.ts` and `e2e/011-4-reorder.spec.ts` still pass (they start edit mode from the moved button).",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        },
+        {
+          "card": "In Settings (`/settings`) on a 360 px screen the page does not scroll sideways (`document.documentElement.scrollWidth` equals the screen width) and both export ",
+          "status": "unchecked",
+          "via": "none",
+          "page": "",
+          "screenshots": [],
+          "round": 0
+        }
+      ],
+      "checkedHead": "0b55b6c21912c2428f365420888f3241d93325ed"
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-11-19T21:32:07.070Z",
+      "plan": "026",
+      "text": "the folder baby-tasting-orch-run-026-026 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-19T21:48:01.005Z",
+      "plan": "026",
+      "text": "builder left undone (round 0): kit-checks reuse-registry-missing-piece x2: needs docs/brain/component-families.md (outside scope) to get two family headings; once added, rerun `node scripts/inventory.mjs`, because the home-card line in docs/brain/inventory.md is regenerated from that file and is missing for now; Icon override for"
+    },
+    {
+      "at": "2026-11-19T21:48:49.826Z",
+      "plan": "026",
+      "text": "parked: nothing to save (nothing uncommitted)"
+    },
+    {
+      "at": "2026-11-19T21:48:50.397Z",
+      "plan": "026",
+      "text": "ask 026-1 (scope, the Human or the advisor answers): Add docs/brain/component-families.md (and, for the icon overrides, server/domain/tracker/icon-names.js and src/app/core/icons/icon-names.ts) to plan 026's scope?"
+    },
+    {
+      "at": "2026-11-19T21:49:51.592Z",
+      "plan": "026",
+      "text": "ask 026-1 answered by the human: approved: docs/brain/component-families.md, server/domain/tracker/icon-names.js, src/app/core/icons/icon-names.ts"
+    },
+    {
+      "at": "2026-11-19T21:50:12.433Z",
+      "plan": "026",
+      "text": "scope of plan 026 extended on orch/run-026 by the answer to 026-1: docs/brain/component-families.md, server/domain/tracker/icon-names.js, src/app/core/icons/icon-names.ts"
+    },
+    {
+      "at": "2026-11-19T21:51:30.538Z",
+      "plan": "026",
+      "text": "resumed from park/run-026-026: round 0, tier build, after: asking 026-1: ESCALATE scope: ESCALATE: scope docs/brain/component-families.md — `node kit-checks.mjs --base origin/orch/run-026 --plan plans/026-minimize-home-"
+    },
+    {
+      "at": "2026-11-19T21:51:40.189Z",
+      "plan": "026",
+      "text": "the folder baby-tasting-orch-run-026-026 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-19T21:57:53.863Z",
+      "plan": "026",
+      "text": "builder left undone (round 0): [ui] e2e/026-1-minimize-cards.spec.ts (2 tests): written, not run; [ui] e2e/026-2-export-dates.spec.ts: written, not run; [ui] e2e/023-1-minimize.spec.ts and e2e/011-4-reorder.spec.ts still pass: written, not run"
+    },
+    {
+      "at": "2026-11-19T21:58:01.085Z",
+      "plan": "026",
+      "text": "[ui] On the home page (`/`), tapping `ערוך פריסה`, switching `מזער` on for the pumping tracker and tapping `סיום ושמירה` shows the pumping tracker as one bar ca: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-19T21:58:01.823Z",
+      "plan": "026",
+      "text": "[ui] `e2e/023-1-minimize.spec.ts` and `e2e/011-4-reorder.spec.ts` still pass (they start edit mode from the moved button).: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-19T21:58:02.849Z",
+      "plan": "026",
+      "text": "[ui] In Settings (`/settings`) on a 360 px screen the page does not scroll sideways (`document.documentElement.scrollWidth` equals the screen width) and both ex: written, not run — checked by the run's [ui] step / the Human"
+    },
+    {
+      "at": "2026-11-19T22:02:14.612Z",
+      "plan": "026",
+      "text": "the folder baby-tasting-orch-merge-run-026 was installed (root, scripts, server)"
+    },
+    {
+      "at": "2026-11-19T22:03:33.863Z",
+      "text": "FINAL: same tree as plan 026's gate — pnpm run build, pnpm run lint, pnpm run test, node scripts/override-check.mjs skipped"
+    }
+  ],
+  "attempts": 1,
+  "phase": "finished",
+  "freeDiskGb": 12.3,
+  "updatedAt": "2026-11-19T22:03:37.321Z",
+  "decisions": [
+    {
+      "id": "D1",
+      "plan": "026",
+      "type": "seen",
+      "text": "seen: server/domain/tracker/icon-names.js:336 — ICON_SLOT_KEYS lacks the 4 new card.* slots because the generator's output files are outside the plan scope; saving an icon override for those slots answers 400 until `node server/lib/gen-icon-names.mjs` is run",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D2",
+      "plan": "026",
+      "type": "behaviour",
+      "text": "behaviour: the page-wide edit-mode button uses the same `סדר הכפתורים נשמר` / `שגיאה בשמירת הסדר` toasts as before, though it now also saves container switches (simplest option, no new text) — reverse: add new Hebrew toast keys",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D3",
+      "plan": "026",
+      "type": "behaviour",
+      "text": "behaviour: the new card.* slot defaults use icons already in the small icon font (calendar_month, edit_note, baby_changing_station, water_bottle) so no full font loads — reverse: pick other defaults in icon-slots.ts",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    },
+    {
+      "id": "D4",
+      "plan": "026",
+      "type": "behaviour",
+      "text": "behaviour: the bar's chevron is a text character (⌄) turned by state, not an icon slot — reverse: swap in an app-icon slot",
+      "alsoFrom": [],
+      "attempt": 1,
+      "verdict": "none",
+      "kind": "-",
+      "confidence": null,
+      "rec": "",
+      "why": ""
+    }
+  ],
+  "finishedAt": "2026-11-19T22:03:37.318Z",
+  "finalGate": {
+    "ok": true,
+    "command": null,
+    "at": "2026-11-19T22:03:37.320Z",
+    "attempt": 1,
+    "blamed": []
+  }
+}
