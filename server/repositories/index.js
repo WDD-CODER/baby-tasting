@@ -1,4 +1,5 @@
 import { ActivityRepository } from './activity-repository.js'
+import { AppLogsRepository } from './app-logs-repository.js'
 import { AllergensRepository } from './allergens-repository.js'
 import { BabiesRepository } from './babies-repository.js'
 import { CalendarItemsRepository } from './calendar-items-repository.js'
@@ -30,6 +31,7 @@ export function createRepos(db) {
     userPrefs: new UserPrefsRepository(db),
     trackerEvents: new TrackerEventsRepository(db),
     activity: new ActivityRepository(db),
+    appLogs: new AppLogsRepository(db),
     testReset: new TestResetRepository(db),
   }
 }

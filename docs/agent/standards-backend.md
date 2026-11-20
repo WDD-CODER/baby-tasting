@@ -33,6 +33,7 @@ Keep one registry of persisted entity types in code and mirror it as a table her
 | `entityType` key | Domain | Purpose |
 |---|---|---|
 | | | |
+| `app_logs` (collection, not an entity) | Operations | `warn`/`error` server log records, 30-day TTL on `at`; written only by `app-logs-repository.js`; no household data, no route reads it |
 
 ---
 

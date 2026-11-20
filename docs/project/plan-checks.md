@@ -5,6 +5,7 @@ Read by `/plan`'s Architect + PM review through `paths.planChecks` in `kit.confi
 ## Success criteria
 - A plan that touches UI has at least one `[ui]` item (one page, one action, a quoted Hebrew text, a screenshot under `e2e/screens/<NNN>-<n>.png`) and one `[human]` item for how it feels on the phone.
 - Checks are `pnpm run build`, `pnpm run lint`, `pnpm run test` and `node --test server/test/<file>`; never `npx`.
+- A plan that touches server code has `[auto] node tools/log-query.mjs --since <plan start> --level error` → no entries.
 
 ## Phone and RTL
 - Every touched page fits 360 × 780 with no sideways scroll; proof: `document.documentElement.scrollWidth` equals the screen width.
