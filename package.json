@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "lint": "ng lint && node tools/check-no-hex.mjs",
+    "lint": "ng lint && node tools/check-no-hex.mjs && node tools/check-no-server-console.mjs",
     "test": "ng test --watch=false --browsers=ChromeHeadless && pnpm run test:server",
     "prepare": "husky",
     "e2e": "playwright test",

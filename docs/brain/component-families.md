@@ -273,3 +273,27 @@ One heading per family, then bullet fields:
 - selector: (none — a root service)
 - when: switch the app icons from the small icon font to the full Material Symbols font on demand
 - files: `src/app/core/icons/icon-font.service.ts`
+
+### server-logger — Server logger
+
+- selector: (none — a server module)
+- when: log from server code with a request id instead of console
+- files: `server/lib/logger.js`
+
+### app-logs-store — App logs store
+
+- selector: (none — a repository)
+- when: read or write the searchable server log records in Mongo
+- files: `server/repositories/app-logs-repository.js`
+
+### log-query — Log query tool
+
+- selector: (none — a CLI)
+- when: search the stored server logs by time, level or request id
+- files: `tools/log-query.mjs`
+
+### server-console-check — Server console check
+
+- selector: (none — a CLI check)
+- when: fail the build when server code calls console directly
+- files: `tools/check-no-server-console.mjs`

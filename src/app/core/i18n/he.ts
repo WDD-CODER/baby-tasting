@@ -383,6 +383,7 @@ export const HE = {
       saved: 'האירוע נשמר בהצלחה',
       saveFailed: 'תקלה בשמירת הנתונים',
       connectFailed: 'לא ניתן להתחבר לשרת',
+      errorCode: 'קוד תקלה',
       quickMealSaved: 'ארוחה מהירה נרשמה 🍼',
       quickMealFailed: 'תקלה ברישום ארוחה מהירה',
       quickDiaperSaved: {

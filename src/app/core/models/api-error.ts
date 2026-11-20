@@ -11,4 +11,6 @@ export interface ApiError {
   code: string
   message: string
   conflict?: ConflictInfo
+  /** The server's request id (500 answers); the app shows its first 8 characters as the error code. */
+  requestId?: string
 }

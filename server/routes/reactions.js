@@ -180,7 +180,7 @@ export function createReactionsRouter({ repos, photoStore }) {
         try {
           await photoStore.destroy(photo.publicId)
         } catch (err) {
-          console.error('photo delete failed', photo.publicId, err?.message)
+          req.log.warn({ event: 'photo.delete_failed', publicId: photo.publicId, err }, 'photo delete failed')
         }
       }
       await repos.reactions.remove(req.householdId, req.params.id)
