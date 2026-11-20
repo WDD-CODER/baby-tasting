@@ -1,6 +1,6 @@
 # Plan 026 — Minimize any container on the home screen
 
-Status: draft
+Status: done
 Depends-on: 023
 Snapshot: c9fb54b9955fe6e0c9a8529978220c944213730e
 Source: the Human, 2026-11-19, after validating plan 023: "make all the containers in the main screen be minimized if wished!" Answer the same day: `plan 026 as described` — a minimize switch per container in `ערוך פריסה`, a slim bar when minimized, a tap opens it for this visit, saved for both parents, the alert banners stay, and the Settings date field that overflows a narrow phone is fixed here too.
