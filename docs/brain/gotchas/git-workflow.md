@@ -156,3 +156,11 @@ A stale dev server left running on another port can masquerade as a regression; 
 **Why the obvious fix is wrong:** Switching the slot to `main`, or `cd`-ing to the main folder to "finish" the merge, takes the Worker out of its slot. The next `take-plan` then refuses with "not a slot", and `main` is the Planner's checkout.
 
 **What to do instead:** In a slot, run `gh pr merge {n} --merge`, then `git push origin --delete <branch>` and `git fetch origin --prune`, and stay on the branch. The next `take plan NNN` in the same slot releases the merged branch and claims the new plan (`docs/agent/standards-git.md` → "Merging from a slot").
+
+## `git worktree remove` leaves a run folder behind on Windows
+
+**What hurt:** After runs 021–023 merged, their merge folders (`baby-tasting-orch-merge-run-0NN`) stayed on disk. The automatic cleanup in `scripts/free-merged-slots.mjs` skipped them, because each one had untracked scratch files: root `screens/` from older specs and `e2e/tmp/` probe specs. A manual `git worktree remove --force` then failed with `Directory not empty`. Git unregistered the worktree and deleted its `.git` link, but left the whole tree, `src/` included, as a plain folder git no longer knows about.
+
+**Why the obvious fix is wrong:** Git for Windows cannot delete pnpm's `node_modules`: the packages are junctions, and some paths are over 260 characters (`@angular/cdk` schematics reach 286). Re-running `git worktree remove`, or `Remove-Item -Recurse` from a shell an agent runs, leaves the same folder or is refused as a bulk delete.
+
+**What to do instead:** Let `node scripts/free-merged-slots.mjs` remove merged run folders; it falls back to a Node `rmSync` delete. Keep scratch output out of `git status`: root `screens/` and `e2e/tmp/` are in `.gitignore`. To remove one folder by hand, use the kit helper: `node --input-type=module -e "import('./scripts/lib/orch-folders.mjs').then(m => console.log(m.removeFolder('<folder>')))"`.

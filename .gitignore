@@ -61,3 +61,7 @@ src/environments/environment.slot.ts
 /e2e/.results/
 /e2e/screens/
 /playwright-report/
+# Older specs save screenshots to a root screens/ folder; scratch probe specs live in e2e/tmp/.
+# Untracked, they made merged run folders look "dirty", so free-merged-slots.mjs never removed them.
+/screens/
+/e2e/tmp/
