@@ -1,6 +1,6 @@
 # Plan 028 — Searchable server logs: one request id from the phone's error message to the server's log line
 
-Status: draft
+Status: done
 Depends-on: 027
 Snapshot: f0e48f9074b3c46f0f0d1a22712780cf720d6a32
 Source: the Human, 2026-11-19, after the foodVibe comparison: "plan for 1 and 5" — item 5: foodVibe logs every request as structured JSON with a request id (`foodVibe1.0/server/logger.js`, pino), keeps warnings and errors in a Mongo `app_logs` collection and reads them with `scripts/log-query.mjs`. baby-tasting writes one `console.log` line per request (`server/middleware/request-logger.js`) and `console.error` for crashes, which Render keeps only briefly and which cannot be tied to the phone that saw the error.

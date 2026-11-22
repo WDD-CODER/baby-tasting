@@ -1,6 +1,6 @@
 # Plan 027 — Write this project's own plan checklist so every plan gets the same phone, Hebrew and reuse checks
 
-Status: draft
+Status: done
 Depends-on: none
 Snapshot: f0e48f9074b3c46f0f0d1a22712780cf720d6a32
 Source: the Human, 2026-11-19, after the foodVibe comparison: "plan for 1 and 5" — item 1: foodVibe has a project plan checklist (`foodVibe1.0/docs/agent/plan-checks.md`); baby-tasting's `kit.config.json` points `paths.planChecks` at `docs/project/plan-checks.md`, but that file does not exist, so `/plan`'s "project's own checks" step reads nothing.
