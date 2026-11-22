@@ -6,7 +6,7 @@ import { HE } from '../i18n/he'
 import { ApiError, ConflictInfo } from '../models/api-error'
 
 interface ServerErrorBody {
-  error?: { code?: string; message?: string; conflict?: ConflictInfo }
+  error?: { code?: string; message?: string; conflict?: ConflictInfo; requestId?: string }
 }
 
 function toApiError(err: HttpErrorResponse): ApiError {
@@ -20,6 +20,7 @@ function toApiError(err: HttpErrorResponse): ApiError {
     message: body?.error?.message ?? HE.common.errorGeneric,
   }
   if (body?.error?.conflict) apiError.conflict = body.error.conflict
+  if (body?.error?.requestId) apiError.requestId = body.error.requestId
   return apiError
 }
 
