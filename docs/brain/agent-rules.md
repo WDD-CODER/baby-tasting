@@ -5,6 +5,8 @@ Short rules each orchestrator role reads before it starts, learned from decision
 ## builder
 
 - When the plan does not describe a behaviour (on edit, leave, cancel or error), do the simplest thing and log it as a `behaviour:` decision; never add a dialog, confirmation or automatic action.
+- A button whose action is ignored while a save or delete runs is disabled for that time (and looks it), so a tap cannot land.
+- An icon in the UI is an app-icon (a slot, or a fixed name with an icon-slot-exception comment), never a text character such as ⌄ or ›.
 
 ## checkers
 
